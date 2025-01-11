@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveController;
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.YAGSLDrivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,6 +22,9 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
 
+  public YAGSLDrivetrain yagslDrivetrain = new YAGSLDrivetrain();
+
+  
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(0);
@@ -47,6 +51,8 @@ public class RobotContainer {
     // cancelling on release.
     m_robotDrive.setDefaultCommand(
         new DriveController(m_robotDrive, m_driverController));
+    
+    yagslDrivetrain.setDefaultCommand(yagslDrivetrain.driveWithControllerCommand(m_driverController));
   }
 
   /**
