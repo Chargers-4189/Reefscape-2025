@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -46,11 +48,15 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    if (Robot.isSimulation())
+    {
+      Commands.runOnce(() -> yagslDrivetrain.resetOdometry(new Pose2d(5, 5, new Rotation2d())));
+    }
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    m_robotDrive.setDefaultCommand(
-        new DriveController(m_robotDrive, m_driverController));
+    //m_robotDrive.setDefaultCommand(
+    //    new DriveController(m_robotDrive, m_driverController));
     
     yagslDrivetrain.setDefaultCommand(yagslDrivetrain.driveWithControllerCommand(m_driverController));
   }

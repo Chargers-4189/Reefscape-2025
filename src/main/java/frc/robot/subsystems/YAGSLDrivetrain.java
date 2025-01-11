@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import java.io.File;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -26,7 +28,7 @@ public class YAGSLDrivetrain extends SubsystemBase {
 
   public YAGSLDrivetrain() {
     try{
-      swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed);
+      swerveDrive = new SwerveParser(swerveJsonDirectory).createSwerveDrive(maximumSpeed, new Pose2d(5, 5, new Rotation2d()));
     } catch(Exception e) {
       System.err.println("SwerveDrive no workie :(");
     }
@@ -35,6 +37,12 @@ public class YAGSLDrivetrain extends SubsystemBase {
   public void drive(ChassisSpeeds speeds){
     swerveDrive.drive(speeds);
   }
+
+  public void resetOdometry(Pose2d pose) {
+    swerveDrive.resetOdometry(pose);
+  }
+
+
   public Command driveWithControllerCommand(CommandXboxController controller){
      SwerveInputStream driveSpeeds = SwerveInputStream.of(swerveDrive,
                                                                () -> controller.getLeftY() * -1,
