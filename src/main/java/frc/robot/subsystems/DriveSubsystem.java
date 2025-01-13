@@ -90,19 +90,19 @@ public class DriveSubsystem extends SubsystemBase {
         new Translation2d(-Constants.DriveConstants.kWheelBase / 2, -Constants.DriveConstants.kTrackWidth / 2));
     
     // PID Loop needs to be tuned and figure out if we need alliance swapping
-    AutoBuilder.configure(
-      this::getPose, 
-      this::resetOdometry, 
-      this::getVelocitySpeeds, 
-      (speeds, feedforwards) -> driveWithChassisSpeeds(speeds),
-      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-      ),
-      config,
-      ()->false,
-      this
-    );
+    // AutoBuilder.configure(
+    //   this::getPose, 
+    //   this::resetOdometry, 
+    //   this::getVelocitySpeeds, 
+    //   (speeds, feedforwards) -> driveWithChassisSpeeds(speeds),
+    //   new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+    //     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+    //     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+    //   ),
+    //   config,
+    //   ()->false,
+    //   this
+    // );
   }
 
   public Command followPathCommand(String pathFile){
