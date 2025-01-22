@@ -16,4 +16,12 @@ public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
   }
+  public static class Elevator {
+    public static final int kLEFT_MOTOR_ID = 10;
+    public static final int kRIGHT_MOTOR_ID = 11;
+    public static final int kMIN_DIO_PORT = 0;
+    public static final int kMAX_DIO_PORT = 1;
+    public static final int kENCODER_DIO_PORT = 2;
+
+  }
 }
