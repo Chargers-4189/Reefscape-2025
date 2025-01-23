@@ -14,6 +14,14 @@ package frc.robot;
  */
 public final class Constants {
   public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
+    public static final int kDriverControllerPort = -1;
+  }
+  public static class CoralEffectorConstants {
+    public static final int kLEFT_MOTOR_ID = -1;
+    public static final int kRIGHT_MOTOR_ID = -1;
+    public static final int kINTAKE_SENSOR_ID = -1;
+    public static final int kOUTTAKE_SENSOR_ID = -1;
+    public static final int kMEASURE_THRESHOLD = 5; //milimeters
+
   }
 }
