@@ -24,19 +24,19 @@ public class Elevator extends SubsystemBase {
   private Level level = Level.INTAKE;
 
   private final SparkMax leftMotor = new SparkMax(
-    Constants.Elevator.kLEFT_MOTOR_ID,
+    Constants.ElevatorConstants.kLEFT_MOTOR_ID,
     MotorType.kBrushless
   );
   private final SparkMax rightMotor = new SparkMax(
-    Constants.Elevator.kRIGHT_MOTOR_ID,
+    Constants.ElevatorConstants.kRIGHT_MOTOR_ID,
     MotorType.kBrushless
   );
 
   private final DigitalInput minLimitSwitch = new DigitalInput(
-    Constants.Elevator.kMIN_DIO_PORT
+    Constants.ElevatorConstants.kMIN_DIO_PORT
   );
   private final DigitalInput maxLimitSwitch = new DigitalInput(
-    Constants.Elevator.kMAX_DIO_PORT
+    Constants.ElevatorConstants.kMAX_DIO_PORT
   );
 
   private RelativeEncoder encoder = rightMotor.getEncoder();
