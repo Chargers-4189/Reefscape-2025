@@ -6,7 +6,9 @@ package frc.robot.subsystems;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import com.pathplanner.lib.path.PathPlannerPath;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
@@ -120,19 +122,19 @@ public class DriveSubsystem extends SubsystemBase {
       )
     );
     // PID Loop needs to be tuned and figure out if we need alliance swapping
-    // AutoBuilder.configure(
-    //   this::getPose,
-    //   this::resetOdometry,
-    //   this::getVelocitySpeeds,
-    //   (speeds, feedforwards) -> driveWithChassisSpeeds(speeds),
-    //   new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-    //     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-    //     new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-    //   ),
-    //   config,
-    //   ()->false,
-    //   this
-    // );
+    AutoBuilder.configure(
+      this::getPose,
+      this::resetOdometry,
+      this::getVelocitySpeeds,
+      (speeds, feedforwards) -> driveWithChassisSpeeds(speeds),
+      new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
+        new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+        new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+      ),
+      config,
+      () -> false,
+      this
+    );
   }
 
   public Command followPathCommand(String pathFile) {
