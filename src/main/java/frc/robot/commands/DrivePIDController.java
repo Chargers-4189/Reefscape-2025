@@ -8,7 +8,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import frc.robot.Constants.OIConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.DriveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -40,11 +40,11 @@ public class DrivePIDController extends Command {
     driveSubsystem.drive(
       -MathUtil.applyDeadband(
         xboxController.getLeftY(),
-        OIConstants.kDriveDeadband
+        OperatorConstants.kDriveDeadband
       ),
       -MathUtil.applyDeadband(
         xboxController.getLeftX(),
-        OIConstants.kDriveDeadband
+        OperatorConstants.kDriveDeadband
       ),
       MathUtil.clamp(
         swerveFeedback.calculate(

@@ -20,6 +20,7 @@ public final class Constants {
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = -1;
+    public static final double kDriveDeadband = 0.05;
   }
   public static class CoralEffectorConstants {
     public static final int kLEFT_MOTOR_ID = -1;
@@ -88,12 +89,6 @@ public final class Constants {
     public static final double kDriveWheelFreeSpeedRps =
       (kDrivingMotorFreeSpeedRps * kWheelCircumferenceMeters) /
       kDrivingMotorReduction;
-  }
-
-  public static final class OIConstants {
-
-    public static final int kDriverControllerPort = 0;
-
   }
 
   public static class ElevatorConstants {
