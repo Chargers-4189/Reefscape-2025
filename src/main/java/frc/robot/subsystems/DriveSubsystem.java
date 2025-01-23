@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import frc.robot.subsystems.DriveSubsystem;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -31,6 +32,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.subsystems.MAXSwerveModule;
 
 public class DriveSubsystem extends SubsystemBase {
 
