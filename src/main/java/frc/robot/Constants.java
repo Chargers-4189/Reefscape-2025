@@ -14,6 +14,17 @@ package frc.robot;
  */
 public final class Constants {
 
+  public static class OperatorConstants {
+    public static final int kDriverControllerPort = -1;
+  }
+  public static class CoralEffectorConstants {
+    public static final int kLEFT_MOTOR_ID = -1;
+    public static final int kRIGHT_MOTOR_ID = -1;
+    public static final int kINTAKE_SENSOR_ID = -1;
+    public static final int kOUTTAKE_SENSOR_ID = -1;
+    public static final int kMEASURE_THRESHOLD = 5; //milimeters
+  }
+
   public static final class DriveConstants {
 
     // Driving Parameters - Note that these are not the maximum capable speeds of
@@ -78,6 +89,7 @@ public final class Constants {
   public static final class OIConstants {
 
     public static final int kDriverControllerPort = 0;
+
   }
 
   public static class ElevatorConstants {
