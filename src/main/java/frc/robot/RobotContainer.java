@@ -4,15 +4,12 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveController;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.YAGSLDrivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,15 +18,14 @@ import frc.robot.subsystems.YAGSLDrivetrain;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+
   // The robot's subsystems and commands are defined here...
-  //private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final DriveSubsystem swerveDrive = new DriveSubsystem();
 
-  public YAGSLDrivetrain yagslDrivetrain = new YAGSLDrivetrain();
-
-  
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(0);
+  private final CommandXboxController driveController = new CommandXboxController(
+    0
+  );
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -48,17 +44,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    if (Robot.isSimulation())
-    {
-      Commands.runOnce(() -> yagslDrivetrain.resetOdometry(new Pose2d(5, 5, new Rotation2d())));
-    }
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    //m_robotDrive.setDefaultCommand(
-    //    new DriveController(m_robotDrive, m_driverController));
-    
-    yagslDrivetrain.setDefaultCommand(yagslDrivetrain.driveWithControllerCommand(m_driverController));
+    swerveDrive.setDefaultCommand(
+      new DriveController(swerveDrive, driveController)
+    );
   }
 
   /**
@@ -68,6 +59,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return yagslDrivetrain.followPathCommand("testPath");
+    return Commands.none();
   }
 }
