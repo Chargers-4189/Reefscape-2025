@@ -7,21 +7,21 @@ package frc.robot.commands;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
-import frc.robot.subsystems.ElevatorSubsystem;
+import frc.robot.subsystems.Elevator;
 //import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 //import edu.wpi.first.math.trajectory.TrapezoidProfile;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ElevatorController extends Command {
+public class MoveElevator extends Command {
 
-  private final ElevatorSubsystem elevatorSubsystem;
+  private final Elevator elevatorSubsystem;
   private final PIDController elevatorFeedback = new PIDController(0.0, 0.0, 0.0);
   private double setpoint;
   private int level;
 
 
   /** Creates a new MoveElevator. */
-  public ElevatorController(ElevatorSubsystem elevatorSubsystem, int level) {
+  public MoveElevator(Elevator elevatorSubsystem, int level) {
     this.elevatorSubsystem = elevatorSubsystem;
 
     this.level = level;

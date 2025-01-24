@@ -11,7 +11,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
-public class ElevatorSubsystem extends SubsystemBase {
+public class Elevator extends SubsystemBase {
   private int level = -1;
 
   private final SparkMax leftMotor = new SparkMax(
@@ -33,7 +33,7 @@ public class ElevatorSubsystem extends SubsystemBase {
   private RelativeEncoder encoder = rightMotor.getEncoder();
 
   /** Creates a new Elevator. */
-  public ElevatorSubsystem() {}
+  public Elevator() {}
 
   public int getLevel() {
     return level;
@@ -75,7 +75,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     leftMotor.setVoltage(voltage);
     rightMotor.setVoltage(voltage);
   }*/
-
+  
   public void setPower(double power) {
     if (getMinLimitSwitch() && power < 0) {
       power = 0;
@@ -84,7 +84,7 @@ public class ElevatorSubsystem extends SubsystemBase {
     }
 
     leftMotor.set(power);
-    rightMotor.set(power);
+    rightMotor.set(-power);
   }
 
   @Override
