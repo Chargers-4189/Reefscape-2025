@@ -105,6 +105,13 @@ public final class Constants {
     public static final double[] HEIGHTS_METERS = {0, 0, 0, 0, 0}; //Intake, L1, L2, L3, L4
   }
 
+  public static class SysIdConstants {
+    
+    public static final double kELEVATOR_MASS = -1;
+    public static final double kRADIUS_METERS = 1.757 * 2.54 / 100 / 2;
+    public static final double kGEARING = 1;
+  }
+
   public static final class NeoMotorConstants {
     //public static final double kFreeSpeedRpm = 5676;
     public static final double kFreeSpeedRpm = 6784;
