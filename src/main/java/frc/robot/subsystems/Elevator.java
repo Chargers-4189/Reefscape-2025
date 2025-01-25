@@ -52,6 +52,10 @@ public class Elevator extends SubsystemBase {
     return encoder.getPosition() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
 
+  public double getVelocityMeters() {
+    return encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
+  }
+
   public void zeroEncoder() {
     encoder.setPosition(0);
   }
@@ -64,7 +68,7 @@ public class Elevator extends SubsystemBase {
     return this.maxLimitSwitch.get();
   }
 
-  /*
+  
   public void setVoltage(double voltage) {
     if (getMinLimitSwitch() && voltage < 0) {
       voltage = 0;
@@ -74,7 +78,8 @@ public class Elevator extends SubsystemBase {
 
     leftMotor.setVoltage(voltage);
     rightMotor.setVoltage(voltage);
-  }*/
+  }
+  
   
   public void setPower(double power) {
     if (getMinLimitSwitch() && power < 0) {

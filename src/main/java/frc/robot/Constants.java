@@ -22,6 +22,7 @@ public final class Constants {
     public static final int kDriverControllerPort = -1;
     public static final double kDriveDeadband = 0.05;
   }
+
   public static class CoralEffectorConstants {
     public static final int kLEFT_MOTOR_ID = -1;
     public static final int kRIGHT_MOTOR_ID = -1;
@@ -98,13 +99,18 @@ public final class Constants {
     public static final int kMIN_DIO_PORT = 0;
     public static final int kMAX_DIO_PORT = 1;
     public static final int kENCODER_DIO_PORT = 2;
-    public static final int kMaxCurrentDriveMotor = 50;
+
+    public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 / 100;
+
+    public static final double[] HEIGHTS_METERS = {0, 0, 0, 0, 0}; //Intake, L1, L2, L3, L4
   }
+
   public static final class NeoMotorConstants {
     //public static final double kFreeSpeedRpm = 5676;
     public static final double kFreeSpeedRpm = 6784;
     public static final int kMaxCurrentDriveMotor = 50;
   }
+
   public static final class AutoConstants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;

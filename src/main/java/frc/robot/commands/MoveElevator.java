@@ -8,26 +8,42 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
-//import edu.wpi.first.math.controller.SimpleMotorFeedforward;
-//import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.Timer;
+
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
 
   private final Elevator elevatorSubsystem;
-  private final PIDController elevatorFeedback = new PIDController(0.0, 0.0, 0.0);
-  private double setpoint;
+  private final PIDController feedback = new PIDController(0.0, 0.0, 0.0);
+  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(0.0, 0.0, 0.0, 0.0);
+  private final TrapezoidProfile trapezoidProfiler = new TrapezoidProfile(new Constraints(.3, .3));
   private int level;
+  private State startState;
+  private State goalState;
+  private State setpoint;
+  private double startTime;
+  private double feedbackVoltage;
+  private double feedforwardVoltage;
 
 
-  /** Creates a new MoveElevator. */
+  /**
+   * Creates a new moveElevator command.
+   *
+   * @param level The level to move the elevator to. 0 moves to the intake.
+   */
   public MoveElevator(Elevator elevatorSubsystem, int level) {
     this.elevatorSubsystem = elevatorSubsystem;
-
     this.level = level;
-    this.setpoint = ElevatorConstants.HEIGHTS_METERS[level];
 
-    elevatorFeedback.setTolerance(ElevatorConstants.kTOLERANCE_METERS);
+    this.startTime = Timer.getFPGATimestamp();
+    this.startState = new State(elevatorSubsystem.getHeightMeters(), elevatorSubsystem.getVelocityMeters());
+    this.goalState = new State(ElevatorConstants.HEIGHTS_METERS[level], 0);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevatorSubsystem);
@@ -42,10 +58,18 @@ public class MoveElevator extends Command {
   public void execute() {
     if(elevatorSubsystem.getMinLimitSwitch()) {
       elevatorSubsystem.zeroEncoder();
-      elevatorFeedback.reset();
+      feedback.reset();
     }
 
-    elevatorSubsystem.setPower(elevatorFeedback.calculate(elevatorSubsystem.getHeightMeters(), setpoint));
+    //currentState = new State(elevatorSubsystem.getHeightMeters(), elevatorSubsystem.getVelocityMeters());
+
+    setpoint = trapezoidProfiler.calculate(Timer.getFPGATimestamp() - startTime, startState, goalState);
+
+    feedbackVoltage = feedback.calculate(elevatorSubsystem.getHeightMeters(), setpoint.position);
+    feedforwardVoltage = feedforward.calculate(setpoint.velocity);
+    
+
+    elevatorSubsystem.setVoltage(feedbackVoltage + feedforwardVoltage);
   }
 
   // Called once the command ends or is interrupted.
@@ -57,6 +81,6 @@ public class MoveElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return elevatorFeedback.atSetpoint();
+    return trapezoidProfiler.isFinished(Timer.getFPGATimestamp() - startTime);
   }
 }
