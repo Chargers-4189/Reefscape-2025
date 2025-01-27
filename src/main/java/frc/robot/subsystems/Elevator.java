@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
+
   private int level = -1;
 
   private final SparkMax leftMotor = new SparkMax(
@@ -33,7 +34,9 @@ public class Elevator extends SubsystemBase {
   private RelativeEncoder encoder = rightMotor.getEncoder();
 
   /** Creates a new Elevator. */
-  public Elevator() {}
+  public Elevator() {
+    zeroEncoder();
+  }
 
   public int getLevel() {
     return level;
@@ -61,14 +64,13 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return this.minLimitSwitch.get();
+    return minLimitSwitch.get();
   }
 
   public boolean getMaxLimitSwitch() {
-    return this.maxLimitSwitch.get();
+    return maxLimitSwitch.get();
   }
 
-  
   public void setVoltage(double voltage) {
     if (getMinLimitSwitch() && voltage < 0) {
       voltage = 0;
@@ -76,16 +78,25 @@ public class Elevator extends SubsystemBase {
       voltage = 0;
     }
 
+    //temporary safety:
+    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+      return;
+    }
+
     leftMotor.setVoltage(voltage);
-    rightMotor.setVoltage(voltage);
+    rightMotor.setVoltage(-voltage);
   }
-  
-  
+
   public void setPower(double power) {
     if (getMinLimitSwitch() && power < 0) {
       power = 0;
     } else if (getMaxLimitSwitch() && power > 0) {
       power = 0;
+    }
+
+    //temporary safety:
+    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+      return;
     }
 
     leftMotor.set(power);
