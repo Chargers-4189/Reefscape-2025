@@ -13,6 +13,7 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;*/
 import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Vision;
 import frc.robot.commands.DriveController;
 
 /**
@@ -25,6 +26,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerveDrive = new DriveSubsystem();
+  private final Vision vision = new Vision();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
