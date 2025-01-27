@@ -26,21 +26,27 @@ public class Vision extends SubsystemBase {
 
   public Vision() {
 
-    Rotation3d frontCameraRot = new Rotation3d(0, Math.toRadians(-15), 0);
-    Transform3d frontCameraPose = new Transform3d(
-      new Translation3d(0.25, -0.25, 0),
-      frontCameraRot
+    final Rotation3d flCamRot = new Rotation3d(0, Math.toRadians(0), 0);
+    final Transform3d flCamPose = new Transform3d(
+      new Translation3d(0, -0.01, 0),
+      flCamRot
     );
-    Rotation3d backCameraRot = new Rotation3d(0, Math.toRadians(-15), 0);
-    Transform3d backCameraPose = new Transform3d(
-      new Translation3d(0.25, 0.25, 0),
-      backCameraRot
+    final Rotation3d frCamRot = new Rotation3d(0, Math.toRadians(0), 0);
+    final Transform3d frCamPose = new Transform3d(
+      new Translation3d(0, 0, 0),
+      frCamRot
+    );
+    final Rotation3d bkCamRot = new Rotation3d(0, Math.toRadians(0), 0);
+    final Transform3d bkCamPose = new Transform3d(
+      new Translation3d(0, 0.01, 0),
+      bkCamRot
     );
 
     cameras =
       new AprilTagCamera[] {
-        new AprilTagCamera("FrontCamera2025", frontCameraPose),
-        new AprilTagCamera("BackCamera2025", backCameraPose),
+        new AprilTagCamera("flCam2025", flCamPose),
+        new AprilTagCamera("frCam2025", frCamPose),
+        new AprilTagCamera("bkCam2025", bkCamPose),
       };
   }
 
