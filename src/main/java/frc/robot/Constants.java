@@ -99,6 +99,7 @@ public final class Constants {
     public static final int kMIN_DIO_PORT = 0;
     public static final int kMAX_DIO_PORT = 1;
     public static final int kENCODER_DIO_PORT = 2;
+    public static final int kMaxCurrentDriveMotor = 50;
 
     public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 / 100;
 
