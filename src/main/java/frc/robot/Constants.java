@@ -24,6 +24,9 @@ public final class Constants {
   }
 
   public static class CoralEffectorConstants {
+    public static final double kPLACE_CORAL_ANGLE = -1; //Find the optimal angle for placing coral in absolute encoder
+    public static final double kDEFAULT_CORAL_EFFECTER_ANGLE = -1; //Find the optimal default angle in absolute encoder
+    public static final int kACTUATOR_ID = -1;
     public static final int kLEFT_MOTOR_ID = -1;
     public static final int kRIGHT_MOTOR_ID = -1;
     public static final int kINTAKE_SENSOR_ID = -1;

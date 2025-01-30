@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
@@ -31,7 +32,7 @@ public class Elevator extends SubsystemBase {
     ElevatorConstants.kMAX_DIO_PORT
   );
 
-  private RelativeEncoder encoder = rightMotor.getEncoder();
+  private RelativeEncoder encoder = rightMotor.getAlternateEncoder();
 
   /** Creates a new Elevator. */
   public Elevator() {
