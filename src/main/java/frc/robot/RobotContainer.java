@@ -12,9 +12,11 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.ExampleSubsystem;*/
+import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.commands.CoralIntake;
 import frc.robot.commands.DriveController;
+import frc.robot.commands.MoveElevator;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +28,11 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerveDrive = new DriveSubsystem();
+  private final Elevator elevator = new Elevator();
+  private final CoralEffector coralEffector = new CoralEffector();
+
+
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -58,6 +65,7 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(
       new DriveController(swerveDrive, driveController)
     );
+    driveController.x().onTrue(new MoveElevator());
 
   }
 
