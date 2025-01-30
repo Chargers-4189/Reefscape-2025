@@ -14,8 +14,8 @@ public class CoralIntake extends Command {
 
   /**
    * 
-   *  This does this
-   * @param coraleffector
+   *  If intake sensor is active, inputs coral until outtake sensor sees coral
+   * @param coraleffector import coral subsystem
    */
   public CoralIntake(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
@@ -45,9 +45,7 @@ public class CoralIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(coraleffector.getOuttakeSensor() == true){
-      return true;
-    }
-    return false;
+    return (coraleffector.getOuttakeSensor() || !coraleffector.getIntakeSensor());
+
   }
 }
