@@ -120,7 +120,7 @@ The development branch contains the latest but unstable code. This is where all 
 > The development branch will not be used during competitions. There are specific branches for each competition.
 
 #### Competition Development `gainesville/dev` `gwinnett/dev`
-These branches contain the latest but unstable code for a specific competition. Unlike the development branch, this does not require code review approval due to the competition's chaotic qualities, and direct commits can be made on this branch. Afterward, we can sort out these commits to resolve errors or bugs. 
+These branches contain the latest but unstable code for a specific competition. Unlike the development branch, this does not require code review approval due to how chaotic competition's can be, and direct commits can be made on this branch. Afterward, we can sort out these commits to resolve any errors or bugs on the competition's main branches. 
 
 ## Workflow
 Before you jump in and start contributing, it’s a good idea to get familiar with the Git Workflow. The power of GitHub ensures that the version history is maintained and multiple versions are retained. Likewise, the code is checked for errors with pull requests to prevent further problems. This allows us to build high-quality code and collaborate efficiently. If you would like to learn more, read [here](https://github.com/Chargers-4189/git-lesson/blob/main/github-course.md#workflow)
