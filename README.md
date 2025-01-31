@@ -2,7 +2,7 @@
 
 ![](https://updates.team4189.org/content/images/size/w1000/2025/logo/4189-horizontal-black.png)
 
-###  <img align="left" src="https://updates.team4189.org/content/images/size/w100/2025/logo/4189-icon-black.png"> FRC Team 4189 - Chargers
+### FRC Team 4189 - Chargers
 
 This repository includes all code and resources for the 2025 FRC Season, Reefscape.
 
@@ -10,11 +10,14 @@ This repository includes all code and resources for the 2025 FRC Season, Reefsca
 - [Resources](#resources)
 - [Setup](#setup)
   - [Requirements](#requirements)
-- [Contribution](#contribution)
+- [Contributing](#contributing)
 
 ## Resources
 
 ```
+assets/
+└── AdvantageScopeAssets/
+    └── Robot_Chargers2025
 design/
 src/
 └── main/
@@ -27,6 +30,9 @@ src/
                 ├── commands
                 └── subsystems
 ```
+
+`assets`
+- The robot assets for the FRC Reefscape season and AdvantageScope.
 
 `design`
 - Design and code plans for commands and subsystems
@@ -52,4 +58,6 @@ To contribute or run the code, you must have the following installed:
 - Install the latest version of [FRC Game Tools](https://www.ni.com/en/support/downloads/drivers/download.frc-game-tools.html)
 - Install the [Seamless Prettier For Java 2022](https://marketplace.visualstudio.com/items?itemName=hyperproof.vscode-ext-prettier-java) VSCode Extension
 
-## Contribution
+## Contributing
+
+For more information about contributing to this project, please read [`CONTRIBUTING.md`](https://github.com/Chargers-4189/Reefscape-2025/blob/main/CONTRIBUTING.md)
