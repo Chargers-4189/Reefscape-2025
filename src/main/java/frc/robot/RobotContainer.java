@@ -50,7 +50,7 @@ public class RobotContainer {
   private void configureBindings() {
     if (Robot.isSimulation()) {
       Commands.runOnce(() ->
-        swerveDrive.resetOdometry(new Pose2d(5, 5, new Rotation2d()))
+        swerveDrive.resetOdometry(new Pose2d(2, 7, new Rotation2d()))
       );
     }
     swerveDrive.setDefaultCommand(
@@ -65,6 +65,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return swerveDrive.followPathCommand("testPath");
+    return swerveDrive.followPathCommand("s-curve-6m");
   }
 }

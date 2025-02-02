@@ -96,7 +96,9 @@ public class YAGSLDrivetrain extends SubsystemBase {
         new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
       ),
       config,
-      () -> false,
+      () -> {
+        return true;
+      },
       this
     );
   }
@@ -119,7 +121,7 @@ public class YAGSLDrivetrain extends SubsystemBase {
       PathPlannerPath path = PathPlannerPath.fromPathFile(pathFile);
 
       // Create a path following command using AutoBuilder. This will also trigger event markers.
-      return AutoBuilder.followPath(path);
+      return new PathPlannerAuto("auto-test");
     } catch (Exception e) {
       DriverStation.reportError(
         "Big oops: " + e.getMessage(),
