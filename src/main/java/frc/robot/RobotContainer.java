@@ -7,14 +7,10 @@ package frc.robot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-/*
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
-import frc.robot.subsystems.ExampleSubsystem;*/
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.commands.CoralIntake;
 import frc.robot.commands.DriveController;
+import frc.robot.subsystems.CoralEffector;
+import frc.robot.subsystems.DriveSubsystem;
+import frc.robot.subsystems.Elevator;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -26,6 +22,8 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerveDrive = new DriveSubsystem();
+  private final Elevator elevator = new Elevator();
+  private final CoralEffector coralIntake = new CoralEffector();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -48,17 +46,9 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    /*
-    new Trigger(m_exampleSubsystem::exampleCondition)
-      .onTrue(new ExampleCommand(m_exampleSubsystem));
-    */
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
     swerveDrive.setDefaultCommand(
       new DriveController(swerveDrive, driveController)
     );
-
   }
 
   /**
