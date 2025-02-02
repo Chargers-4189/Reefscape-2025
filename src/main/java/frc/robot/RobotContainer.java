@@ -4,13 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.DriveController;
 import frc.robot.subsystems.CoralEffector;
-import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.YAGSLDrivetrain;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -21,7 +23,7 @@ import frc.robot.subsystems.Elevator;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem swerveDrive = new DriveSubsystem();
+  private final YAGSLDrivetrain swerveDrive = new YAGSLDrivetrain();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralIntake = new CoralEffector();
 
@@ -46,8 +48,13 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    if (Robot.isSimulation()) {
+      Commands.runOnce(() ->
+        swerveDrive.resetOdometry(new Pose2d(5, 5, new Rotation2d()))
+      );
+    }
     swerveDrive.setDefaultCommand(
-      new DriveController(swerveDrive, driveController)
+      swerveDrive.driveWithControllerCommand(driveController)
     );
   }
 
