@@ -6,6 +6,8 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -25,6 +27,12 @@ public class CoralEffector extends SubsystemBase {
     MotorType.kBrushless
   );
 
+  private final SparkMax actuatorMotor = new SparkMax(
+    CoralEffectorConstants.kACTUATOR_ID,
+    MotorType.kBrushless
+  );
+
+  private AbsoluteEncoder encoder = rightMotor.getAbsoluteEncoder();
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
   private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
 
@@ -47,6 +55,17 @@ public class CoralEffector extends SubsystemBase {
     rightMotor.set(rightMotorPower);
   }
 
+  public void ActuateForward(){
+    actuatorMotor.set(0.1);
+  }
+
+  public void ActuateBackward(){
+    actuatorMotor.set(-0.1);
+  }
+
+  public void StopActuating(){
+    actuatorMotor.set(0);
+  }
   public boolean getIntakeSensor() {
     LaserCan.Measurement inMeasurement = intakeSensor.getMeasurement();
     if (inMeasurement != null && inMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
@@ -66,7 +85,9 @@ public class CoralEffector extends SubsystemBase {
     }
     return false;
   }
-
+  public double getAbsoluteEncoderValue(){
+    return encoder.getPosition();
+  }
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
