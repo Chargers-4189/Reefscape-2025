@@ -100,6 +100,11 @@ public class Elevator extends SubsystemBase {
     // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
     //   return;
     // }
+
+    // ----- WARNING WARNING -----
+    // This is a TEMPORARY SOLUTION. The error with this is that when setPower()
+    // method is not running, resistance to gravity will NOT work. Need to add
+    // solution in periodic.
     leftMotor.set(-power * ElevatorConstants.kMAX_POWER - resistPower);
     rightMotor.set(power * ElevatorConstants.kMAX_POWER + resistPower);
   }
