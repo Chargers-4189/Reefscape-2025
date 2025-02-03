@@ -51,8 +51,8 @@ public class CoralEffector extends SubsystemBase {
   }
 
   public void set(double leftMotorPower, double rightMotorPower) {
-    leftMotor.set(leftMotorPower);
-    rightMotor.set(rightMotorPower);
+    leftMotor.set(-leftMotorPower * 0.2);
+    rightMotor.set(rightMotorPower * 0.2);
   }
 
   public void ActuateForward(){

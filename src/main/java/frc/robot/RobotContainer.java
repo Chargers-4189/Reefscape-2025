@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveController;
@@ -23,7 +24,7 @@ public class RobotContainer {
   // The robot's subsystems and commands are defined here...
   private final DriveSubsystem swerveDrive = new DriveSubsystem();
   private final Elevator elevator = new Elevator();
-  private final CoralEffector coralIntake = new CoralEffector();
+  private final CoralEffector coralEffector = new CoralEffector();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -46,9 +47,28 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    /*
     swerveDrive.setDefaultCommand(
       new DriveController(swerveDrive, driveController)
-    );
+    );*/
+
+    
+    elevator.setDefaultCommand(Commands.run(()->{
+      elevator.setPower(driveController.getLeftY());
+    }, elevator));
+
+    driveController.a().onTrue(Commands.runOnce(()->{
+      elevator.setResistPower(.05);
+    }));
+    driveController.b().onTrue(Commands.runOnce(()->{
+      elevator.setResistPower(-.05);
+    }));
+
+    coralEffector.setDefaultCommand(Commands.run(()->{
+      coralEffector.set(driveController.getRightY(),driveController.getRightY());
+    }, coralEffector));
+    driveController.y().onTrue(getAutonomousCommand());
+
   }
 
   /**

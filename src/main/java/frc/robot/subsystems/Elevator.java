@@ -14,6 +14,7 @@ import frc.robot.Constants.ElevatorConstants;
 public class Elevator extends SubsystemBase {
 
   private int level = -1;
+  private double resistPower;
 
   private final SparkMax leftMotor = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID,
@@ -71,6 +72,7 @@ public class Elevator extends SubsystemBase {
     return maxLimitSwitch.get();
   }
 
+  /*
   public void setVoltage(double voltage) {
     if (getMinLimitSwitch() && voltage < 0) {
       voltage = 0;
@@ -85,26 +87,31 @@ public class Elevator extends SubsystemBase {
 
     leftMotor.setVoltage(voltage);
     rightMotor.setVoltage(-voltage);
-  }
+  }*/
 
   public void setPower(double power) {
-    if (getMinLimitSwitch() && power < 0) {
-      power = 0;
-    } else if (getMaxLimitSwitch() && power > 0) {
-      power = 0;
-    }
+    // if (getMinLimitSwitch() && power < 0) {
+    //   power = 0;
+    // } else if (getMaxLimitSwitch() && power > 0) {
+    //   power = 0;
+    // }
 
     //temporary safety:
-    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
-      return;
-    }
+    // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+    //   return;
+    // }
+    leftMotor.set(-power * ElevatorConstants.kMAX_POWER - resistPower);
+    rightMotor.set(power * ElevatorConstants.kMAX_POWER + resistPower);
+  }
 
-    leftMotor.set(power);
-    rightMotor.set(-power);
+  public void setResistPower(double power) {
+    resistPower += power;
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(resistPower);
+
   }
 }

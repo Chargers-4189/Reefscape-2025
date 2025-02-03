@@ -69,7 +69,7 @@ public class MoveElevator extends Command {
     feedforwardVoltage = feedforward.calculate(setpoint.velocity);
     
 
-    elevatorSubsystem.setVoltage(feedbackVoltage + feedforwardVoltage);
+    //elevatorSubsystem.setVoltage(feedbackVoltage + feedforwardVoltage);
   }
 
   // Called once the command ends or is interrupted.
