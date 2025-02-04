@@ -34,7 +34,7 @@ public final class Constants {
     public static final int kRIGHT_MOTOR_ID = 32;
     public static final int kINTAKE_SENSOR_ID = 34;
     public static final int kOUTTAKE_SENSOR_ID = 35;
-    public static final int kMEASURE_THRESHOLD = 5; //milimeters
+    public static final int kMEASURE_THRESHOLD = 20; //milimeters
   }
 
   public static final class DriveConstants {

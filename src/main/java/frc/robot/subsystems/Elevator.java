@@ -14,7 +14,7 @@ import frc.robot.Constants.ElevatorConstants;
 public class Elevator extends SubsystemBase {
 
   private int level = -1;
-  private double resistPower;
+  private double resistPower = -0.05;
 
   private final SparkMax leftMotor = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID,
@@ -116,7 +116,7 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(resistPower);
+    //System.out.println(resistPower);
 
   }
 }

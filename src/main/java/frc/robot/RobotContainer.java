@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.DriveController;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.DriveSubsystem;
@@ -57,17 +59,12 @@ public class RobotContainer {
       elevator.setPower(driveController.getLeftY());
     }, elevator));
 
-    driveController.a().onTrue(Commands.runOnce(()->{
-      elevator.setResistPower(.05);
-    }));
-    driveController.b().onTrue(Commands.runOnce(()->{
-      elevator.setResistPower(-.05);
-    }));
+    driveController.a().onTrue(new CoralIntake(coralEffector));
+    driveController.b().onTrue(new CoralOuttake(coralEffector));
 
-    coralEffector.setDefaultCommand(Commands.run(()->{
-      coralEffector.set(driveController.getRightY(),driveController.getRightY());
-    }, coralEffector));
     driveController.y().onTrue(getAutonomousCommand());
+
+
 
   }
 
