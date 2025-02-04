@@ -9,6 +9,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.DriveController;
+import frc.robot.commands.MoveElevator;
+import frc.robot.commands.SimpleMoveElevator;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Elevator;
@@ -52,23 +54,30 @@ public class RobotContainer {
       new DriveController(swerveDrive, driveController)
     );*/
 
-    
-    elevator.setDefaultCommand(Commands.run(()->{
-      elevator.setPower(driveController.getLeftY());
-    }, elevator));
+    elevator.setDefaultCommand(
+      Commands.run(
+        () -> {
+          elevator.setVoltage(-driveController.getLeftY() * 2);
+        },
+        elevator
+      )
+    );
 
-    driveController.a().onTrue(Commands.runOnce(()->{
-      elevator.setResistPower(.05);
-    }));
-    driveController.b().onTrue(Commands.runOnce(()->{
-      elevator.setResistPower(-.05);
-    }));
+    driveController.a().whileTrue(new SimpleMoveElevator(elevator, 2));
+    driveController.b().whileTrue(new MoveElevator(elevator, 2));
 
-    coralEffector.setDefaultCommand(Commands.run(()->{
-      coralEffector.set(driveController.getRightY(),driveController.getRightY());
-    }, coralEffector));
+    coralEffector.setDefaultCommand(
+      Commands.run(
+        () -> {
+          coralEffector.set(
+            driveController.getRightY(),
+            driveController.getRightY()
+          );
+        },
+        coralEffector
+      )
+    );
     driveController.y().onTrue(getAutonomousCommand());
-
   }
 
   /**

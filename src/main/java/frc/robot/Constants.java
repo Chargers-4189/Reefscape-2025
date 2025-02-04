@@ -107,11 +107,20 @@ public final class Constants {
     public static final int kMAX_DIO_PORT = 1;
     public static final int kMaxCurrentDriveMotor = 50;
 
-    public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 / 100;
+    public static final double kROTATIONS_TO_METERS =
+      1.757 * Math.PI * 2.54 / 100;
 
-    public static final double[] HEIGHTS_METERS = { -1, -1, -1, -1, -1 }; //Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS_METERS = {
+      .7,
+      .75,
+      .813,
+      1.232,
+      1.829,
+    }; //Intake, L1, L2, L3, L4
+    public static final double kBASE_HEIGHT = .673;
 
-    public static final double kMAX_POWER = .2;
+    public static final double kMAX_VOLTAGE = 2;
+    public static final double kGRAVITY_VOLTAGE = -.4;
   }
 
   public static final class NeoMotorConstants {
