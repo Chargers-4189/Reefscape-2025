@@ -72,6 +72,12 @@ public class RobotContainer {
       .y()
       .and(driveController.rightBumper())
       .whileTrue(elevator.sysIdDynamic(SysIdRoutine.Direction.kReverse));
+    elevator.setDefaultCommand(
+      Commands.run(
+        () -> elevator.setVoltage(driveController.getLeftY()),
+        elevator
+      )
+    );
   }
 
   /**

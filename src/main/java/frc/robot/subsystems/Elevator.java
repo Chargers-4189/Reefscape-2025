@@ -50,7 +50,6 @@ public class Elevator extends SubsystemBase {
   private RelativeEncoder encoder = rightMotor.getEncoder();
 
   private static final SparkMaxConfig LeftSparkMaxConfig = new SparkMaxConfig();
-  private RelativeEncoder encoderL = leftMotor.getEncoder();
 
   /** Creates a new Elevator. */
   public Elevator() {
@@ -96,8 +95,8 @@ public class Elevator extends SubsystemBase {
     return maxLimitSwitch.get();
   }
 
-  /*
   public void setVoltage(double voltage) {
+    /*
     if (getMinLimitSwitch() && voltage < 0) {
       voltage = 0;
     } else if (getMaxLimitSwitch() && voltage > 0) {
@@ -107,74 +106,42 @@ public class Elevator extends SubsystemBase {
     //temporary safety:
     if (getMinLimitSwitch() || getMaxLimitSwitch()) {
       return;
-    }
+    }*/
 
     leftMotor.setVoltage(voltage);
     rightMotor.setVoltage(voltage);
   }
-  
-  
-  public void setPower(double power) {
-    if (getMinLimitSwitch() && power < 0) {
-      power = 0;
-    } else if (getMaxLimitSwitch() && power > 0) {
-      power = 0;
-    }
 
-    //temporary safety:
-    // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
-    //   return;
-    // }
+  private final SysIdRoutine sysIdRoutine = new SysIdRoutine(
+    // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
+    new SysIdRoutine.Config(),
+    new SysIdRoutine.Mechanism(
+      // Tell SysId how to plumb the driving voltage to the motors.
+      voltage -> {
+        rightMotor.setVoltage(voltage);
+      },
+      // Tell SysId how to record a frame of data for each motor on the mechanism being
+      // characterized.
+      log -> {
+        log
+          .motor("elevator-right")
+          .voltage(
+            m_appliedVoltage.mut_replace(
+              rightMotor.get() * RobotController.getBatteryVoltage(),
+              Volts
+            )
+          )
+          .linearPosition(m_distance.mut_replace(encoder.getPosition(), Meters))
+          .linearVelocity(
+            m_velocity.mut_replace(encoder.getVelocity(), MetersPerSecond)
+          );
+      },
+      // Tell SysId to make generated commands require this subsystem, suffix test state in
+      // WPILog with this subsystem's name ("Elevator")
+      this
+    )
+  );
 
-    // ----- WARNING WARNING -----
-    // This is a TEMPORARY SOLUTION. The error with this is that when setPower()
-    // method is not running, resistance to gravity will NOT work. Need to add
-    // solution in periodic.
-    rightMotor.setVoltage(-voltage);
-  }
-
-  private final SysIdRoutine sysIdRoutine =
-      new SysIdRoutine(
-          // Empty config defaults to 1 volt/second ramp rate and 7 volt step voltage.
-          new SysIdRoutine.Config(),
-          new SysIdRoutine.Mechanism(
-              // Tell SysId how to plumb the driving voltage to the motors.
-              voltage -> {
-                if (getMinLimitSwitch() && !voltage.gte(Volts.of(0))) {
-                  leftMotor.setVoltage(0);
-                  rightMotor.setVoltage(0);
-                } else if (getMaxLimitSwitch() && voltage.gt(Volts.of(0))) {
-                  leftMotor.setVoltage(0);
-                  rightMotor.setVoltage(0);
-                } else {
-                  leftMotor.setVoltage(voltage);
-                  rightMotor.setVoltage(voltage);
-                }
-              },
-              // Tell SysId how to record a frame of data for each motor on the mechanism being
-              // characterized.
-              log -> {
-                // Record a frame for the left motors.
-                log.motor("elevator-left")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            leftMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                    .linearPosition(m_distance.mut_replace(encoderL.getPosition(), Meters))
-                    .linearVelocity(
-                        m_velocity.mut_replace(encoderL.getVelocity(), MetersPerSecond));
-                // Record a frame for the right motors.
-                log.motor("elevator-right")
-                    .voltage(
-                        m_appliedVoltage.mut_replace(
-                            rightMotor.get() * RobotController.getBatteryVoltage(), Volts))
-                    .linearPosition(m_distance.mut_replace(encoder.getPosition(), Meters))
-                    .linearVelocity(
-                        m_velocity.mut_replace(encoder.getVelocity(), MetersPerSecond));
-              },
-              // Tell SysId to make generated commands require this subsystem, suffix test state in
-              // WPILog with this subsystem's name ("Elevator")
-              this));
-  
   /**
    * Returns a command that will execute a quasistatic test in the given direction.
    *
