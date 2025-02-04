@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import static edu.wpi.first.units.Units.Meter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -44,7 +45,7 @@ public class YAGSLDrivetrain extends SubsystemBase {
     try {
       swerveDrive =
         new SwerveParser(swerveJsonDirectory)
-          .createSwerveDrive(maximumSpeed, new Pose2d(2, 7, new Rotation2d()));
+          .createSwerveDrive(maximumSpeed, new Pose2d(Meter.of(2), Meter.of(7), new Rotation2d()));
     } catch (Exception e) {
       System.err.println("SwerveDrive no workie :(");
     }
@@ -52,7 +53,7 @@ public class YAGSLDrivetrain extends SubsystemBase {
      * Wheel COF = https://docs.google.com/spreadsheets/d/1e-PpfiaOBn0BW1PxHVpOaZREy2jI7hNt-4gQEwFrpzM/edit?gid=1799070435#gid=1799070435
      */
     ModuleConfig moduleConfig = new ModuleConfig(
-      Constants.ModuleConstants.kWheelDiameterMeters,
+      Constants.ModuleConstants.kWheelDiameterMeters/2,
       AutoConstants.kMaxSpeedMetersPerSecond,
       .87,
       DCMotor.getNeoVortex(1),
