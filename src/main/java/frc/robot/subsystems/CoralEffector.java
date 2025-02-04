@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
+import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -25,6 +26,13 @@ public class CoralEffector extends SubsystemBase {
     MotorType.kBrushless
   );
 
+  private final SparkMax actuatorMotor = new SparkMax(
+    CoralEffectorConstants.kACTUATOR_ID,
+    MotorType.kBrushless
+  );
+
+  private AbsoluteEncoder encoder = rightMotor.getAbsoluteEncoder();
+
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
   private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
 
@@ -43,8 +51,20 @@ public class CoralEffector extends SubsystemBase {
   }
 
   public void set(double leftMotorPower, double rightMotorPower) {
-    leftMotor.set(leftMotorPower);
-    rightMotor.set(rightMotorPower);
+    leftMotor.set(-leftMotorPower * 0.2);
+    rightMotor.set(rightMotorPower * 0.2);
+  }
+
+  public void ActuateForward(){
+    actuatorMotor.set(0.1);
+  }
+
+  public void ActuateBackward(){
+    actuatorMotor.set(-0.1);
+  }
+
+  public void StopActuating(){
+    actuatorMotor.set(0);
   }
 
   public boolean getIntakeSensor() {
@@ -65,6 +85,10 @@ public class CoralEffector extends SubsystemBase {
       System.out.println("ERROR! Coral Effector Outtake LaserCan measurement is invalid");
     }
     return false;
+  }
+
+  public double getAbsoluteEncoderValue(){
+    return encoder.getPosition();
   }
 
   @Override

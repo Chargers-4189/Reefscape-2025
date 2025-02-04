@@ -4,10 +4,16 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Meters;
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.Volts;
+
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
+import com.revrobotics.spark.config.SparkMaxConfig;
 import edu.wpi.first.units.measure.MutDistance;
 import edu.wpi.first.units.measure.MutLinearVelocity;
 import edu.wpi.first.units.measure.MutVoltage;
@@ -18,11 +24,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import frc.robot.Constants.ElevatorConstants;
 
-import static edu.wpi.first.units.Units.Volts;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.MetersPerSecond;
-
 public class Elevator extends SubsystemBase {
+
   private int level = -1;
   private final MutVoltage m_appliedVoltage = Volts.mutable(0);
   private final MutDistance m_distance = Meters.mutable(0);
@@ -45,10 +48,20 @@ public class Elevator extends SubsystemBase {
   );
 
   private RelativeEncoder encoder = rightMotor.getEncoder();
+
+  private static final SparkMaxConfig LeftSparkMaxConfig = new SparkMaxConfig();
   private RelativeEncoder encoderL = leftMotor.getEncoder();
 
   /** Creates a new Elevator. */
-  public Elevator() {}
+  public Elevator() {
+    zeroEncoder();
+    LeftSparkMaxConfig.follow(rightMotor, true);
+    leftMotor.configure(
+      LeftSparkMaxConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+    );
+  }
 
   public int getLevel() {
     return level;
@@ -64,11 +77,11 @@ public class Elevator extends SubsystemBase {
   }*/
 
   public double getHeightMeters() {
-    return encoder.getPosition() * ElevatorConstants.kROTATIONS_TO_METERS;
+    return -encoder.getPosition() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
 
   public double getVelocityMeters() {
-    return encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
+    return -encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
 
   public void zeroEncoder() {
@@ -76,14 +89,14 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return this.minLimitSwitch.get();
+    return minLimitSwitch.get();
   }
 
   public boolean getMaxLimitSwitch() {
-    return this.maxLimitSwitch.get();
+    return maxLimitSwitch.get();
   }
 
-  
+  /*
   public void setVoltage(double voltage) {
     if (getMinLimitSwitch() && voltage < 0) {
       voltage = 0;
@@ -91,10 +104,16 @@ public class Elevator extends SubsystemBase {
       voltage = 0;
     }
 
+    //temporary safety:
+    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+      return;
+    }
+
     leftMotor.setVoltage(voltage);
     rightMotor.setVoltage(voltage);
   }
-
+  
+  
   public void setPower(double power) {
     if (getMinLimitSwitch() && power < 0) {
       power = 0;
@@ -102,8 +121,16 @@ public class Elevator extends SubsystemBase {
       power = 0;
     }
 
-    leftMotor.set(power);
-    rightMotor.set(-power);
+    //temporary safety:
+    // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+    //   return;
+    // }
+
+    // ----- WARNING WARNING -----
+    // This is a TEMPORARY SOLUTION. The error with this is that when setPower()
+    // method is not running, resistance to gravity will NOT work. Need to add
+    // solution in periodic.
+    rightMotor.setVoltage(-voltage);
   }
 
   private final SysIdRoutine sysIdRoutine =
@@ -165,9 +192,10 @@ public class Elevator extends SubsystemBase {
   public Command sysIdDynamic(SysIdRoutine.Direction direction) {
     return sysIdRoutine.dynamic(direction);
   }
-  
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(getHeightMeters());
   }
 }
