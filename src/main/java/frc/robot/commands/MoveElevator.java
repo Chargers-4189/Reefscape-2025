@@ -4,100 +4,74 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
-import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
+import edu.wpi.first.math.controller.ElevatorFeedforward;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.wpilibj.Timer;
+
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
 
-  private final Elevator elevatorSubsystem;
-  private final PIDController feedback = new PIDController(1.0, 0.0, 0.0);
-  private final ElevatorFeedforward feedforward = new ElevatorFeedforward(
-    0.0,
-    0.4,
-    0.0,
-    0.0
-  );
-  private final TrapezoidProfile trapezoidProfiler = new TrapezoidProfile(
-    new Constraints(.3, .3)
-  );
+  private final Elevator elevator;
   private int level;
-  private State startState;
-  private State goalState;
-  private State setpoint;
+  private double goal;
   private double startTime;
-  private double feedbackVoltage;
-  private double feedforwardVoltage;
+
 
   /**
    * Creates a new moveElevator command.
    *
    * @param level The level to move the elevator to. 0 moves to the intake.
    */
-  public MoveElevator(Elevator elevatorSubsystem, int level) {
-    this.elevatorSubsystem = elevatorSubsystem;
+  public MoveElevator(Elevator elevator, int level) {
+    this.elevator = elevator;
     this.level = level;
-
-    this.startTime = Timer.getFPGATimestamp();
-    this.startState =
-      new State(
-        elevatorSubsystem.getHeightMeters(),
-        elevatorSubsystem.getVelocityMeters()
-      );
-    this.goalState = new State(ElevatorConstants.kHEIGHTS_METERS[level], 0);
+    this.goal = ElevatorConstants.kHEIGHTS[level];
 
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevatorSubsystem);
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    this.startTime = Timer.getFPGATimestamp();
+  };
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     /*
-    if (elevatorSubsystem.getMinLimitSwitch()) {
+    if(elevatorSubsystem.getMinLimitSwitch()) {
       elevatorSubsystem.zeroEncoder();
-      feedback.reset();
     }*/
 
-    //currentState = new State(elevatorSubsystem.getHeightMeters(), elevatorSubsystem.getVelocityMeters());
+    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * ElevatorConstants.kPROPORTIONAL_VOLTS;
+    var maxVoltage = (Timer.getFPGATimestamp() - startTime) * ElevatorConstants.kMAX_VOLT_CHNAGE_PER_SECOND;
 
-    setpoint =
-      trapezoidProfiler.calculate(
-        Timer.getFPGATimestamp() - startTime,
-        startState,
-        goalState
-      );
-
-    feedbackVoltage =
-      feedback.calculate(
-        elevatorSubsystem.getHeightMeters(),
-        setpoint.position
-      );
-    feedforwardVoltage = feedforward.calculate(setpoint.velocity);
-    elevatorSubsystem.setVoltage(feedbackVoltage + feedforwardVoltage);
+    if (elevator.getEncoder() < goal) {
+      elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
+    } else {
+      elevator.setVoltage(-Math.min(proportionalVoltage, maxVoltage));
+    }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevatorSubsystem.setLevel(level);
+    elevator.setLevel(level);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
-    //return trapezoidProfiler.isFinished(Timer.getFPGATimestamp() - startTime);
+    return Math.abs(goal - elevator.getEncoder()) < .005;
   }
 }

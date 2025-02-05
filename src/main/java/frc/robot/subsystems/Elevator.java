@@ -63,14 +63,14 @@ public class Elevator extends SubsystemBase {
     return encoder.getPosition();
   }*/
 
-  public double getHeightMeters() {
-    return -encoder.getPosition() * ElevatorConstants.kROTATIONS_TO_METERS;
+  public double getEncoder() {
+    return -encoder.getPosition();
   }
-
+/*
   public double getVelocityMeters() {
     return -encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
-
+*/
   public void zeroEncoder() {
     encoder.setPosition(0);
   }
@@ -83,28 +83,11 @@ public class Elevator extends SubsystemBase {
     return maxLimitSwitch.get();
   }
 
-  /*
   public void setVoltage(double voltage) {
-    if (getMinLimitSwitch() && voltage < 0) {
-      voltage = 0;
-    } else if (getMaxLimitSwitch() && voltage > 0) {
-      voltage = 0;
-    }
-
-    //temporary safety:
-    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
-      return;
-    }
-
-    leftMotor.setVoltage(voltage);
-    rightMotor.setVoltage(-voltage);
-  }*/
-
-  public void setVoltage(double voltage) {
-    // if (getMinLimitSwitch() && power < 0) {
-    //   power = 0;
-    // } else if (getMaxLimitSwitch() && power > 0) {
-    //   power = 0;
+    // if (getMinLimitSwitch() && voltage < 0) {
+    //   voltage = 0;
+    // } else if (getMaxLimitSwitch() && voltage > 0) {
+    //   voltage = 0;
     // }
 
     //temporary safety:
@@ -122,6 +105,6 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    System.out.println(getHeightMeters());
+    System.out.println(getEncoder());
   }
 }
