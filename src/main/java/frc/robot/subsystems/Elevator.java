@@ -10,14 +10,21 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
+  public double kPROPORTIONAL_VOLTS = ElevatorConstants.kPROPORTIONAL_VOLTS;
+  public double kMAX_VOLT_CHANGE_PER_SECOND = ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND;
+  public double kMAX_VOLTS = ElevatorConstants.kMAX_VOLTS;
+  public double kGRAVITY_VOLTS = ElevatorConstants.kGRAVITY_VOLTS;
 
   private int level = -1;
-  private double resistVoltage;
 
   private final SparkMax leftMotor = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID,
@@ -48,6 +55,18 @@ public class Elevator extends SubsystemBase {
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
+
+    SmartDashboard.putData("Elevator Control Vars", new Sendable() {
+      @Override
+      public void initSendable(SendableBuilder builder) {
+        builder.setSmartDashboardType("ElevatorControl");
+
+        builder.addDoubleProperty("Proportional Voltage", null, (x) -> kPROPORTIONAL_VOLTS = x);
+        builder.addDoubleProperty("Max Voltage", null, (x) -> kMAX_VOLTS = x);
+        builder.addDoubleProperty("Max Voltage Change Per Second", null, (x) -> kMAX_VOLT_CHANGE_PER_SECOND = x);
+        builder.addDoubleProperty("Gravity Voltage", null, (x) -> kMAX_VOLT_CHANGE_PER_SECOND = x);
+      }
+    });
   }
 
   public int getLevel() {

@@ -11,14 +11,15 @@ import frc.robot.subsystems.Elevator;
 import edu.wpi.first.math.controller.ElevatorFeedforward;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.State;
+import edu.wpi.first.util.sendable.Sendable;
+import edu.wpi.first.util.sendable.SendableBuilder;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
 import edu.wpi.first.wpilibj.Timer;
-
-
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
-
+  
   private final Elevator elevator;
   private int level;
   private double goal;
@@ -31,6 +32,7 @@ public class MoveElevator extends Command {
    * @param level The level to move the elevator to. 0 moves to the intake.
    */
   public MoveElevator(Elevator elevator, int level) {
+
     this.elevator = elevator;
     this.level = level;
     this.goal = ElevatorConstants.kHEIGHTS[level];
@@ -53,9 +55,9 @@ public class MoveElevator extends Command {
       elevatorSubsystem.zeroEncoder();
     }*/
 
-    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * ElevatorConstants.kPROPORTIONAL_VOLTS;
-    var maxVoltage = (Timer.getFPGATimestamp() - startTime) * ElevatorConstants.kMAX_VOLT_CHNAGE_PER_SECOND;
-
+    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * elevator.kPROPORTIONAL_VOLTS;
+    var maxVoltage = Math.min(elevator.kMAX_VOLTS, (Timer.getFPGATimestamp() - startTime) * elevator.kMAX_VOLT_CHANGE_PER_SECOND);
+    System.out.println(elevator.kGRAVITY_VOLTS);
     if (elevator.getEncoder() < goal) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
     } else {

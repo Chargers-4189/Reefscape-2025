@@ -119,9 +119,9 @@ public final class Constants {
 
     public static final double kPROPORTIONAL_VOLTS = .4;
 
-    public static final double kMAX_VOLT_CHNAGE_PER_SECOND = .1;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 1;
 
-    public static final double kGRAVITY_VOLTS = .4;
+    public static final double kGRAVITY_VOLTS = .1; // .4 for current coral head
   }
 
   public static final class NeoMotorConstants {
