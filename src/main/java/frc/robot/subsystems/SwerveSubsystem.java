@@ -52,7 +52,7 @@ public class SwerveSubsystem extends SubsystemBase {
         SwerveConstants.kWheelCOF, DCMotor.getNeoVortex(1), SwerveConstants.kDriveRatio, SwerveConstants.kDriveAmpLimit,
         1);
     RobotConfig config = new RobotConfig(SwerveConstants.kRobotWeight, SwerveConstants.kMOI, swerveModuleConfig,
-        JDADDCHASSISMEASUREMENTS);
+        this.swerveDrive.swerveDriveConfiguration.moduleLocationsMeters);
 
     AutoBuilder.configure(
         this::getPose,
