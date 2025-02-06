@@ -19,6 +19,8 @@
 
 Steering gear ratio full value: `46.423645320197`
 
+drive conversion factor: `0.00000531315`
+
 #### Sources
 - https://docs.wpilib.org/en/stable/docs/hardware/sensors/serial-buses.html
 - https://www.revrobotics.com/rev-21-3005/

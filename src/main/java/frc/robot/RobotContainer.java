@@ -45,7 +45,7 @@ public class RobotContainer {
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    swerve.setDefaultCommand(swerve.driveCommand(()->m_driverController.getLeftY(), ()->m_driverController.getLeftX(), ()->-m_driverController.getRightX(), false));
+    swerve.setDefaultCommand(swerve.driveCommand(()->m_driverController.getLeftY(), ()->-m_driverController.getLeftX(), ()->-m_driverController.getRightX(), true));
   }
 
   /**
