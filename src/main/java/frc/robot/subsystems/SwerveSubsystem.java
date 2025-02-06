@@ -7,12 +7,24 @@ package frc.robot.subsystems;
 import java.io.File;
 import java.util.function.DoubleSupplier;
 
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.ModuleConfig;
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Constants.SwerveConstants;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
 import swervelib.parser.SwerveParser;
@@ -20,7 +32,6 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-  double maximumSpeed = 4.5;
   File swerveJsonDirectory = new File(
       Filesystem.getDeployDirectory(),
       "swerve");
@@ -31,10 +42,51 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // CHANGE TO LOW IN COMP
     try {
       swerveDrive = new SwerveParser(swerveJsonDirectory)
-          .createSwerveDrive(maximumSpeed, new Pose2d(2, 7, new Rotation2d()));
+          .createSwerveDrive(SwerveConstants.kMaxVelocity, new Pose2d(2, 7, new Rotation2d()));
     } catch (Exception e) {
       System.err.println("SwerveDrive no workie :(");
     }
+
+    // ----- PathPlanner ------
+    ModuleConfig swerveModuleConfig = new ModuleConfig(SwerveConstants.kWheelRadius, SwerveConstants.kMaxVelocity,
+        SwerveConstants.kWheelCOF, DCMotor.getNeoVortex(1), SwerveConstants.kDriveRatio, SwerveConstants.kDriveAmpLimit,
+        1);
+    RobotConfig config = new RobotConfig(SwerveConstants.kRobotWeight, SwerveConstants.kMOI, swerveModuleConfig,
+        JDADDCHASSISMEASUREMENTS);
+
+    AutoBuilder.configure(
+        this::getPose,
+        this::resetPose,
+        this::getRobotRelativeSpeeds,
+        (speeds, feedforwards) -> swerveDrive.drive(speeds),
+        new PPHolonomicDriveController(
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        config,
+        () -> {
+          var alliance = DriverStation.getAlliance();
+          return false;
+          // Uncomment when using vision or station based control
+          // if (alliance.isPresent()) {
+          // return alliance.get() == DriverStation.Alliance.Red;
+          // }
+          // return false;
+        },
+        this);
+
+  }
+
+  public Pose2d getPose() {
+    return swerveDrive.getPose();
+  }
+
+  public void resetPose(Pose2d pose) {
+    swerveDrive.resetOdometry(pose);
+  }
+
+  public ChassisSpeeds getRobotRelativeSpeeds() {
+    return swerveDrive.getRobotVelocity();
   }
 
   /**
@@ -54,11 +106,12 @@ public class SwerveSubsystem extends SubsystemBase {
       Translation2d scaledInputs = SwerveMath.scaleTranslation(new Translation2d(translationX.getAsDouble(),
           translationY.getAsDouble()), 0.8);
 
-      swerveDrive.driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
-          headingX.getAsDouble(),
-          headingY.getAsDouble(),
-          swerveDrive.getOdometryHeading().getRadians(),
-          swerveDrive.getMaximumChassisVelocity()));
+      swerveDrive
+          .driveFieldOriented(swerveDrive.swerveController.getTargetSpeeds(scaledInputs.getX(), scaledInputs.getY(),
+              headingX.getAsDouble(),
+              headingY.getAsDouble(),
+              swerveDrive.getOdometryHeading().getRadians(),
+              swerveDrive.getMaximumChassisVelocity()));
     });
   }
 
