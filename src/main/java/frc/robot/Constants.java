@@ -111,17 +111,16 @@ public final class Constants {
 
     //public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179, 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = {.15, .15, 7.86, 25.69, 52.05}; //Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS = {0.15, 0.15, 7.86, 25.69, 52.05}; //Intake, L1, L2, L3, L4
 
     public static final double kELEVATOR_BASE_HEIGHT = .686;
 
-    public static final double kMAX_VOLTS = .4;
+    public static final double kGRAVITY_VOLTS = .15; // .4 for current coral head
+    public static final double kPROPORTIONAL_VOLTS = .8;
+    public static final double kMAX_VOLTS = 4;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 8;
 
-    public static final double kPROPORTIONAL_VOLTS = .4;
-
-    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 1;
-
-    public static final double kGRAVITY_VOLTS = .1; // .4 for current coral head
+    public static final double kTOLERANCE = .02;
   }
 
   public static final class NeoMotorConstants {

@@ -3,6 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
+import frc.robot.Constants.ElevatorConstants;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -11,18 +12,21 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.util.sendable.SendableBuilder;
+import edu.wpi.first.networktables.DoubleArrayEntry;
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.DoubleSubscriber;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
-  public double kPROPORTIONAL_VOLTS = ElevatorConstants.kPROPORTIONAL_VOLTS;
-  public double kMAX_VOLT_CHANGE_PER_SECOND = ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND;
-  public double kMAX_VOLTS = ElevatorConstants.kMAX_VOLTS;
-  public double kGRAVITY_VOLTS = ElevatorConstants.kGRAVITY_VOLTS;
+  public DoubleEntry kGRAVITY_VOLTS;
+  public DoubleEntry kPROPORTIONAL_VOLTS;
+  public DoubleEntry kMAX_VOLTS;
+  public DoubleEntry kMAX_VOLT_CHANGE_PER_SECOND;
+  public DoubleEntry kTOLERANCE;
+  public DoubleArrayEntry kHEIGHTS;
 
   private int level = -1;
 
@@ -56,17 +60,21 @@ public class Elevator extends SubsystemBase {
       PersistMode.kPersistParameters
     );
 
-    SmartDashboard.putData("Elevator Control Vars", new Sendable() {
-      @Override
-      public void initSendable(SendableBuilder builder) {
-        builder.setSmartDashboardType("ElevatorControl");
-
-        builder.addDoubleProperty("Proportional Voltage", null, (x) -> kPROPORTIONAL_VOLTS = x);
-        builder.addDoubleProperty("Max Voltage", null, (x) -> kMAX_VOLTS = x);
-        builder.addDoubleProperty("Max Voltage Change Per Second", null, (x) -> kMAX_VOLT_CHANGE_PER_SECOND = x);
-        builder.addDoubleProperty("Gravity Voltage", null, (x) -> kMAX_VOLT_CHANGE_PER_SECOND = x);
-      }
-    });
+    NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
+    NetworkTable datatable = networkInstance.getTable("elevatorConstants");
+    kGRAVITY_VOLTS = datatable.getDoubleTopic("GRAVITY_VOLTS").getEntry(ElevatorConstants.kGRAVITY_VOLTS);
+    kMAX_VOLTS = datatable.getDoubleTopic("MAX_VOLTS").getEntry(ElevatorConstants.kMAX_VOLTS);
+    kMAX_VOLT_CHANGE_PER_SECOND = datatable.getDoubleTopic("MAX_VOLT_CHANGE_PER_SECOND").getEntry(ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND);
+    kPROPORTIONAL_VOLTS = datatable.getDoubleTopic("PROPORTIONAL_VOLTS").getEntry(ElevatorConstants.kPROPORTIONAL_VOLTS);
+    kTOLERANCE = datatable.getDoubleTopic("TOLERANCE").getEntry(ElevatorConstants.kTOLERANCE);
+    kHEIGHTS = datatable.getDoubleArrayTopic("HEIGHTS").getEntry(ElevatorConstants.kHEIGHTS);
+    
+    kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
+    kPROPORTIONAL_VOLTS.set(kPROPORTIONAL_VOLTS.get());
+    kMAX_VOLTS.set(kMAX_VOLTS.get());
+    kMAX_VOLT_CHANGE_PER_SECOND.set(kMAX_VOLT_CHANGE_PER_SECOND.get());
+    kTOLERANCE.set(kTOLERANCE.get());
+    kHEIGHTS.set(kHEIGHTS.get());
   }
 
   public int getLevel() {
@@ -76,11 +84,6 @@ public class Elevator extends SubsystemBase {
   public void setLevel(int level) {
     this.level = level;
   }
-
-  /*
-  public double getEncoderPosition() {
-    return encoder.getPosition();
-  }*/
 
   public double getEncoder() {
     return -encoder.getPosition();
@@ -114,16 +117,14 @@ public class Elevator extends SubsystemBase {
     //   return;
     // }
 
-    // ----- WARNING WARNING -----
-    // This is a TEMPORARY SOLUTION. The error with this is that when setPower()
-    // method is not running, resistance to gravity will NOT work. Need to add
-    // solution in periodic.
-    rightMotor.setVoltage(-voltage);
+    rightMotor.setVoltage(-voltage - kGRAVITY_VOLTS.getAsDouble());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println(getEncoder());
+
     System.out.println(getEncoder());
   }
 }

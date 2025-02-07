@@ -67,6 +67,7 @@ public class RobotContainer {
     driveController.y().whileTrue(new MoveElevator(elevator, 2));
     driveController.b().whileTrue(new MoveElevator(elevator,3));
     driveController.a().whileTrue(new MoveElevator(elevator, 4));
+    driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
 
   }
