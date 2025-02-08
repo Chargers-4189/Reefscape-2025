@@ -10,6 +10,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
@@ -43,11 +45,11 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
+    // Schedule `ExampleCommand` when `exampleCondition` changes to `true
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
-    swerve.setDefaultCommand(swerve.driveCommand(()->m_driverController.getLeftY(), ()->-m_driverController.getLeftX(), ()->-m_driverController.getRightX(), true));
+    swerve.setDefaultCommand(swerve.driveCommand(()->m_driverController.getLeftY(), ()->m_driverController.getLeftX(), ()->m_driverController.getRightX(), true));
   }
 
   /**
