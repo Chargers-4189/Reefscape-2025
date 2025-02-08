@@ -85,6 +85,11 @@ public class SwerveSubsystem extends SubsystemBase {
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return swerveDrive.getRobotVelocity();
   }
+  
+  public void resetGyro() {
+    resetGyro();
+    swerveDrive.zeroGyro();
+  }
 
   /**
    * Command to drive the robot using translative values and heading as a

@@ -7,12 +7,16 @@ package frc.util;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import java.util.List;
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
+import org.photonvision.simulation.PhotonCameraSim;
+import org.photonvision.simulation.SimCameraProperties;
+import org.photonvision.simulation.VisionSystemSim;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 public class AprilTagCamera {
@@ -29,22 +33,17 @@ public class AprilTagCamera {
   public AprilTagCamera(String cameraName, Transform3d cameraTranslation) {
     camera = new PhotonCamera(cameraName);
     try {
-      tagLayout =
-        AprilTagFieldLayout.loadFromResource(
-          AprilTagFields.k2024Crescendo.m_resourceFile
-        );
+      tagLayout = AprilTagFieldLayout.loadFromResource(
+          AprilTagFields.k2024Crescendo.m_resourceFile);
     } catch (Exception e) {
       System.err.println(e);
     }
-    poseEstimator =
-      new PhotonPoseEstimator(
+    poseEstimator = new PhotonPoseEstimator(
         tagLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        cameraTranslation
-      );
+        cameraTranslation);
     poseEstimator.setMultiTagFallbackStrategy(
-      PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY
-    );
+        PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
   }
 
   public Pose2d getEstimatedRobotPose() {
@@ -63,11 +62,15 @@ public class AprilTagCamera {
     return estimateAvailable;
   }
 
+  public PhotonCamera getPhotonCamera() {
+    return this.camera;
+  }
+
   public void update() {
     var results = camera.getAllUnreadResults();
     var estimatedResult = targetFilter(results);
     if (estimatedResult != null) {
-			estimateAvailable = true;
+      estimateAvailable = true;
       estimatedPose = estimatedResult.estimatedPose.toPose2d();
     }
   }
@@ -78,16 +81,12 @@ public class AprilTagCamera {
       result.targets.removeIf(tag -> {
         double maxDistance = 6.0;
         Transform3d transform = tag.getBestCameraToTarget();
-        return (
-          transform.getX() > maxDistance || transform.getY() > maxDistance
-        );
+        return (transform.getX() > maxDistance || transform.getY() > maxDistance);
       });
       estimatedTagYaw = result.getBestTarget().getYaw();
-      if (
-        result.hasTargets() &&
-        result.getTargets().size() < 16 &&
-        result.getTargets().size() > 0
-      ) {
+      if (result.hasTargets() &&
+          result.getTargets().size() < 16 &&
+          result.getTargets().size() > 0) {
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
           return estimatedResult.get();
@@ -96,5 +95,27 @@ public class AprilTagCamera {
     }
     return null;
   }
-}
 
+  public static class AprilTagCameraSim extends AprilTagCamera {
+    public AprilTagCameraSim(
+        String cameraName,
+        Transform3d cameraTranslation,
+        boolean stream,
+        VisionSystemSim visionSimField) {
+      super(cameraName, cameraTranslation);
+      SimCameraProperties simCameraProp = new SimCameraProperties();
+      simCameraProp.setCalibration(1280, 720, Rotation2d.fromDegrees(100));
+      simCameraProp.setCalibError(0.25, 0.08);
+      simCameraProp.setFPS(20);
+      simCameraProp.setAvgLatencyMs(35);
+      simCameraProp.setLatencyStdDevMs(5);
+      PhotonCameraSim cameraSim = new PhotonCameraSim(super.camera, simCameraProp);
+
+      visionSimField.addCamera(cameraSim, cameraTranslation);
+
+      cameraSim.enableRawStream(stream);
+      cameraSim.enableProcessedStream(stream);
+      cameraSim.enableDrawWireframe(stream);
+    }
+  }
+}
