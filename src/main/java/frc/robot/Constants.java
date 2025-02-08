@@ -28,7 +28,7 @@ public final class Constants {
     public static final double kWheelCOF = 1.19;
     public static final double kDriveRatio = 5.5;
     public static final double kSteerRatio = 46.423645320197;
-    public static final double kMOI = (1/12) * kRobotWeight * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2));
+    public static final double kMOI = ((1.0/12.0) * kRobotWeight * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2)));
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
   }
