@@ -51,6 +51,14 @@ public class Vision extends SubsystemBase {
       };
   }
 
+  public Double getFrontLeftTagYaw() {
+    return cameras[0].getEstimatedTagYaw();
+  }
+
+  public Double getFrontRightTagYaw() {
+    return cameras[1].getEstimatedTagYaw();
+  }
+
   public Pose2d getEstimatedRobotPosition() {
     if (avgEstimateAvailable) {
       return avgEstimatedRobotPosition;
