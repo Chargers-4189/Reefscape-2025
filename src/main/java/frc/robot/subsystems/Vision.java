@@ -125,6 +125,6 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    System.out.println(cameras[0].getEstimatedTagYaw());
+    //System.out.println(cameras[0].getEstimatedTagYaw());
   }
 }
