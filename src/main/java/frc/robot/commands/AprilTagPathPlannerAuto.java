@@ -36,20 +36,23 @@ public class AprilTagPathPlannerAuto extends SequentialCommandGroup {
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public AprilTagPathPlannerAuto(SwerveSubsystem swerveSubsystem, int apriltagnumber) {
-    
-    Pose2d AprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
     // Create the constraints to use while pathfinding
     PathConstraints constraints = new PathConstraints(
             3.0, 4.0,
             Units.degreesToRadians(540), Units.degreesToRadians(720));
     // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    Command AprilTagPathFinder = AutoBuilder.pathfindToPose(
-        AprilTagPose,
+    Command ReefPath = AutoBuilder.pathfindToPose(
+            aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d(),
             constraints,
             0.0 // Goal end velocity in meters/sec
     );
+    Command StationPath = AutoBuilder.pathfindToPose(
+      aprilTagFieldLayout.getTagPose(2).get().toPose2d(),
+      constraints,
+      0.0 // Goal end velocity in meters/sec
+);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(AprilTagPathFinder);
+    addCommands(ReefPath,StationPath);
   }
 }
