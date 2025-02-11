@@ -10,8 +10,16 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
+import java.util.Map;
 
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.pathfinding.Pathfinding;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -53,13 +61,16 @@ public class RobotContainer {
   private void configureBindings() {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true
 
-    m_driverController.cross().onTrue(new AutoAlign(swerve, vision, false));
-    m_driverController.circle().onTrue(new AutoAlign(swerve, vision, true));
+    //m_driverController.cross().onTrue(new AutoAlign(swerve, vision, false));
+    //m_driverController.circle().onTrue(new AutoAlign(swerve, vision, true));
     m_driverController.options().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
 
-    SmartDashboard.putNumber("Number", 9);
-    
-    m_driverController.square().onTrue(new AprilTagPathPlannerAuto(swerve,9));
+    m_driverController.povDownRight().onTrue(new AprilTagPathPlannerAuto(swerve, 6));
+    m_driverController.povRight().onTrue(new AprilTagPathPlannerAuto(swerve, 7));
+    m_driverController.povUpRight().onTrue(new AprilTagPathPlannerAuto(swerve, 8));
+    m_driverController.povUpLeft().onTrue(new AprilTagPathPlannerAuto(swerve, 9));
+    m_driverController.povLeft().onTrue(new AprilTagPathPlannerAuto(swerve, 10));
+    m_driverController.povDownLeft().toggleOnTrue(new AprilTagPathPlannerAuto(swerve, 11));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.
