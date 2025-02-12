@@ -9,12 +9,12 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class autoIntake extends Command {
+public class AutoIntake extends Command {
   private final SwerveSubsystem swerve;
   private final Vision vision;
 
   /** Creates a new autoIntake. */
-  public autoIntake(Vision vision, SwerveSubsystem swerve) {
+  public AutoIntake(Vision vision, SwerveSubsystem swerve) {
     this.vision = vision;
     this.swerve = swerve;
     // Use addRequirements() here to declare subsystem dependencies.
