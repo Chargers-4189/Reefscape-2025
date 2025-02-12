@@ -7,6 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.SwerveConstants;
+
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoIntake extends Command {
@@ -31,10 +33,10 @@ public class AutoIntake extends Command {
   @Override
   public void execute() {
     if(vision.getBackTagYaw() > 0){
-      swerve.driveCommand(()->-1.0 * 0.1, ()->0.0, ()->0.0, false);
+      swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
     }
     else{
-      swerve.driveCommand(()->1.0 * 0.1, ()->0.0, ()->0.0, false);
+      swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
     }
   }
 
@@ -47,6 +49,6 @@ public class AutoIntake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return (vision.getBackTagYaw() <= 0.0698132 && vision.getBackTagYaw() >= -0.0698132 );
+      return (vision.getBackTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getBackTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
   }
 }

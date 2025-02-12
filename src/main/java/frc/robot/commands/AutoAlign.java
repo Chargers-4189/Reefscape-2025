@@ -7,6 +7,8 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.Constants.SwerveConstants;
+
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -36,18 +38,18 @@ public class AutoAlign extends Command {
   public void execute() {
     if(alignRight == true){
       if(vision.getFrontRightTagYaw() > 0){
-        swerve.driveCommand(()->-1.0 * 0.1, ()->0.0, ()->0.0, false);
+        swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
       else{
-        swerve.driveCommand(()->1.0 * 0.1, ()->0.0, ()->0.0, false);
+        swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
     }
     else{
       if(vision.getFrontLeftTagYaw() > 0){
-        swerve.driveCommand(()->-1.0 * 0.1, ()->0.0, ()->0.0, false);
+        swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
       else{
-        swerve.driveCommand(()->1.0 * 0.1, ()->0.0, ()->0.0, false);
+        swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
     }
     
@@ -63,10 +65,10 @@ public class AutoAlign extends Command {
   @Override
   public boolean isFinished() {
     if(alignRight == true){
-      return (vision.getFrontRightTagYaw() <= 0.0698132 && vision.getFrontRightTagYaw() >= -0.0698132 );
+      return (vision.getFrontRightTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getFrontRightTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
     }
     else{
-      return (vision.getFrontLeftTagYaw() <= 0.0698132 && vision.getFrontLeftTagYaw() >= -0.0698132 );
+      return (vision.getFrontLeftTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getFrontLeftTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
     }
   }
 }
