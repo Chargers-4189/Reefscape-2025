@@ -76,6 +76,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return swerveDrive.getPose();
   }
 
+  public void updatePose(Pose2d pose, double time) {
+    swerveDrive.addVisionMeasurement(pose, time);
+  }
+
   public void resetPose(Pose2d pose) {
     swerveDrive.resetOdometry(pose);
   }
@@ -85,7 +89,6 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public void resetGyro() {
-    resetGyro();
     swerveDrive.zeroGyro();
   }
 

@@ -22,6 +22,7 @@ import frc.util.AprilTagCamera.AprilTagCameraSim;
 
 public class Vision extends SubsystemBase {
 
+  private Pose2d robotPose = new Pose2d();
   private Pose2d avgEstimatedRobotPosition = new Pose2d();
   private boolean avgEstimateAvailable = false;
   private NetworkTableInstance networkTable = NetworkTableInstance.getDefault();
@@ -127,10 +128,17 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public void updatePose(Pose2d pose) {
+    robotPose = pose;
+  }
+
   @Override
   public void periodic() {
     for (AprilTagCamera camera : cameras) {
       camera.update();
+    }
+    if (Robot.isSimulation()) {
+      visionSim.update(robotPose);
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
