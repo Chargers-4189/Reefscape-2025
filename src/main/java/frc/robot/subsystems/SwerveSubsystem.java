@@ -29,9 +29,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-  File swerveJsonDirectory = new File(
-      Filesystem.getDeployDirectory(),
-      "swerve");
+  File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
   SwerveDrive swerveDrive;
 
   /** Creates a new SwerveDrive. */
@@ -41,7 +39,7 @@ public class SwerveSubsystem extends SubsystemBase {
       swerveDrive = new SwerveParser(swerveJsonDirectory)
           .createSwerveDrive(SwerveConstants.kMaxVelocity, new Pose2d(2, 7, new Rotation2d()));
     } catch (Exception e) {
-      System.err.println("SwerveDrive no workie :(");
+      System.err.println("Swerve no workie :( " + e.getMessage());
     }
 
     // ----- PathPlanner ------

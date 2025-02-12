@@ -84,6 +84,7 @@ public class AprilTagCamera {
         return (transform.getX() > maxDistance || transform.getY() > maxDistance);
       });
       estimatedTagYaw = result.getBestTarget().getYaw();
+      System.out.println(result.getBestTarget().getYaw());
       if (result.hasTargets() &&
           result.getTargets().size() < 16 &&
           result.getTargets().size() > 0) {
@@ -111,11 +112,11 @@ public class AprilTagCamera {
       simCameraProp.setLatencyStdDevMs(5);
       PhotonCameraSim cameraSim = new PhotonCameraSim(super.camera, simCameraProp);
 
-      visionSimField.addCamera(cameraSim, cameraTranslation);
-
       cameraSim.enableRawStream(stream);
       cameraSim.enableProcessedStream(stream);
       cameraSim.enableDrawWireframe(stream);
+
+      visionSimField.addCamera(cameraSim, cameraTranslation);
     }
   }
 }
