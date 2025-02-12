@@ -30,14 +30,14 @@ public class Vision extends SubsystemBase {
 
   private AprilTagCamera[] cameras;
   final Transform3d flCamPose = new Transform3d(
-      new Translation3d(0, -0.01, 0),
+      new Translation3d(0.5, -0.1, 0),
       new Rotation3d(0, Math.toRadians(0), 0));
   final Transform3d frCamPose = new Transform3d(
-      new Translation3d(0, 0, 0),
+      new Translation3d(0, 0.1, 0),
       new Rotation3d(0, Math.toRadians(0), 0));
   final Transform3d bkCamPose = new Transform3d(
-      new Translation3d(0, 0.01, 0),
-      new Rotation3d(0, Math.toRadians(0), 0));
+      new Translation3d(-0.5, 0, 0),
+      new Rotation3d(0, Math.toRadians(0), Math.toRadians(180.0)));
 
   // ----- Simulated Vision -----
   VisionSystemSim visionSim;
@@ -88,6 +88,14 @@ public class Vision extends SubsystemBase {
     }
   }
 
+  public Double getBackTagYaw() {
+    if (cameras[2].getEstimatedTagYaw() != null) {
+      return cameras[2].getEstimatedTagYaw();
+    } else {
+      return null;
+    }
+  }
+
   public Pose2d getEstimatedRobotPosition() {
     if (avgEstimateAvailable) {
       return avgEstimatedRobotPosition;
@@ -126,6 +134,6 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    System.out.println(cameras[0].getEstimatedTagYaw());
+    System.out.println(cameras[0].getEstimatedTagYaw() + " " + cameras[1].getEstimatedTagYaw());
   }
 }
