@@ -68,6 +68,7 @@ public class RobotContainer {
     driveController.y().onTrue(new MoveElevator(elevator, 2));
     driveController.b().onTrue(new MoveElevator(elevator, 3));
     driveController.a().onTrue(new MoveElevator(elevator, 4));
+    //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision, false));
     driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
