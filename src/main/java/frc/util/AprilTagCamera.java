@@ -83,11 +83,10 @@ public class AprilTagCamera {
         Transform3d transform = tag.getBestCameraToTarget();
         return (transform.getX() > maxDistance || transform.getY() > maxDistance);
       });
-      estimatedTagYaw = result.getBestTarget().getYaw();
-      System.out.println(result.getBestTarget().getYaw());
       if (result.hasTargets() &&
           result.getTargets().size() < 16 &&
           result.getTargets().size() > 0) {
+        estimatedTagYaw = result.getBestTarget().getYaw();
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
           return estimatedResult.get();

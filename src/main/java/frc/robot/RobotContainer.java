@@ -28,8 +28,8 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem swerve = new SwerveSubsystem();
-  private final Vision vision = new Vision();
+  public final SwerveSubsystem swerve = new SwerveSubsystem();
+  public final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralIntake = new CoralEffector();
 
