@@ -31,10 +31,10 @@ public class Vision extends SubsystemBase {
 
   private AprilTagCamera[] cameras;
   final Transform3d flCamPose = new Transform3d(
-      new Translation3d(0.5, -0.1, 0),
+      new Translation3d(0.5, -0.3, 0),
       new Rotation3d(0, Math.toRadians(0), 0));
   final Transform3d frCamPose = new Transform3d(
-      new Translation3d(0, 0.1, 0),
+      new Translation3d(0, 0.3, 0),
       new Rotation3d(0, Math.toRadians(0), 0));
   final Transform3d bkCamPose = new Transform3d(
       new Translation3d(-0.5, 0, 0),
