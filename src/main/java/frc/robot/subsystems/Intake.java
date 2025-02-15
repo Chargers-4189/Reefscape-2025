@@ -19,8 +19,12 @@ public class Intake extends SubsystemBase {
     MotorType.kBrushless
   );
 
-  private final DigitalInput limitSwitch = new DigitalInput(
-    IntakeConstants.kDIO_PORT
+  private final DigitalInput topLimitSwitch = new DigitalInput(
+    IntakeConstants.kDIO_PORT_TOP
+  );
+
+  private final DigitalInput bottomLimitSwitch = new DigitalInput(
+    IntakeConstants.kDIO_PORT_BOTTOM
   );
   public Intake() {}
     public void ActuateForward(){
@@ -33,8 +37,11 @@ public class Intake extends SubsystemBase {
     public void StopActuating(){
       actuatorMotor.set(0);
     }
-    public boolean getLimitSwitch() {
-      return limitSwitch.get();
+    public boolean getTopLimitSwitch() {
+      return topLimitSwitch.get();
+    }
+    public boolean getBottomLimitSwitch() {
+      return bottomLimitSwitch.get();
     }
   
 

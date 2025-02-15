@@ -75,7 +75,8 @@ public final class Constants {
 
   public static final class IntakeConstants{
     public static final int kACTUATOR_MOTOR_ID = -1;
-    public static final int kDIO_PORT = -1;
+    public static final int kDIO_PORT_TOP = -1;
+    public static final int kDIO_PORT_BOTTOM = -1;
   }
 
   public static final class AutoConstants {
