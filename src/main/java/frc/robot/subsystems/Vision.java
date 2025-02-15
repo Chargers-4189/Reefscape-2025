@@ -61,7 +61,7 @@ public class Vision extends SubsystemBase {
     visionSim = new VisionSystemSim("main");
     try {
       AprilTagFieldLayout tagLayout = AprilTagFieldLayout
-          .loadFromResource(AprilTagFields.k2025Reefscape.m_resourceFile);
+          .loadFromResource(AprilTagFields.k2025ReefscapeWelded.m_resourceFile);
       visionSim.addAprilTags(tagLayout);
     } catch (Exception e) {
       System.out.println("Could not load simulated field: " + e);

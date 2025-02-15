@@ -34,7 +34,7 @@ public class AprilTagCamera {
     camera = new PhotonCamera(cameraName);
     try {
       tagLayout = AprilTagFieldLayout.loadFromResource(
-          AprilTagFields.k2024Crescendo.m_resourceFile);
+          AprilTagFields.k2025ReefscapeWelded.m_resourceFile);
     } catch (Exception e) {
       System.err.println(e);
     }
