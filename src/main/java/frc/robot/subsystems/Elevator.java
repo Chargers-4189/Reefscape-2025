@@ -4,57 +4,59 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
 
-  public enum Level {
-    INTAKE,
-    L1,
-    L2,
-    L3,
-    L4,
-  }
-
-  private Level level = Level.INTAKE;
+  private int level = -1;
 
   private final SparkMax leftMotor = new SparkMax(
-    Constants.ElevatorConstants.kLEFT_MOTOR_ID,
+    ElevatorConstants.kLEFT_MOTOR_ID,
     MotorType.kBrushless
   );
   private final SparkMax rightMotor = new SparkMax(
-    Constants.ElevatorConstants.kRIGHT_MOTOR_ID,
+    ElevatorConstants.kRIGHT_MOTOR_ID,
     MotorType.kBrushless
   );
 
   private final DigitalInput minLimitSwitch = new DigitalInput(
-    Constants.ElevatorConstants.kMIN_DIO_PORT
+    ElevatorConstants.kMIN_DIO_PORT
   );
   private final DigitalInput maxLimitSwitch = new DigitalInput(
-    Constants.ElevatorConstants.kMAX_DIO_PORT
+    ElevatorConstants.kMAX_DIO_PORT
   );
 
   private RelativeEncoder encoder = rightMotor.getAlternateEncoder();
 
   /** Creates a new Elevator. */
-  public Elevator() {}
+  public Elevator() {
+    zeroEncoder();
+  }
 
-  public Level getLevel() {
+  public int getLevel() {
     return level;
   }
 
-  public void setLevel(Level level) {
+  public void setLevel(int level) {
     this.level = level;
   }
 
-  public double getEncoder() {
+  /*
+  public double getEncoderPosition() {
     return encoder.getPosition();
+  }*/
+
+  public double getHeightMeters() {
+    return encoder.getPosition() * ElevatorConstants.kROTATIONS_TO_METERS;
+  }
+
+  public double getVelocityMeters() {
+    return encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
 
   public void zeroEncoder() {
@@ -62,22 +64,43 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return this.minLimitSwitch.get();
+    return minLimitSwitch.get();
   }
 
   public boolean getMaxLimitSwitch() {
-    return this.maxLimitSwitch.get();
+    return maxLimitSwitch.get();
   }
 
-  public void set(double power) {
+  public void setVoltage(double voltage) {
+    if (getMinLimitSwitch() && voltage < 0) {
+      voltage = 0;
+    } else if (getMaxLimitSwitch() && voltage > 0) {
+      voltage = 0;
+    }
+
+    //temporary safety:
+    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+      return;
+    }
+
+    leftMotor.setVoltage(voltage);
+    rightMotor.setVoltage(-voltage);
+  }
+
+  public void setPower(double power) {
     if (getMinLimitSwitch() && power < 0) {
       power = 0;
     } else if (getMaxLimitSwitch() && power > 0) {
       power = 0;
     }
 
+    //temporary safety:
+    if (getMinLimitSwitch() || getMaxLimitSwitch()) {
+      return;
+    }
+
     leftMotor.set(power);
-    rightMotor.set(power);
+    rightMotor.set(-power);
   }
 
   @Override
