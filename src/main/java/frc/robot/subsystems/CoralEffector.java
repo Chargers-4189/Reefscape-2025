@@ -21,7 +21,7 @@ public class CoralEffector extends SubsystemBase {
     MotorType.kBrushless
   );
 
-  private AbsoluteEncoder encoder = rightMotor.getAbsoluteEncoder();
+  private AbsoluteEncoder encoder = mainMotor.getAbsoluteEncoder();
 
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
   private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
@@ -51,6 +51,9 @@ public class CoralEffector extends SubsystemBase {
   }
   public void outtakeAlgae(double mainMotorPower) {
     mainMotor.set(-mainMotorPower);
+  }
+  public void stop() {
+    mainMotor.set(0);
   }
   
 
