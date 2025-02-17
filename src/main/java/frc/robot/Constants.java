@@ -45,6 +45,8 @@ public final class Constants {
         * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2)));
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
+    public static final double kDriveSpeedWhileAligning = 0.1;
+    public static final double kAlignDistanceToleranceYaw = 0.069813;
   }
 
   public static class CoralEffectorConstants {
