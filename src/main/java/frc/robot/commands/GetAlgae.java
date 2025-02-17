@@ -5,48 +5,29 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralEffector;
-import frc.robot.Constants.CoralEffectorConstants;
-
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ActuateEffectorUp extends Command {
-  private CoralEffector coralEffector;
-  private double encoderValue;
-
-  /** Creates a new ActuateEffector. */
-  public ActuateEffectorUp(CoralEffector coralEffector) {
-    this.coralEffector = coralEffector;
-    
+public class GetAlgae extends Command {
+  /** Creates a new GetAlgae. */
+  public GetAlgae() {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(coralEffector);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {
-    encoderValue = coralEffector.getAbsoluteEncoderValue();
-    //FIND GOAL VALUE
-    if(encoderValue < CoralEffectorConstants.kPLACE_CORAL_ANGLE){
-      coralEffector.ActuateForward();
-    }
-
-  }
+  public void execute() {}
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    coralEffector.StopActuating();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return(encoderValue >= CoralEffectorConstants.kPLACE_CORAL_ANGLE);
+    return false;
   }
 }
