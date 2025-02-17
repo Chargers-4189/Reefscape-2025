@@ -28,10 +28,14 @@ public class Intake extends SubsystemBase {
   );
   public Intake() {}
     public void ActuateForward(){
+      if(topLimitSwitch.get() != true){
       actuatorMotor.set(0.1);
+      }
     }
     public void ActuateBackward(){
-      actuatorMotor.set(-0.1);
+      if(bottomLimitSwitch.get() != true){
+        actuatorMotor.set(-0.1);
+      }
     }
   
     public void StopActuating(){
