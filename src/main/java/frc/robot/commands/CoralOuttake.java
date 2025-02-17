@@ -32,14 +32,14 @@ public class CoralOuttake extends Command {
   @Override
   public void execute() {
     if(coraleffector.getOuttakeSensor() == true){
-      coraleffector.set(0.1, 0.1);
+      coraleffector.outtakeCoral( 0.1);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coraleffector.set(0,0);
+    coraleffector.stop();
   }
 
   // Returns true when the command should end.
