@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -61,9 +62,21 @@ public class RobotContainer {
    */
   private void configureBindings() {
 
-    driveController.a().onTrue(new AutoAlign(swerve, vision, false));
-    driveController.b().onTrue(new AutoAlign(swerve, vision, true));
+    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false));
+    driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true));
+    driveController.x().onTrue(new MoveElevator(elevator, 1));
+    driveController.y().onTrue(new MoveElevator(elevator, 2));
+    driveController.b().onTrue(new MoveElevator(elevator, 3));
+    driveController.a().onTrue(new MoveElevator(elevator, 4));
+    //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
+    //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povUpLeft().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povDown().onTrue(new INPUTCLIMBCOMMANDDon));
+    //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
+    //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
+
 
     swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY(),
         () -> driveController.getLeftX(), () -> driveController.getRightX(), false));
