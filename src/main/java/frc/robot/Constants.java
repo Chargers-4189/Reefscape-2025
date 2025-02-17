@@ -73,6 +73,12 @@ public final class Constants {
     public static final double[] HEIGHTS_METERS = { -1, -1, -1, -1, -1 }; // Intake, L1, L2, L3, L4
   }
 
+  public static final class IntakeConstants{
+    public static final int kACTUATOR_MOTOR_ID = -1;
+    public static final int kDIO_PORT_TOP = -1;
+    public static final int kDIO_PORT_BOTTOM = -1;
+  }
+
   public static final class AutoConstants {
 
     public static final double kMaxSpeedMetersPerSecond = 3;
