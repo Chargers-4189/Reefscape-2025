@@ -31,10 +31,16 @@ public class Intake extends SubsystemBase {
       if(topLimitSwitch.get() != true){
       actuatorMotor.set(0.1);
       }
+      else{
+        actuatorMotor.set(0);
+      }
     }
     public void ActuateBackward(){
       if(bottomLimitSwitch.get() != true){
         actuatorMotor.set(-0.1);
+      }
+      else{
+        actuatorMotor.set(0);
       }
     }
   
