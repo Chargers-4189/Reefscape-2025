@@ -16,22 +16,12 @@ import frc.robot.Constants.CoralEffectorConstants;
 
 public class CoralEffector extends SubsystemBase {
 
-  private final SparkMax leftMotor = new SparkMax(
+  private final SparkMax mainMotor = new SparkMax(
     CoralEffectorConstants.kLEFT_MOTOR_ID,
     MotorType.kBrushless
   );
 
-  private final SparkMax rightMotor = new SparkMax(
-    CoralEffectorConstants.kRIGHT_MOTOR_ID,
-    MotorType.kBrushless
-  );
-
-  private final SparkMax actuatorMotor = new SparkMax(
-    CoralEffectorConstants.kACTUATOR_ID,
-    MotorType.kBrushless
-  );
-
-  private AbsoluteEncoder encoder = rightMotor.getAbsoluteEncoder();
+  private AbsoluteEncoder encoder = mainMotor.getAbsoluteEncoder();
 
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
   private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
@@ -50,22 +40,22 @@ public class CoralEffector extends SubsystemBase {
     }
   }
 
-  public void set(double leftMotorPower, double rightMotorPower) {
-    leftMotor.set(-leftMotorPower * 0.2);
-    rightMotor.set(rightMotorPower * 0.2);
+  public void intakeCoral(double mainMotorPower) {
+    mainMotor.set(-mainMotorPower);
   }
-
-  public void ActuateForward(){
-    actuatorMotor.set(0.1);
+  public void outtakeCoral(double mainMotorPower) {
+    mainMotor.set(mainMotorPower);
   }
-
-  public void ActuateBackward(){
-    actuatorMotor.set(-0.1);
+  public void intakeAlgae(double mainMotorPower) {
+    mainMotor.set(mainMotorPower);
   }
-
-  public void StopActuating(){
-    actuatorMotor.set(0);
+  public void outtakeAlgae(double mainMotorPower) {
+    mainMotor.set(-mainMotorPower);
   }
+  public void stop() {
+    mainMotor.set(0);
+  }
+  
 
   public boolean getIntakeSensor() {
     LaserCan.Measurement inMeasurement = intakeSensor.getMeasurement();

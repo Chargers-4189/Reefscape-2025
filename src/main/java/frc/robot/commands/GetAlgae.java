@@ -7,21 +7,16 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 
-
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralOuttake extends Command {
-  private CoralEffector coraleffector;
+public class GetAlgae extends Command {
+    private CoralEffector coraleffector;
 
-  /**
-   * Outtakes coral until outake sensor is false
-   * @param coraleffector import coral subsystem
-   */
-  public CoralOuttake(CoralEffector coraleffector) {
+
+  /** Creates a new GetAlgae. */
+  public GetAlgae(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
-
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coraleffector);
-    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -31,9 +26,7 @@ public class CoralOuttake extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coraleffector.getOuttakeSensor() == true){
-      coraleffector.outtakeCoral( 0.1);
-    }
+    coraleffector.intakeAlgae(0.1);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,11 +38,6 @@ public class CoralOuttake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-    if(coraleffector.getOuttakeSensor() == false){
-      return true;
-    }
-    return false;*/
-    return (coraleffector.getOuttakeSensor() == false);
+    return false;
   }
 }
