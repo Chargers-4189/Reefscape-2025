@@ -10,6 +10,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralOuttake;
+import frc.robot.commands.DriveController;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.CoralEffector;
@@ -32,7 +35,7 @@ public class RobotContainer {
   private final SwerveSubsystem swerve = new SwerveSubsystem();
   private final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
-  private final CoralEffector coralIntake = new CoralEffector();
+  private final CoralEffector coralEffector = new CoralEffector();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -61,13 +64,31 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    /*
+    swerveDrive.setDefaultCommand(
+      new DriveController(swerveDrive, driveController)
+    );*/
+
+    /*
+    elevator.setDefaultCommand(Commands.run(()->{
+      elevator.setVoltage(Constants.ElevatorConstants.kGRAVITY_VOLTS - driveController.getLeftY());
+    }, elevator));*/
+
+    //driveController.a().onTrue(new CoralIntake(coralEffector));
+    //driveController.b().onTrue(new CoralOuttake(coralEffector));
+
+    driveController.x().whileTrue(new MoveElevator(elevator, 1));
+    driveController.y().whileTrue(new MoveElevator(elevator, 2));
+    driveController.b().whileTrue(new MoveElevator(elevator,3));
+    driveController.a().whileTrue(new MoveElevator(elevator, 4));
+    driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
+
+
+
 
     driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false));
     driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true));
-    driveController.x().onTrue(new MoveElevator(elevator, 1));
-    driveController.y().onTrue(new MoveElevator(elevator, 2));
-    driveController.b().onTrue(new MoveElevator(elevator, 3));
-    driveController.a().onTrue(new MoveElevator(elevator, 4));
+
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));

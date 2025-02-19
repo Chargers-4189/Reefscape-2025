@@ -57,7 +57,7 @@ public final class Constants {
     public static final int kRIGHT_MOTOR_ID = 32;
     public static final int kINTAKE_SENSOR_ID = 34;
     public static final int kOUTTAKE_SENSOR_ID = 35;
-    public static final int kMEASURE_THRESHOLD = 5; // milimeters
+    public static final int kMEASURE_THRESHOLD = 20; //milimeters
   }
 
   public static class ElevatorConstants {
@@ -68,9 +68,20 @@ public final class Constants {
     public static final int kMAX_DIO_PORT = 1;
     public static final int kMaxCurrentDriveMotor = 50;
 
-    public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 / 100;
+    //public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 / 100;
 
-    public static final double[] HEIGHTS_METERS = { -1, -1, -1, -1, -1 }; // Intake, L1, L2, L3, L4
+    //public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179, 1.829}; //Intake, L1, L2, L3, L4
+
+    public static final double[] kHEIGHTS = {0.15, 0.15, 7.86, 25.69, 52.05}; //Intake, L1, L2, L3, L4
+
+    public static final double kELEVATOR_BASE_HEIGHT = .686;
+
+    public static final double kGRAVITY_VOLTS = .15; // .4 for current coral head
+    public static final double kPROPORTIONAL_VOLTS = .8;
+    public static final double kMAX_VOLTS = 4;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 8;
+
+    public static final double kTOLERANCE = .02;
   }
 
   public static final class IntakeConstants{
