@@ -98,11 +98,11 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return minLimitSwitch.get();
+    return !minLimitSwitch.get(); //exclamation mark necesary because we connected the blue instead of white wire.
   }
 
   public boolean getMaxLimitSwitch() {
-    return maxLimitSwitch.get();
+    return !maxLimitSwitch.get();
   }
 
   public void setVoltage(double voltage) {
@@ -116,7 +116,17 @@ public class Elevator extends SubsystemBase {
     // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
     //   return;
     // }
-
+    if(getMinLimitSwitch()) {
+      zeroEncoder();
+      if (voltage < -.2) {
+         voltage = -.2;
+      }
+    } else if (getMaxLimitSwitch()) {
+      if (voltage > .2) {
+        voltage = .2;
+      }
+      rightMotor.setVoltage(Math.min(-voltage - kGRAVITY_VOLTS.getAsDouble(), 0));
+    }
     rightMotor.setVoltage(-voltage - kGRAVITY_VOLTS.getAsDouble());
   }
 

@@ -43,10 +43,6 @@ public class MoveElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*
-    if(elevatorSubsystem.getMinLimitSwitch()) {
-      elevatorSubsystem.zeroEncoder();
-    }*/
 
     var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * elevator.kPROPORTIONAL_VOLTS.get();
     var maxVoltage = Math.min(elevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * elevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
@@ -55,6 +51,7 @@ public class MoveElevator extends Command {
     } else {
       elevator.setVoltage(-Math.min(proportionalVoltage, maxVoltage));
     }
+
   }
 
   // Called once the command ends or is interrupted.
