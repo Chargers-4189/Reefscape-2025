@@ -58,6 +58,7 @@ public class MoveElevator extends Command {
   @Override
   public void end(boolean interrupted) {
     elevator.setLevel(level);
+    elevator.setVoltage(0);
   }
 
   // Returns true when the command should end.
