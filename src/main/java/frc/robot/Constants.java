@@ -47,6 +47,7 @@ public final class Constants {
     public static final int kSteerAmpLimit = 20;
     public static final double kDriveSpeedWhileAligning = 0.05;
     public static final double kAlignDistanceToleranceYaw = 0.069813;
+    public static final double kProportionalVoltage = 0.008;
   }
 
   public static class CoralEffectorConstants {
