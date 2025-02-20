@@ -37,11 +37,12 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
     if(alignRight == true){
+      System.out.println(vision.getFrontRightTagYaw());
       if(vision.getFrontRightTagYaw() > 0){
-        swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
+        swerve.drive(0.0 , -SwerveConstants.kDriveSpeedWhileAligning, 0.0, false);
       }
       else{
-        swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
+        swerve.drive(0.0, SwerveConstants.kDriveSpeedWhileAligning, 0.0, false);
       }
     }
     else{

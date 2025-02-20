@@ -135,6 +135,6 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     //System.out.println(getEncoder());
 
-    System.out.println(getEncoder());
+    //System.out.println(getEncoder());
   }
 }

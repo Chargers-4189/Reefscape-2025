@@ -135,6 +135,15 @@ public class SwerveSubsystem extends SubsystemBase {
     });
   }
 
+  public void drive(double translationX, double translationY,
+  double angularRotationX, boolean fieldOriented) {
+    swerveDrive.drive(new Translation2d(-translationX * swerveDrive.getMaximumChassisVelocity(),
+          -translationY * swerveDrive.getMaximumChassisVelocity()),
+          -angularRotationX * swerveDrive.getMaximumChassisAngularVelocity(),
+          fieldOriented,
+          false);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run

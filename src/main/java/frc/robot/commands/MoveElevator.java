@@ -17,6 +17,7 @@ public class MoveElevator extends Command {
   private int level;
   private double goal;
   private double startTime;
+  private boolean up;
 
 
   /**
@@ -38,6 +39,7 @@ public class MoveElevator extends Command {
   @Override
   public void initialize() {
     this.startTime = Timer.getFPGATimestamp();
+    this.up = elevator.getEncoder() < goal;
   };
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -46,23 +48,27 @@ public class MoveElevator extends Command {
 
     var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * elevator.kPROPORTIONAL_VOLTS.get();
     var maxVoltage = Math.min(elevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * elevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
-    if (elevator.getEncoder() < goal) {
+    if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
     } else {
       elevator.setVoltage(-Math.min(proportionalVoltage, maxVoltage));
     }
-
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     elevator.setLevel(level);
+    elevator.setVoltage(0);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return Math.abs(goal - elevator.getEncoder()) < (elevator.kTOLERANCE.get());
+    if (up) {
+      return elevator.getEncoder() > goal + elevator.kTOLERANCE.get();
+    } else {
+      return elevator.getEncoder() < goal - elevator.kTOLERANCE.get();
+    }
   }
 }
