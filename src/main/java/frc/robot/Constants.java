@@ -45,7 +45,7 @@ public final class Constants {
         * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2)));
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-    public static final double kDriveSpeedWhileAligning = 0.1;
+    public static final double kDriveSpeedWhileAligning = 0.05;
     public static final double kAlignDistanceToleranceYaw = 0.069813;
   }
 
@@ -57,7 +57,7 @@ public final class Constants {
     public static final int kRIGHT_MOTOR_ID = 32;
     public static final int kINTAKE_SENSOR_ID = 34;
     public static final int kOUTTAKE_SENSOR_ID = 35;
-    public static final int kMEASURE_THRESHOLD = 20; //milimeters
+    public static final int kMEASURE_THRESHOLD = 100; //milimeters
   }
 
   public static class ElevatorConstants {
@@ -78,8 +78,8 @@ public final class Constants {
 
     public static final double kGRAVITY_VOLTS = .15; // .4 for current coral head
     public static final double kPROPORTIONAL_VOLTS = .8;
-    public static final double kMAX_VOLTS = 4;
-    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 8;
+    public static final double kMAX_VOLTS = 8;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 12;
 
     public static final double kTOLERANCE = .02;
   }

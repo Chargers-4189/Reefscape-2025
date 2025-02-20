@@ -26,7 +26,7 @@ public class GetAlgae extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coraleffector.intakeAlgae(0.1);
+    coraleffector.setPower(0.1);
   }
 
   // Called once the command ends or is interrupted.

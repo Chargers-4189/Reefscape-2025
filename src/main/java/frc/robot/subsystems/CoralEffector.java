@@ -26,32 +26,23 @@ public class CoralEffector extends SubsystemBase {
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
   private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
 
+  public String state = "empty";
+
   /** Creates a new CoralEffector. */
   public CoralEffector() {
     try {
       intakeSensor.setRangingMode(LaserCan.RangingMode.SHORT);
-      intakeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
+      intakeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 2, 2));
       intakeSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
-      outtakeSensor.setRangingMode(LaserCan.RangingMode.SHORT);
-      outtakeSensor.setRegionOfInterest(new LaserCan.RegionOfInterest(8, 8, 16, 16));
-      outtakeSensor.setTimingBudget(LaserCan.TimingBudget.TIMING_BUDGET_33MS);
     } catch (ConfigurationFailedException e) {
       System.out.println("Configuration failed! " + e);
     }
   }
 
-  public void intakeCoral(double mainMotorPower) {
+  public void setPower(double mainMotorPower) {
     mainMotor.set(-mainMotorPower);
   }
-  public void outtakeCoral(double mainMotorPower) {
-    mainMotor.set(mainMotorPower);
-  }
-  public void intakeAlgae(double mainMotorPower) {
-    mainMotor.set(mainMotorPower);
-  }
-  public void outtakeAlgae(double mainMotorPower) {
-    mainMotor.set(-mainMotorPower);
-  }
+
   public void stop() {
     mainMotor.set(0);
   }
@@ -59,14 +50,19 @@ public class CoralEffector extends SubsystemBase {
 
   public boolean getIntakeSensor() {
     LaserCan.Measurement inMeasurement = intakeSensor.getMeasurement();
-    if (inMeasurement != null && inMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
-      return (inMeasurement.distance_mm < CoralEffectorConstants.kMEASURE_THRESHOLD);
-    } else {
-      System.out.println("ERROR! Coral Effector Intake LaserCan measurement is invalid");
+    //System.out.println(inMeasurement.distance_mm);
+    /*
+    if (inMeasurement == null) {
+      System.out.print("null ");
     }
-    return false;
+    if (inMeasurement.status != LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
+      System.out.print("invalid ");
+    }
+    System.out.println(inMeasurement.distance_mm);
+    */
+    return (inMeasurement.distance_mm < CoralEffectorConstants.kMEASURE_THRESHOLD);
   }
-
+  /*
   public boolean getOuttakeSensor() {
     LaserCan.Measurement outMeasurement = outtakeSensor.getMeasurement();
     if (outMeasurement != null && outMeasurement.status == LaserCan.LASERCAN_STATUS_VALID_MEASUREMENT) {
@@ -75,7 +71,7 @@ public class CoralEffector extends SubsystemBase {
       System.out.println("ERROR! Coral Effector Outtake LaserCan measurement is invalid");
     }
     return false;
-  }
+  }*/
 
   public double getAbsoluteEncoderValue(){
     return encoder.getPosition();
@@ -84,5 +80,10 @@ public class CoralEffector extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    /*
+    System.out.print(state);
+    System.out.print(" ");i
+    System.out.println(getIntakeSensor());
+    */
   }
 }

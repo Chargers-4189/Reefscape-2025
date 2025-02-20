@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import frc.util.Stopwatch;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 
@@ -11,6 +13,7 @@ import frc.robot.subsystems.CoralEffector;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CoralOuttake extends Command {
   private CoralEffector coraleffector;
+  private Stopwatch stopwatch = new Stopwatch();
 
   /**
    * Outtakes coral until outake sensor is false
@@ -26,14 +29,14 @@ public class CoralOuttake extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stopwatch.start(3000);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coraleffector.getOuttakeSensor() == true){
-      coraleffector.outtakeCoral( 0.1);
-    }
+    coraleffector.setPower( 0.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -45,11 +48,6 @@ public class CoralOuttake extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    /*
-    if(coraleffector.getOuttakeSensor() == false){
-      return true;
-    }
-    return false;*/
-    return (coraleffector.getOuttakeSensor() == false);
+    return stopwatch.hasTriggered();
   }
 }

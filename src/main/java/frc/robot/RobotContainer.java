@@ -16,6 +16,7 @@ import frc.robot.commands.AutoAlign;
 import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
@@ -73,20 +74,23 @@ public class RobotContainer {
       elevator.setVoltage(Constants.ElevatorConstants.kGRAVITY_VOLTS - driveController.getLeftY());
     }, elevator));*/
 
-    //driveController.a().onTrue(new CoralIntake(coralEffector));
+    coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
+
+    //driveController.leftBumper().onTrue(new CoralIntake(coralEffector));
+    driveController.rightBumper().onTrue(new CoralOuttake(coralEffector));
     //driveController.b().onTrue(new CoralOuttake(coralEffector));
 
-    driveController.x().whileTrue(new MoveElevator(elevator, 1));
-    driveController.y().whileTrue(new MoveElevator(elevator, 2));
-    driveController.b().whileTrue(new MoveElevator(elevator,3));
-    driveController.a().whileTrue(new MoveElevator(elevator, 4));
-    driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
+    driveController.x().onTrue(new MoveElevator(elevator, 1));
+    driveController.y().onTrue(new MoveElevator(elevator, 2));
+    driveController.b().onTrue(new MoveElevator(elevator,3));
+    driveController.a().onTrue(new MoveElevator(elevator, 4));
+    //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
 
 
 
-    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false));
-    driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true));
+    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, true));
+    //driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true));
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
@@ -98,8 +102,8 @@ public class RobotContainer {
     //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
 
-    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY(),
-        () -> driveController.getLeftX(), () -> driveController.getRightX(), false));
+    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY() * .3,
+        () -> driveController.getLeftX() * .3, () -> driveController.getRightX() * .3, false));
   }
 
   /**
