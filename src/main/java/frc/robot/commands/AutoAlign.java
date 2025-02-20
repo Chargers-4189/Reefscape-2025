@@ -36,8 +36,8 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(alignRight == true){
-      if(vision.getFrontRightTagYaw() > 0){
+        if(alignRight == true){
+          if(vision.getFrontRightTagYaw() > SwerveConstants.kAlignDistanceToleranceYaw){
         swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
       else{
@@ -45,7 +45,7 @@ public class AutoAlign extends Command {
       }
     }
     else{
-      if(vision.getFrontLeftTagYaw() > 0){
+      if(vision.getFrontLeftTagYaw() > SwerveConstants.kAlignDistanceToleranceYaw){
         swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
       }
       else{
