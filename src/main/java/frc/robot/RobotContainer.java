@@ -36,6 +36,7 @@ public class RobotContainer {
   private final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
+  private final Intake intake = new Intake();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -89,8 +90,8 @@ public class RobotContainer {
 
 
 
-    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, true));
-    //driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true));
+    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false));
+    driveController.back().onTrue(new AutoAlign(swerve, vision, true));
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
