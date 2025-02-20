@@ -45,8 +45,9 @@ public final class Constants {
         * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2)));
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-    public static final double kDriveSpeedWhileAligning = 0.05;
+    public static final double kDriveSpeedWhileAligning = 0.005;
     public static final double kAlignDistanceToleranceYaw = 0.069813;
+    public static final double kAlignDistanceToleranceYawReef = 1.5;
   }
 
   public static class CoralEffectorConstants {
@@ -85,9 +86,9 @@ public final class Constants {
   }
 
   public static final class IntakeConstants{
-    public static final int kACTUATOR_MOTOR_ID = -1;
-    public static final int kDIO_PORT_TOP = -1;
-    public static final int kDIO_PORT_BOTTOM = -1;
+    public static final int kACTUATOR_MOTOR_ID = 41;
+    public static final int kDIO_PORT_TOP = 2;
+    public static final int kDIO_PORT_BOTTOM = 3;
   }
 
   public static final class AutoConstants {
