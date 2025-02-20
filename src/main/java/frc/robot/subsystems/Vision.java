@@ -81,11 +81,7 @@ public class Vision extends SubsystemBase {
   }
 
   public Double getFrontRightTagYaw() {
-    if (cameras[1].getEstimatedTagYaw() != null) {
-      return cameras[1].getEstimatedTagYaw();
-    } else {
-      return null;
-    }
+    return cameras[1].getEstimatedTagYaw();
   }
 
   public Double getBackTagYaw() {
@@ -134,6 +130,5 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    System.out.println(cameras[0].getEstimatedTagYaw() + " " + cameras[1].getEstimatedTagYaw());
   }
 }

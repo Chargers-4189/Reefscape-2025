@@ -39,9 +39,10 @@ public class AutoAlign extends Command {
         if(alignRight == true){
           if(vision.getFrontRightTagYaw() > SwerveConstants.kAlignDistanceToleranceYaw){
         swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
+
       }
       else{
-        swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
+        swerve.drive(0.0, SwerveConstants.kDriveSpeedWhileAligning, 0.0, false);
       }
     }
     else{
