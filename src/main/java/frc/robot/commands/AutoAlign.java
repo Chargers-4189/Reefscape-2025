@@ -36,40 +36,28 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-        if(alignRight == true){
-          if(vision.getFrontRightTagYaw() > SwerveConstants.kAlignDistanceToleranceYaw){
-        swerve.driveCommand(()->-vision.getFrontRightTagYaw() * SwerveConstants.kProportionalVoltage, ()->0.0, ()->0.0, false);
-
-      }
-      else{
-        swerve.driveCommand(()->vision.getFrontRightTagYaw() * SwerveConstants.kProportionalVoltage, ()->0.0, ()->0.0, false);
-      }
+    Double yaw;
+    if (alignRight) {
+      yaw = vision.getFrontLeftTagYaw();
+    } else {
+      yaw = vision.getFrontRightTagYaw();
     }
-    else{
-      if(vision.getFrontLeftTagYaw() > SwerveConstants.kAlignDistanceToleranceYaw){
-        swerve.driveCommand(()->-vision.getFrontRightTagYaw() * SwerveConstants.kProportionalVoltage, ()->0.0, ()->0.0, false);
-      }
-      else{
-        swerve.driveCommand(()->vision.getFrontRightTagYaw() * SwerveConstants.kProportionalVoltage, ()->0.0, ()->0.0, false);
-      }
-    }
-    
+    swerve.drive(0.0, yaw * SwerveConstants.kProportionalVoltage, 0.0, false);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.driveCommand(()->0.0, ()->0.0, ()->0.0, false);
+    swerve.drive(0.0, 0.0, 0.0, false);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(alignRight == true){
-      return (vision.getFrontRightTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getFrontRightTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
-    }
-    else{
-      return (vision.getFrontLeftTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getFrontLeftTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
+    if (alignRight) {
+      return (vision.getFrontRightTagYaw() == null) || (Math.abs(vision.getFrontLeftTagYaw()) <= SwerveConstants.kAlignDistanceToleranceYawReef);
+    } else {
+      return (vision.getFrontRightTagYaw() == null) || (Math.abs(vision.getFrontRightTagYaw()) <= SwerveConstants.kAlignDistanceToleranceYawReef);
     }
   }
 }

@@ -84,6 +84,7 @@ public class AprilTagCamera {
           result.getTargets().size() < 16 &&
           result.getTargets().size() > 0) {
             estimatedTagYaw = result.getBestTarget().getYaw();
+            
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
           return estimatedResult.get();
