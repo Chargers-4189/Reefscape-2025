@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix.time.StopWatch;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -40,9 +42,12 @@ public class AutoAlign extends Command {
     if (alignRight) {
       yaw = vision.getFrontLeftTagYaw();
     } else {
-      yaw = vision.getFrontRightTagYaw();
+      yaw = vision.getFrontLeftTagYaw();
     }
-    swerve.drive(0.0, yaw * SwerveConstants.kProportionalVoltage, 0.0, false);
+    if (yaw != null) {
+      swerve.drive(0.0, yaw * SwerveConstants.kProportionalVoltage, 0.0, false);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
@@ -54,10 +59,19 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    Double yaw;
     if (alignRight) {
-      return (vision.getFrontRightTagYaw() == null) || (Math.abs(vision.getFrontLeftTagYaw()) <= SwerveConstants.kAlignDistanceToleranceYawReef);
+      yaw = vision.getFrontRightTagYaw();
+      if (yaw == null) {
+        return false;
+      }
+      return (Math.abs(yaw) <= SwerveConstants.kAlignDistanceToleranceYawReef);
     } else {
-      return (vision.getFrontRightTagYaw() == null) || (Math.abs(vision.getFrontRightTagYaw()) <= SwerveConstants.kAlignDistanceToleranceYawReef);
+      yaw = vision.getFrontRightTagYaw();
+      if (yaw == null) {
+        return false;
+      }
+      return (Math.abs(yaw) <= SwerveConstants.kAlignDistanceToleranceYawReef);
     }
   }
 }

@@ -51,7 +51,7 @@ public class Vision extends SubsystemBase {
       cameras = new AprilTagCamera[] {
           new AprilTagCamera("flCam2025", flCamPose),
           new AprilTagCamera("frCam2025", frCamPose),
-          //new AprilTagCamera("bkCam2025", bkCamPose),
+          // new AprilTagCamera("bkCam2025", bkCamPose),
       };
     }
   }
@@ -73,11 +73,7 @@ public class Vision extends SubsystemBase {
   }
 
   public Double getFrontLeftTagYaw() {
-    if (cameras[0].getEstimatedTagYaw() != null) {
-      return cameras[0].getEstimatedTagYaw();
-    } else {
-      return null;
-    }
+    return cameras[0].getEstimatedTagYaw();
   }
 
   public Double getFrontRightTagYaw() {
@@ -130,8 +126,6 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    System.out.print(getFrontLeftTagYaw());
-    System.out.print(" ");
-    System.out.println(getFrontRightTagYaw());
+    System.out.println(cameras[0].getEstimatedTagYaw() + "  " + cameras[1].getEstimatedTagYaw());
   }
 }

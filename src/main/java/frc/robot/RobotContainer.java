@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
@@ -77,9 +78,10 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
 
-    //driveController.leftBumper().onTrue(new CoralIntake(coralEffector));
-    driveController.rightBumper().onTrue(new CoralOuttake(coralEffector));
-    //driveController.b().onTrue(new CoralOuttake(coralEffector));
+    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
+
+    driveController.axisGreaterThan(3, 0.5).onTrue(new CoralOuttake(coralEffector));
 
     driveController.x().onTrue(new MoveElevator(elevator, 1));
     driveController.y().onTrue(new MoveElevator(elevator, 2));
@@ -90,11 +92,10 @@ public class RobotContainer {
 
 
 
-    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false));
-    driveController.back().onTrue(new AutoAlign(swerve, vision, true));
+    driveController.leftBumper().onTrue(new AutoAlign(swerve, vision, false).withTimeout(2));
+    driveController.rightBumper().onTrue(new AutoAlign(swerve, vision, true).withTimeout(2));
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpLeft().onTrue(new INPUTCLIMBCOMMANDUP));
