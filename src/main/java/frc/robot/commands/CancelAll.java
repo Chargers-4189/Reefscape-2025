@@ -12,13 +12,19 @@ import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CancelAll extends Command {
+
   private CoralEffector effector;
   private Elevator elevator;
   private Intake intake;
   private SwerveSubsystem swerve;
-  
+
   /** Creates a new CancelAll. */
-  public CancelAll(CoralEffector effector, Elevator elevator, Intake intake, SwerveSubsystem swerve) {
+  public CancelAll(
+    CoralEffector effector,
+    Elevator elevator,
+    Intake intake,
+    SwerveSubsystem swerve
+  ) {
     this.effector = effector;
     this.elevator = elevator;
     this.intake = intake;
@@ -33,7 +39,7 @@ public class CancelAll extends Command {
   public void initialize() {
     effector.stop();
     elevator.setVoltage(0);
-    intake.StopActuating();
+    intake.stop();
     swerve.drive(0, 0, 0, false);
   }
 

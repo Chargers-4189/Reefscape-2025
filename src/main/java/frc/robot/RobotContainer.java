@@ -5,15 +5,14 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.CoralIntake;
-import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.AutoAlignPose;
 import frc.robot.commands.CancelAll;
+import frc.robot.commands.CoralIntake;
+import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.MoveElevator;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
@@ -41,7 +40,8 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
-      Constants.OperatorConstants.kDriverControllerPort);
+    Constants.OperatorConstants.kDriverControllerPort
+  );
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -78,23 +78,46 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
 
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
+    driveController
+      .back()
+      .onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController
+      .start()
+      .debounce(1)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            swerve.resetGyro();
+          },
+          swerve
+        )
+      );
 
-    driveController.axisGreaterThan(3, 0.5).onTrue(new CoralOuttake(coralEffector));
+    driveController
+      .axisGreaterThan(3, 0.5)
+      .onTrue(new CoralOuttake(coralEffector));
 
     driveController.x().onTrue(new MoveElevator(elevator, 1));
     driveController.y().onTrue(new MoveElevator(elevator, 2));
-    driveController.b().onTrue(new MoveElevator(elevator,3));
+    driveController.b().onTrue(new MoveElevator(elevator, 3));
     driveController.a().onTrue(new MoveElevator(elevator, 4));
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
+    intake.setDefaultCommand(
+      Commands.run(
+        () -> {
+          intake.setPower(Math.pow(driveController.getLeftY(), 3));
+        },
+        intake
+      )
+    );
 
-
-
-    driveController.leftBumper().onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(3));
-
+    driveController
+      .leftBumper()
+      .onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(3));
+    driveController
+      .rightBumper()
+      .onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(3));
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
@@ -102,10 +125,15 @@ public class RobotContainer {
     //driveController.povDown().onTrue(new INPUTCLIMBCOMMANDDon));
     //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
     //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
-
-
-    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY() * .3,
-        () -> driveController.getLeftX() * .3, () -> driveController.getRightX() * .3, false));
+    /*
+    swerve.setDefaultCommand(
+      swerve.driveCommand(
+        () -> driveController.getLeftY() * .3,
+        () -> driveController.getLeftX() * .3,
+        () -> driveController.getRightX() * .3,
+        false
+      )
+    );*/
   }
 
   /**
