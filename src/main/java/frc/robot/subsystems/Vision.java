@@ -10,13 +10,12 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
+import frc.robot.Constants.VisionConstants;
 import frc.util.AprilTagCamera;
 import frc.util.AprilTagCamera.AprilTagCameraSim;
 
@@ -29,15 +28,6 @@ public class Vision extends SubsystemBase {
       .getStructTopic("PhotonRobotPosition", Pose2d.struct).publish();
 
   private AprilTagCamera[] cameras;
-  final Transform3d flCamPose = new Transform3d(
-      new Translation3d(0.5, -0.1, 0),
-      new Rotation3d(0, Math.toRadians(0), 0));
-  final Transform3d frCamPose = new Transform3d(
-      new Translation3d(0, 0.1, 0),
-      new Rotation3d(0, Math.toRadians(0), 0));
-  final Transform3d bkCamPose = new Transform3d(
-      new Translation3d(-0.5, 0, 0),
-      new Rotation3d(0, Math.toRadians(0), Math.toRadians(180.0)));
 
   // ----- Simulated Vision -----
   VisionSystemSim visionSim;
@@ -49,9 +39,9 @@ public class Vision extends SubsystemBase {
       System.out.println("SIM");
     } else {
       cameras = new AprilTagCamera[] {
-          new AprilTagCamera("flCam2025", flCamPose),
-          new AprilTagCamera("frCam2025", frCamPose),
-          //new AprilTagCamera("bkCam2025", bkCamPose),
+          new AprilTagCamera("flCam2025", VisionConstants.flCamPose),
+          new AprilTagCamera("frCam2025", VisionConstants.frCamPose),
+          // new AprilTagCamera("bkCam2025", VisionConstants.bkCamPose),
       };
     }
   }
@@ -66,22 +56,26 @@ public class Vision extends SubsystemBase {
       System.out.println("Could not load simulated field: " + e);
     }
     cameras = new AprilTagCamera[] {
-        new AprilTagCameraSim("flCam2025", flCamPose, true, visionSim),
-        new AprilTagCameraSim("frCam2025", frCamPose, false, visionSim),
-        new AprilTagCameraSim("bkCam2025", bkCamPose, false, visionSim),
+        new AprilTagCameraSim("flCam2025", VisionConstants.flCamPose, true, visionSim),
+        new AprilTagCameraSim("frCam2025", VisionConstants.frCamPose, false, visionSim),
+        new AprilTagCameraSim("bkCam2025", VisionConstants.bkCamPose, false, visionSim),
     };
   }
 
   public Double getFrontLeftTagYaw() {
-    if (cameras[0].getEstimatedTagYaw() != null) {
-      return cameras[0].getEstimatedTagYaw();
-    } else {
-      return null;
-    }
+    return cameras[0].getEstimatedTagYaw();
   }
 
   public Double getFrontRightTagYaw() {
     return cameras[1].getEstimatedTagYaw();
+  }
+
+  public Transform3d getFLTagPose() {
+    return cameras[0].getEstimatedTagPose();
+  }
+
+  public Transform3d getFRTagPose() {
+    return cameras[1].getEstimatedTagPose();
   }
 
   public Double getBackTagYaw() {
@@ -130,5 +124,6 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
+    // System.out.println(cameras[0].getEstimatedTagYaw() + "  " + cameras[1].getEstimatedTagYaw());
   }
 }

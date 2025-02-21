@@ -26,6 +26,7 @@ public class AprilTagCamera {
   private boolean estimateAvailable = false;
   public Pose2d estimatedPose;
   public Double estimatedTagYaw;
+  public Transform3d estimateTagPose;
 
   protected PhotonCamera camera;
   private PhotonPoseEstimator poseEstimator;
@@ -55,6 +56,10 @@ public class AprilTagCamera {
     return estimatedTagYaw;
   }
 
+  public Transform3d getEstimatedTagPose() {
+    return estimateTagPose;
+  }
+
   public boolean isEstimateReady() {
     return estimateAvailable;
   }
@@ -80,15 +85,20 @@ public class AprilTagCamera {
         Transform3d transform = tag.getBestCameraToTarget();
         return (transform.getX() > maxDistance || transform.getY() > maxDistance);
       });
+
       if (result.hasTargets() &&
           result.getTargets().size() < 16 &&
           result.getTargets().size() > 0) {
-            estimatedTagYaw = result.getBestTarget().getYaw();
+        estimateTagPose = result.getBestTarget().getBestCameraToTarget();
+        estimatedTagYaw = result.getBestTarget().getYaw();
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
           return estimatedResult.get();
         }
+      } else {
+        estimatedTagYaw = null;
       }
+
     }
     return null;
   }
