@@ -9,6 +9,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
@@ -66,13 +67,14 @@ public class AutoAlignPose extends Command {
     }
 
     if (toTravel != null) {
-      swerve.drive(-toTravel.getX() * .3, -toTravel.getY() * .6, 0.0, false);
+      swerve.drive(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -toTravel.getY() * SwerveConstants.kAlignSpeedY, 0.0, false);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    swerve.drive(0, 0, 0, false);
   }
 
   // Returns true when the command should end.

@@ -62,13 +62,17 @@ public class Vision extends SubsystemBase {
     };
   }
 
-  public Double getFrontLeftTagYaw() {
-    return cameras[0].getEstimatedTagYaw();
-  }
+  // public Double getFrontLeftTagYaw() {
+  // return cameras[0].getEstimatedTagYaw();
+  // }
 
-  public Double getFrontRightTagYaw() {
-    return cameras[1].getEstimatedTagYaw();
-  }
+  // public Double getFrontRightTagYaw() {
+  // return cameras[1].getEstimatedTagYaw();
+  // }
+
+  // public Double getBackTagYaw() {
+  //   return cameras[2].getEstimatedTagYaw();
+  // }
 
   public Transform3d getFLTagPose() {
     return cameras[0].getEstimatedTagPose();
@@ -77,13 +81,8 @@ public class Vision extends SubsystemBase {
   public Transform3d getFRTagPose() {
     return cameras[1].getEstimatedTagPose();
   }
-
-  public Double getBackTagYaw() {
-    if (cameras[2].getEstimatedTagYaw() != null) {
-      return cameras[2].getEstimatedTagYaw();
-    } else {
-      return null;
-    }
+  public Transform3d getBTagPose() {
+    return cameras[2].getEstimatedTagPose();
   }
 
   public Pose2d getEstimatedRobotPosition() {
@@ -124,6 +123,7 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    // System.out.println(cameras[0].getEstimatedTagYaw() + "  " + cameras[1].getEstimatedTagYaw());
+    // System.out.println(cameras[0].getEstimatedTagYaw() + " " +
+    // cameras[1].getEstimatedTagYaw());
   }
 }

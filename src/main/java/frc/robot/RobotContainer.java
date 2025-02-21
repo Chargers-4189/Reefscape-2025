@@ -13,8 +13,9 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.AutoAlignPose;
+import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.MoveElevator;
+import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -83,10 +84,10 @@ public class RobotContainer {
 
     driveController.axisGreaterThan(3, 0.5).onTrue(new CoralOuttake(coralEffector));
 
-    driveController.x().onTrue(new MoveElevator(elevator, 1));
-    driveController.y().onTrue(new MoveElevator(elevator, 2));
-    driveController.b().onTrue(new MoveElevator(elevator,3));
-    driveController.a().onTrue(new MoveElevator(elevator, 4));
+    driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
+    driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
+    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
+    driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
 

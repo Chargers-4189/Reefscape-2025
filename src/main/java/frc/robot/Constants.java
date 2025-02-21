@@ -6,9 +6,7 @@ package frc.robot;
 
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -65,7 +63,10 @@ public final class Constants {
     public static final double kDriveSpeedWhileAligning = 0.020;
     public static final double kAlignDistanceToleranceYaw = 0.069813;
     public static final double kProportionalVoltage = 0.008;
-    public static final double kAlignDistanceToleranceYawReef = .5;
+
+    //public static final double kAlignDistanceToleranceYawReef = .5;
+    public static final double kAlignSpeedX = 0.3;
+    public static final double kAlignSpeedY = 0.6;
   }
 
   public static class CoralEffectorConstants {

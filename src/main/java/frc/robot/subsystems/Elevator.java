@@ -14,7 +14,6 @@ import com.revrobotics.spark.config.SparkMaxConfig;
 
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -28,7 +27,7 @@ public class Elevator extends SubsystemBase {
   public DoubleEntry kTOLERANCE;
   public DoubleArrayEntry kHEIGHTS;
 
-  private int level = -1;
+  private int level = 0;
 
   private final SparkMax leftMotor = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID,
@@ -110,7 +109,8 @@ public class Elevator extends SubsystemBase {
       if (voltage < -.2) {
          voltage = -.2;
       }
-    } else if (getMaxLimitSwitch()) {
+    }
+    if (getMaxLimitSwitch()) {
       if (voltage > .2) {
         voltage = .2;
       }
@@ -124,6 +124,6 @@ public class Elevator extends SubsystemBase {
     if(getMinLimitSwitch()) {
       zeroEncoder();
     }
-    System.out.println(getEncoder());
+    //System.out.println(getEncoder());
   }
 }
