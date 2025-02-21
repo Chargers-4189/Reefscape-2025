@@ -47,6 +47,9 @@ public class MoveElevator extends Command {
   public void execute() {
 
     var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * elevator.kPROPORTIONAL_VOLTS.get();
+    if (level == 0) {
+      proportionalVoltage = 10;
+    }
     var maxVoltage = Math.min(elevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * elevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
@@ -65,6 +68,9 @@ public class MoveElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (level == 0) {
+      return false;
+    }
     if (up) {
       return elevator.getEncoder() > goal + elevator.kTOLERANCE.get();
     } else {

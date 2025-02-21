@@ -27,8 +27,9 @@ public class AutoAlignPose extends Command {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;
+    
     // Use addRequirements() here to declare subsystem dependencies.
-    // addRequirements(swerve);
+    addRequirements(swerve);
   }
 
   // Called when the command is initially scheduled.
@@ -47,8 +48,6 @@ public class AutoAlignPose extends Command {
     if (alignRight) {
       if (vision.getFLTagPose() != null) {
         tagPose = vision.getFLTagPose();
-        // tagGoal = new Pose2d(tagPose.getX(), tagPose.getY(),
-        // new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
         tagGoal = new Pose2d().transformBy(new Transform2d(tagPose.getX(), tagPose.getY(),
             new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
         lastPos = swerve.getPose();
@@ -56,8 +55,6 @@ public class AutoAlignPose extends Command {
     } else {
       if (vision.getFRTagPose() != null) {
         tagPose = vision.getFRTagPose();
-        // tagGoal = new Pose2d(tagPose.getX(), tagPose.getY(),
-        // new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
         tagGoal = new Pose2d().transformBy(new Transform2d(tagPose.getX(), tagPose.getY(),
             new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
       }

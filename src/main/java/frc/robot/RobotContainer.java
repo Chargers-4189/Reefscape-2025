@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralOuttake;
-import frc.robot.commands.AutoAlign;
 import frc.robot.commands.AutoAlignPose;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.MoveElevator;

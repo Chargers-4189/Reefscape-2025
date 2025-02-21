@@ -106,18 +106,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setVoltage(double voltage) {
-    // if (getMinLimitSwitch() && voltage < 0) {
-    //   voltage = 0;
-    // } else if (getMaxLimitSwitch() && voltage > 0) {
-    //   voltage = 0;
-    // }
-
-    //temporary safety:
-    // if (getMinLimitSwitch() || getMaxLimitSwitch()) {
-    //   return;
-    // }
     if(getMinLimitSwitch()) {
-      zeroEncoder();
       if (voltage < -.2) {
          voltage = -.2;
       }
@@ -125,7 +114,6 @@ public class Elevator extends SubsystemBase {
       if (voltage > .2) {
         voltage = .2;
       }
-      rightMotor.setVoltage(Math.min(-voltage - kGRAVITY_VOLTS.getAsDouble(), 0));
     }
     rightMotor.setVoltage(-voltage - kGRAVITY_VOLTS.getAsDouble());
   }
@@ -133,8 +121,9 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //System.out.println(getEncoder());
-
-    //System.out.println(getEncoder());
+    if(getMinLimitSwitch()) {
+      zeroEncoder();
+    }
+    System.out.println(getEncoder());
   }
 }
