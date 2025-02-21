@@ -93,8 +93,8 @@ public class RobotContainer {
 
 
 
-    driveController.leftBumper().onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(2));
-    driveController.rightBumper().onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(2));
+    driveController.leftBumper().onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(3));
+    driveController.rightBumper().onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(3));
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));

@@ -9,7 +9,6 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
@@ -29,7 +28,7 @@ public class AutoAlignPose extends Command {
     this.vision = vision;
     this.alignRight = alignRight;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(swerve);
+    // addRequirements(swerve);
   }
 
   // Called when the command is initially scheduled.
@@ -46,22 +45,21 @@ public class AutoAlignPose extends Command {
   @Override
   public void execute() {
     if (alignRight) {
-      //System.out.print("alignRight  ");
       if (vision.getFLTagPose() != null) {
-        //System.out.println(vision.getFLTagPose());
         tagPose = vision.getFLTagPose();
-        tagGoal = new Pose2d(tagPose.getX(),tagPose.getY(), new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
+        // tagGoal = new Pose2d(tagPose.getX(), tagPose.getY(),
+        // new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
+        tagGoal = new Pose2d().transformBy(new Transform2d(tagPose.getX(), tagPose.getY(),
+            new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
         lastPos = swerve.getPose();
-        //System.out.println(tagGoal);
       }
     } else {
-      //System.out.print("alignLeft  ");
       if (vision.getFRTagPose() != null) {
-        //System.out.println(vision.getFRTagPose());
         tagPose = vision.getFRTagPose();
-        tagGoal = new Pose2d(tagPose.getX(),tagPose.getY(), new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
-        lastPos = swerve.getPose();
-        //System.out.print(tagGoal);
+        // tagGoal = new Pose2d(tagPose.getX(), tagPose.getY(),
+        // new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY()));
+        tagGoal = new Pose2d().transformBy(new Transform2d(tagPose.getX(), tagPose.getY(),
+            new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
       }
     }
     if (lastPos != null) {
@@ -69,13 +67,9 @@ public class AutoAlignPose extends Command {
     } else {
       toTravel = tagGoal;
     }
-    
-    //System.out.print(toTravel.getX());
+
     if (toTravel != null) {
-      //swerve.drive(toTravel.getX() * .005, toTravel.getY() * .005, 0.0, false);
-      System.out.print(toTravel.getX());
-      System.out.print(" ");
-      System.out.print(toTravel.getY());
+      swerve.drive(-toTravel.getX() * .3, -toTravel.getY() * .6, 0.0, false);
     }
   }
 
