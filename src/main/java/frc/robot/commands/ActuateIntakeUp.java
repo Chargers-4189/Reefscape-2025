@@ -27,7 +27,8 @@ public class ActuateIntakeUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setPower();
+
+    intake.setPower((IntakeConstants.kUP_ENCODER - intake.getEncoder()) * IntakeConstants.kPROPORTIONAL);
   }
 
   // Called once the command ends or is interrupted.

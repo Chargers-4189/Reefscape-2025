@@ -72,22 +72,23 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
+    //
     intake.setDefaultCommand(new ActuateIntakeUp(intake));
 
     swerve.setDefaultCommand(
       swerve.driveCommand(
-        () -> driveController.getLeftY() * .3,
-        () -> driveController.getLeftX() * .3,
-        () -> driveController.getRightX() * .3,
+        () -> driveController.getLeftY() * .4,
+        () -> driveController.getLeftX() * .4,
+        () -> driveController.getRightX() * .4,
         true
       )
     );
 
     
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
+    driveController.start().onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
 
-    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
+    driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
     //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
 
     driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
@@ -95,8 +96,8 @@ public class RobotContainer {
     driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
     driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
 
-    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+    //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
@@ -104,7 +105,7 @@ public class RobotContainer {
     intake.setDefaultCommand(
       Commands.run(
         () -> {
-          intake.setPower(Math.pow(driveController.getLeftY(), 3));
+          intake.setPower(Math.pow(driveController.getLeftTriggerAxis(), 3));
         },
         intake
       )
