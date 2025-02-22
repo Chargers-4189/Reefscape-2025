@@ -11,6 +11,7 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
@@ -39,22 +40,30 @@ public class Elevator extends SubsystemBase {
   );
 
   private final DigitalInput minLimitSwitch = new DigitalInput(
-    ElevatorConstants.kMIN_DIO_PORT
+    ElevatorConstants.kMIN_LIMIT_DIO
   );
   private final DigitalInput maxLimitSwitch = new DigitalInput(
-    ElevatorConstants.kMAX_DIO_PORT
+    ElevatorConstants.kMAX_LIMIT_DIO
   );
 
   private RelativeEncoder encoder = rightMotor.getEncoder();
 
-  private static final SparkMaxConfig LeftSparkMaxConfig = new SparkMaxConfig();
+  private static final SparkMaxConfig leftSparkMaxConfig = new SparkMaxConfig();
+  private static final SparkMaxConfig rightSparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new Elevator. */
   public Elevator() {
     zeroEncoder();
-    LeftSparkMaxConfig.follow(rightMotor, true);
+    leftSparkMaxConfig.follow(rightMotor, true);
+    leftSparkMaxConfig.idleMode(IdleMode.kBrake);
+    rightSparkMaxConfig.idleMode(IdleMode.kBrake);
     leftMotor.configure(
-      LeftSparkMaxConfig,
+      leftSparkMaxConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+    );
+    rightMotor.configure(
+      rightSparkMaxConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
@@ -97,7 +106,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return !minLimitSwitch.get(); //exclamation mark necesary because we connected the blue instead of white wire.
+    return !minLimitSwitch.get();
   }
 
   public boolean getMaxLimitSwitch() {
@@ -125,5 +134,7 @@ public class Elevator extends SubsystemBase {
       zeroEncoder();
     }
     //System.out.println(getEncoder());
+    //System.out.println(encoder.getVelocity());
+
   }
 }

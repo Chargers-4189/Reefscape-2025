@@ -19,6 +19,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.wpilibj.Filesystem;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
@@ -74,6 +75,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {
     return swerveDrive.getPose();
+  }
+
+  public void driveWithAngleSetPoint(double x, double y, double setpoint){
+    double rotationPower = (swerveDrive.getOdometryHeading().getDegrees() - setpoint) * SwerveConstants.kAlignAngleSpeed;
+    rotationPower = Math.min(rotationPower, SwerveConstants.kAlignAngleMaxSpeed);
+    rotationPower = Math.max(rotationPower, -SwerveConstants.kAlignAngleMaxSpeed);
+    this.drive(x, y, rotationPower, false);
   }
 
   public void resetPose(Pose2d pose) {
@@ -147,5 +155,6 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println(swerveDrive.getOdometryHeading().getDegrees());
   }
 }

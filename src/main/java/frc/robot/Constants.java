@@ -67,6 +67,10 @@ public final class Constants {
     //public static final double kAlignDistanceToleranceYawReef = .5;
     public static final double kAlignSpeedX = 0.3;
     public static final double kAlignSpeedY = 0.6;
+    public static final double kAlignAngle = 0.1;
+
+    public static final double kAlignAngleSpeed = .002;
+    public static final double kAlignAngleMaxSpeed = .1;
   }
 
   public static class CoralEffectorConstants {
@@ -84,8 +88,10 @@ public final class Constants {
 
     public static final int kLEFT_MOTOR_ID = 11;
     public static final int kRIGHT_MOTOR_ID = 12;
-    public static final int kMIN_DIO_PORT = 0;
-    public static final int kMAX_DIO_PORT = 1;
+
+    public static final int kMIN_LIMIT_DIO = 0;
+    public static final int kMAX_LIMIT_DIO = 1;
+
     public static final int kMaxCurrentDriveMotor = 50;
 
     // public static final double kROTATIONS_TO_METERS = 1.757 * Math.PI * 2.54 /
@@ -98,18 +104,18 @@ public final class Constants {
 
     public static final double kELEVATOR_BASE_HEIGHT = .686;
 
-    public static final double kGRAVITY_VOLTS = .15; // .4 for current coral head
+    public static final double kGRAVITY_VOLTS = .3;
     public static final double kPROPORTIONAL_VOLTS = .8;
     public static final double kMAX_VOLTS = 8;
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 12;
 
-    public static final double kTOLERANCE = .02;
+    public static final double kTOLERANCE = .5;
   }
 
   public static final class IntakeConstants {
     public static final int kACTUATOR_MOTOR_ID = 41;
-    public static final int kDIO_PORT_TOP = 2;
-    public static final int kDIO_PORT_BOTTOM = 3;
+    public static final int kDIO_PORT_TOP = 10;
+    public static final int kDIO_PORT_BOTTOM = 9;
   }
 
   public static final class AutoConstants {

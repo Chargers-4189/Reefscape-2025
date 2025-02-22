@@ -58,15 +58,16 @@ public class MoveElevator extends Command {
   @Override
   public void end(boolean interrupted) {
     elevator.setVoltage(0);
+    System.out.print(goal);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
     if (up) {
-      return elevator.getEncoder() > goal + elevator.kTOLERANCE.get();
+      return elevator.getEncoder() > goal - elevator.kTOLERANCE.get();
     } else {
-      return elevator.getEncoder() < goal - elevator.kTOLERANCE.get();
+      return elevator.getEncoder() < goal + elevator.kTOLERANCE.get();
     }
   }
 }

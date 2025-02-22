@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -22,6 +23,8 @@ public class AutoAlignPose extends Command {
   private Pose2d tagGoal;
   private Pose2d lastPos;
   private Pose2d toTravel;
+  private Pose2d tagField;
+  private Transform3d tagPose3d;
 
   /** Creates a new AutoAlignPose. */
   public AutoAlignPose(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
@@ -46,6 +49,7 @@ public class AutoAlignPose extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    
     if (alignRight) {
       if (vision.getFLTagPose() != null) {
         tagPose = vision.getFLTagPose();
@@ -53,6 +57,7 @@ public class AutoAlignPose extends Command {
             new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
         lastPos = swerve.getPose();
       }
+      
     } else {
       if (vision.getFRTagPose() != null) {
         tagPose = vision.getFRTagPose();
@@ -65,10 +70,19 @@ public class AutoAlignPose extends Command {
     } else {
       toTravel = tagGoal;
     }
-
+    System.out.println(toTravel);
     if (toTravel != null) {
-      swerve.drive(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -toTravel.getY() * SwerveConstants.kAlignSpeedY, 0.0, false);
+      swerve.driveWithAngleSetPoint(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -toTravel.getY() * SwerveConstants.kAlignSpeedY, 0);
     }
+    
+    /*
+    if (vision.getFLTagPose() != null) {
+      tagPose3d = vision.getFLTagPose();
+      tagPose = new Pose2d(tagPose3d.getX(), tagPose3d.getY(), tagPose3d.getRotation().toRotation2d());
+      tagField = swerve.getPose().relativeTo(tagPose.rotateBy(swerve.getPose().getRotation()));
+      lastPos = swerve.getPose();
+    }*/
+
   }
 
   // Called once the command ends or is interrupted.

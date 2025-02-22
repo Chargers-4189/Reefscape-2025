@@ -15,7 +15,6 @@ import frc.robot.commands.CoralOuttake;
 import frc.robot.commands.AutoAlignPose;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -72,10 +71,10 @@ public class RobotContainer {
       new DriveController(swerveDrive, driveController)
     );*/
 
-    /*
+    
     elevator.setDefaultCommand(Commands.run(()->{
-      elevator.setVoltage(Constants.ElevatorConstants.kGRAVITY_VOLTS - driveController.getLeftY());
-    }, elevator));*/
+      elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
+    }, elevator));
 
     coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
 
@@ -104,9 +103,16 @@ public class RobotContainer {
     //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
     //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
+    swerve.setDefaultCommand(
+      swerve.driveCommand(
+        () -> driveController.getLeftY() * .3,
+        () -> driveController.getLeftX() * .3,
+        () -> driveController.getRightX() * .3,
+        true
+      )
+    );
 
-    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY() * .3,
-        () -> driveController.getLeftX() * .3, () -> driveController.getRightX() * .3, false));
+    driveController.leftTrigger(.3).whileTrue(Commands.run(() -> swerve.driveWithAngleSetPoint(driveController.getLeftY(), driveController.getLeftX(), 30)));
   }
 
   /**
