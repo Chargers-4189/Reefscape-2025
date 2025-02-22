@@ -15,7 +15,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAlignPose extends Command {
+public class AutoAlignReef extends Command {
   private SwerveSubsystem swerve;
   private Vision vision;
   private boolean alignRight;
@@ -27,7 +27,7 @@ public class AutoAlignPose extends Command {
   private Transform3d tagPose3d;
 
   /** Creates a new AutoAlignPose. */
-  public AutoAlignPose(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
+  public AutoAlignReef(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;

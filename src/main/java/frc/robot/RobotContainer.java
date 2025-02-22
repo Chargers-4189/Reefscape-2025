@@ -9,11 +9,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoAlignPose;
+import frc.robot.commands.AutoAlignReef;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.CoralIntake;
 import frc.robot.commands.CoralOuttake;
-import frc.robot.commands.AutoAlignPose;
+import frc.robot.commands.AutoAlignReef;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
 import frc.robot.subsystems.CoralEffector;
@@ -73,10 +73,10 @@ public class RobotContainer {
       new DriveController(swerveDrive, driveController)
     );*/
 
-    
+    /*
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
-    }, elevator));
+    }, elevator));*/
 
     coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
 
@@ -116,10 +116,10 @@ public class RobotContainer {
 
     driveController
       .leftBumper()
-      .onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(3));
+      .onTrue(new AutoAlignReef(swerve, vision, false).withTimeout(3));
     driveController
       .rightBumper()
-      .onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(3));
+      .onTrue(new AutoAlignReef(swerve, vision, true).withTimeout(3));
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
@@ -128,6 +128,7 @@ public class RobotContainer {
     //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
     //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
+    /*
     swerve.setDefaultCommand(
       swerve.driveCommand(
         () -> driveController.getLeftY() * .3,
@@ -135,7 +136,7 @@ public class RobotContainer {
         () -> driveController.getRightX() * .3,
         true
       )
-    );
+    );*/
 
     //driveController.leftTrigger(.3).whileTrue(Commands.run(() -> swerve.driveWithAngleSetPoint(driveController.getLeftY(), driveController.getLeftX(), 30)));
   }
@@ -147,6 +148,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new PathPlannerAuto("test-001");
+    return new PathPlannerAuto("test-path");
   }
 }

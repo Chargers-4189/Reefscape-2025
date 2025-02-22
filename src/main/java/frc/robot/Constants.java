@@ -67,7 +67,7 @@ public final class Constants {
     public static final double kWheelDiameter = 3; // Inches
     public static final double kWheelRadius =
       Units.inchesToMeters(kWheelDiameter) / 2;
-    public static final double kRobotWeight = Units.lbsToKilograms(110);
+    public static final double kRobotWeight = Units.lbsToKilograms(119);
     public static final double kWheelBase = Units.inchesToMeters(12.018 * 2);
     public static final double kTrackWidth = Units.inchesToMeters(14.508 * 2);
     public static final double kMaxVelocity = 4.92;
@@ -141,6 +141,10 @@ public final class Constants {
     public static final int kDIO_PORT_TOP = 10;
     public static final int kDIO_PORT_BOTTOM = 9;
     public static final double kPOWER_SCALE = .1;
+
+    public static final double kGRAVITY_VOLTS = .01;
+
+    public static final double kOPTIMAL_ANGLE = 22.5;
   }
 
   public static final class AutoConstants {

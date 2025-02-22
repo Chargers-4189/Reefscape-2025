@@ -7,12 +7,17 @@ package frc.robot.subsystems;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
 
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
+  private DoubleEntry kGRAVITY_VOLTS;
 
   /** Creates a new Intake. */
 
@@ -31,7 +36,18 @@ public class Intake extends SubsystemBase {
     IntakeConstants.kDIO_PORT_BOTTOM
   );
 
-  public Intake() {}
+  public Intake() {
+    zeroEncoder();
+    NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
+    NetworkTable datatable = networkInstance.getTable("intakeConstants");
+    kGRAVITY_VOLTS =
+      datatable
+        .getDoubleTopic("GRAVITY_VOLTS")
+        .getEntry(IntakeConstants.kGRAVITY_VOLTS);
+    
+        kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
+    
+  }
 
   /*
   public void actuateUp() {
@@ -59,11 +75,14 @@ public class Intake extends SubsystemBase {
   }
 
   public double getEncoder() {
-    return -encoder.getPosition();
+    return encoder.getPosition();
+  }
+
+  public void zeroEncoder() {
+    encoder.setPosition(0);
   }
 
   public void setPower(double power) {
-    power *= IntakeConstants.kPOWER_SCALE;
     /*
     if (downLimitSwitch.get() == true) {
       power = Math.min(power, 0);
@@ -71,7 +90,7 @@ public class Intake extends SubsystemBase {
     if (downLimitSwitch.get() == false) {
       power = Math.max(power, 0);
     }*/
-    actuatorMotor.set(power);
+    actuatorMotor.set(power * IntakeConstants.kPOWER_SCALE + kGRAVITY_VOLTS.get());
   }
 
   public void stop() {
@@ -81,6 +100,6 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    actuatorMotor.set(0.010);
+    System.out.println(getEncoder());
   }
 }
