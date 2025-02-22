@@ -11,12 +11,12 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Swerve;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAlignIntake extends Command {
-  private final SwerveSubsystem swerve;
+public class AlignCoralStation extends Command {
+  private final Swerve swerve;
   private final Vision vision;
   private Transform3d tagPose;
   private Pose2d tagGoal;
@@ -24,7 +24,7 @@ public class AutoAlignIntake extends Command {
   private Pose2d toTravel;
 
   /** Creates a new autoIntake. */
-  public AutoAlignIntake(Vision vision, SwerveSubsystem swerve) {
+  public AlignCoralStation(Vision vision, Swerve swerve) {
     this.vision = vision;
     this.swerve = swerve;
     // Use addRequirements() here to declare subsystem dependencies.

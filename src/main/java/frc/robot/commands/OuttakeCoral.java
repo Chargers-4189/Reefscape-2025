@@ -4,29 +4,39 @@
 
 package frc.robot.commands;
 
+import frc.util.Stopwatch;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class GetAlgae extends Command {
-    private CoralEffector coraleffector;
+public class OuttakeCoral extends Command {
+  private CoralEffector coraleffector;
+  private Stopwatch stopwatch = new Stopwatch();
 
-
-  /** Creates a new GetAlgae. */
-  public GetAlgae(CoralEffector coraleffector) {
+  /**
+   * Outtakes coral until outake sensor is false
+   * @param coraleffector import coral subsystem
+   */
+  public OuttakeCoral(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
+
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coraleffector);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stopwatch.start(3000);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coraleffector.setPower(0.1);
+    coraleffector.setPower( 0.2);
   }
 
   // Called once the command ends or is interrupted.
@@ -38,6 +48,6 @@ public class GetAlgae extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return stopwatch.hasTriggered();
   }
 }

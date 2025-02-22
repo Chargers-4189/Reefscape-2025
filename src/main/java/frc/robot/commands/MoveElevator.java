@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 public class MoveElevator extends Command {
   
   private final Elevator elevator;
-  private int level;
   private double goal;
   private double startTime;
   private boolean up;
@@ -26,7 +25,6 @@ public class MoveElevator extends Command {
   public MoveElevator(Elevator elevator, int level) {
 
     this.elevator = elevator;
-    this.level = level;
     this.goal = elevator.kHEIGHTS.get()[level];
     elevator.setLevel(level);
 

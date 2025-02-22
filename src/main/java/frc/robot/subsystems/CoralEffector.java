@@ -24,7 +24,7 @@ public class CoralEffector extends SubsystemBase {
   private AbsoluteEncoder encoder = mainMotor.getAbsoluteEncoder();
 
   private final LaserCan intakeSensor = new LaserCan(CoralEffectorConstants.kINTAKE_SENSOR_ID);
-  private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
+  //private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
 
   public String state = "empty";
 

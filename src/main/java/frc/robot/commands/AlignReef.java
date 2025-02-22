@@ -5,29 +5,26 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAlignReef extends Command {
-  private SwerveSubsystem swerve;
+public class AlignReef extends Command {
+  private Swerve swerve;
   private Vision vision;
   private boolean alignRight;
   private Transform3d tagPose;
   private Pose2d tagGoal;
   private Pose2d lastPos;
   private Pose2d toTravel;
-  private Pose2d tagField;
-  private Transform3d tagPose3d;
 
   /** Creates a new AutoAlignPose. */
-  public AutoAlignReef(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
+  public AlignReef(Swerve swerve, Vision vision, boolean alignRight) {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;

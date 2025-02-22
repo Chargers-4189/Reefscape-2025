@@ -17,6 +17,6 @@ public class AutoPlaceCoral extends SequentialCommandGroup {
   public AutoPlaceCoral(Vision vision, Elevator elevator, CoralEffector effector, int level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new MoveElevator(elevator, level), new CoralOuttake(effector), new MoveElevator(elevator, 0));
+    addCommands(new MoveElevator(elevator, level), new OuttakeCoral(effector), new MoveElevator(elevator, 0));
   }
 }

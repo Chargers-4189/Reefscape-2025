@@ -10,7 +10,7 @@ import frc.util.Stopwatch;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class CoralIntake extends Command {
+public class IntakeCoral extends Command {
   private CoralEffector coralEffector;
   private Stopwatch stopwatch = new Stopwatch();
 
@@ -19,7 +19,7 @@ public class CoralIntake extends Command {
    *  If intake sensor is active, inputs coral until outtake sensor sees coral
    * @param coralEffector import coral subsystem
    */
-  public CoralIntake(CoralEffector coralEffector) {
+  public IntakeCoral(CoralEffector coralEffector) {
     this.coralEffector = coralEffector;
 
     // Use addRequirements() here to declare subsystem dependencies.

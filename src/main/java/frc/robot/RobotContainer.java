@@ -9,17 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AutoAlignReef;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.CoralIntake;
-import frc.robot.commands.CoralOuttake;
-import frc.robot.commands.AutoAlignReef;
+import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -34,7 +33,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem swerve = new SwerveSubsystem();
+  private final Swerve swerve = new Swerve();
   private final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
@@ -78,7 +77,7 @@ public class RobotContainer {
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
     }, elevator));*/
 
-    coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
+    coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
     driveController
       .back()
@@ -97,7 +96,7 @@ public class RobotContainer {
 
     driveController
       .axisGreaterThan(3, 0.5)
-      .onTrue(new CoralOuttake(coralEffector));
+      .onTrue(new OuttakeCoral(coralEffector));
 
     driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
     driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
@@ -116,10 +115,10 @@ public class RobotContainer {
 
     driveController
       .leftBumper()
-      .onTrue(new AutoAlignReef(swerve, vision, false).withTimeout(3));
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     driveController
       .rightBumper()
-      .onTrue(new AutoAlignReef(swerve, vision, true).withTimeout(3));
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
     //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
