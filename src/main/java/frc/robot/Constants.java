@@ -144,7 +144,8 @@ public final class Constants {
 
     public static final double kGRAVITY_VOLTS = .01;
 
-    public static final double kOPTIMAL_ANGLE = 22.5;
+    public static final double kUP_ENCODER = 22.5;
+    public static final double kMAX_POWER = .2;
   }
 
   public static final class AutoConstants {

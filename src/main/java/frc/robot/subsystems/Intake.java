@@ -18,6 +18,7 @@ import frc.robot.Constants.IntakeConstants;
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
   private DoubleEntry kGRAVITY_VOLTS;
+  private DoubleEntry kMAX_POWER;
 
   /** Creates a new Intake. */
 
@@ -46,6 +47,13 @@ public class Intake extends SubsystemBase {
         .getEntry(IntakeConstants.kGRAVITY_VOLTS);
     
         kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
+    kMAX_POWER =
+      datatable
+        .getDoubleTopic("MAX_POWER")
+        .getEntry(IntakeConstants.kMAX_POWER);
+  
+      kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
+      kMAX_POWER.set(kMAX_POWER.get());
     
   }
 
@@ -90,7 +98,9 @@ public class Intake extends SubsystemBase {
     if (downLimitSwitch.get() == false) {
       power = Math.max(power, 0);
     }*/
-    actuatorMotor.set(power * IntakeConstants.kPOWER_SCALE + kGRAVITY_VOLTS.get());
+    power = Math.min(power, kMAX_POWER.get());
+    power = Math.max(power, - kMAX_POWER.get());
+    actuatorMotor.set(power + kGRAVITY_VOLTS.get());
   }
 
   public void stop() {
