@@ -95,7 +95,7 @@ public class Intake extends SubsystemBase {
     if (downLimitSwitch.get() == true) {
       power = Math.min(power, 0);
     }
-    if (downLimitSwitch.get() == false) {
+    if (upLimitSwitch.get() == true) {
       power = Math.max(power, 0);
     }*/
     power = Math.min(power, kMAX_POWER.get());
