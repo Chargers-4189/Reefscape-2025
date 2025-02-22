@@ -15,11 +15,13 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
+import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.ActuateIntakeDown;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -79,24 +81,11 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
-    driveController
-      .back()
-      .onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController
-      .start()
-      .debounce(1)
-      .onTrue(
-        Commands.runOnce(
-          () -> {
-            swerve.resetGyro();
-          },
-          swerve
-        )
-      );
+    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
 
-    driveController
-      .axisGreaterThan(3, 0.5)
-      .onTrue(new OuttakeCoral(coralEffector));
+    driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
+    driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
 
     driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
     driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
@@ -104,6 +93,7 @@ public class RobotContainer {
     driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
+    /*
     intake.setDefaultCommand(
       Commands.run(
         () -> {
@@ -111,23 +101,14 @@ public class RobotContainer {
         },
         intake
       )
-    );
+    );*/
 
-    driveController
-      .leftBumper()
-      .onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    driveController
-      .rightBumper()
-      .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
-    //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
-    //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povUpLeft().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povDown().onTrue(new INPUTCLIMBCOMMANDDon));
-    //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
-    //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
+    intake.setDefaultCommand(new ActuateIntakeUp(intake));
 
-    /*
+    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+
+    
     swerve.setDefaultCommand(
       swerve.driveCommand(
         () -> driveController.getLeftY() * .3,
@@ -135,7 +116,15 @@ public class RobotContainer {
         () -> driveController.getRightX() * .3,
         true
       )
-    );*/
+    );
+
+    //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
+    //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povUpLeft().onTrue(new INPUTCLIMBCOMMANDUP));
+    //driveController.povDown().onTrue(new INPUTCLIMBCOMMANDDon));
+    //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
+    //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
     //driveController.leftTrigger(.3).whileTrue(Commands.run(() -> swerve.driveWithAngleSetPoint(driveController.getLeftY(), driveController.getLeftX(), 30)));
   }
