@@ -69,28 +69,35 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    /*
-    swerveDrive.setDefaultCommand(
-      new DriveController(swerveDrive, driveController)
-    );*/
-
-    /*
-    elevator.setDefaultCommand(Commands.run(()->{
-      elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
-    }, elevator));*/
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
+    intake.setDefaultCommand(new ActuateIntakeUp(intake));
+
+    swerve.setDefaultCommand(
+      swerve.driveCommand(
+        () -> driveController.getLeftY() * .3,
+        () -> driveController.getLeftX() * .3,
+        () -> driveController.getRightX() * .3,
+        true
+      )
+    );
+
+    
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
     driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
 
-    driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
-    driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
+    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
+    //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
 
     driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
     driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
     driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
     driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
+
+    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
     /*
@@ -103,20 +110,15 @@ public class RobotContainer {
       )
     );*/
 
-    intake.setDefaultCommand(new ActuateIntakeUp(intake));
+    /*
+    swerveDrive.setDefaultCommand(
+      new DriveController(swerveDrive, driveController)
+    );*/
 
-    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
-
-    
-    swerve.setDefaultCommand(
-      swerve.driveCommand(
-        () -> driveController.getLeftY() * .3,
-        () -> driveController.getLeftX() * .3,
-        () -> driveController.getRightX() * .3,
-        true
-      )
-    );
+    /*
+    elevator.setDefaultCommand(Commands.run(()->{
+      elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
+    }, elevator));*/
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));

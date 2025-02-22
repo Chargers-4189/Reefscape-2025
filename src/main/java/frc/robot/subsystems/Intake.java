@@ -90,7 +90,7 @@ public class Intake extends SubsystemBase {
     encoder.setPosition(0);
   }
 
-  public void setPower(double power) {
+  public void setPower() {
     /*
     if (downLimitSwitch.get() == true) {
       power = Math.min(power, 0);
@@ -98,9 +98,9 @@ public class Intake extends SubsystemBase {
     if (upLimitSwitch.get() == true) {
       power = Math.max(power, 0);
     }*/
-    power = Math.min(power, kMAX_POWER.get());
-    power = Math.max(power, - kMAX_POWER.get());
-    actuatorMotor.set(power + kGRAVITY_VOLTS.get());
+    //power = Math.min(power, kMAX_POWER.get());
+    //power = Math.max(power, - kMAX_POWER.get());
+    actuatorMotor.set(kGRAVITY_VOLTS.get());
   }
 
   public void stop() {

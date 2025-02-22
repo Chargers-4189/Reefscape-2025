@@ -60,6 +60,7 @@ public class AlignReef extends Command {
         tagPose = vision.getFRTagPose();
         tagGoal = new Pose2d().transformBy(new Transform2d(tagPose.getX(), tagPose.getY(),
             new Rotation2d(tagPose.getRotation().getX(), tagPose.getRotation().getY())));
+        lastPos = swerve.getPose();
       }
     }
     if (lastPos != null) {
