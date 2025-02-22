@@ -123,7 +123,8 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { 0.15, 0.15, 7.86, 25.69, 52.05 }; // Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS = { 0.15, 0.15, 7.9, 26.1, 
+      52.5 }; // Intake, L1, L2, L3, L4
 
     public static final double kELEVATOR_BASE_HEIGHT = .686;
 
