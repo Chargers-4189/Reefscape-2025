@@ -58,7 +58,7 @@ public class Vision extends SubsystemBase {
     cameras = new AprilTagCamera[] {
         new AprilTagCameraSim("flCam2025", VisionConstants.flCamPose, true, visionSim),
         new AprilTagCameraSim("frCam2025", VisionConstants.frCamPose, false, visionSim),
-        new AprilTagCameraSim("bkCam2025", VisionConstants.bkCamPose, false, visionSim),
+        //new AprilTagCameraSim("bkCam2025", VisionConstants.bkCamPose, false, visionSim),
     };
   }
 

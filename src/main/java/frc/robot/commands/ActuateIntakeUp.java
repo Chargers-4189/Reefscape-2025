@@ -28,7 +28,7 @@ public class ActuateIntakeUp extends Command {
   @Override
   public void execute() {
 
-    intake.setPower((IntakeConstants.kUP_ENCODER - intake.getEncoder()) * IntakeConstants.kPROPORTIONAL);
+    intake.setPower((intake.kUP_ENCODER.get() - intake.getEncoder()) * intake.kPROPORTIONAL_POWER.get());
   }
 
   // Called once the command ends or is interrupted.

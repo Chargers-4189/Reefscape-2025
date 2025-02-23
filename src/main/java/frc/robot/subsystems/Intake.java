@@ -17,8 +17,10 @@ import frc.robot.Constants.IntakeConstants;
 
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
-  private DoubleEntry kGRAVITY_VOLTS;
-  private DoubleEntry kMAX_POWER;
+  public DoubleEntry kGRAVITY_VOLTS;
+  public DoubleEntry kMAX_POWER;
+  public DoubleEntry kPROPORTIONAL_POWER;
+  public DoubleEntry kUP_ENCODER;
 
   /** Creates a new Intake. */
 
@@ -51,10 +53,19 @@ public class Intake extends SubsystemBase {
       datatable
         .getDoubleTopic("MAX_POWER")
         .getEntry(IntakeConstants.kMAX_POWER);
-  
+    kPROPORTIONAL_POWER =
+      datatable
+        .getDoubleTopic("PROPORTIONAL_POWER")
+        .getEntry(IntakeConstants.kPROPORTIONAL_VOLTS);
+    kUP_ENCODER =
+      datatable
+        .getDoubleTopic("UP_ENCODER")
+        .getEntry(IntakeConstants.kUP_ENCODER);
+
       kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
       kMAX_POWER.set(kMAX_POWER.get());
-    
+      kPROPORTIONAL_POWER.set(kPROPORTIONAL_POWER.get());
+      kUP_ENCODER.set(kUP_ENCODER.get());
   }
 
   /*

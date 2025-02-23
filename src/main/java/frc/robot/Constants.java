@@ -147,7 +147,7 @@ public final class Constants {
 
     public static final double kUP_ENCODER = 22.5;
     public static final double kMAX_POWER = .5;
-    public static final double kPROPORTIONAL = .01;
+    public static final double kPROPORTIONAL_VOLTS = .01;
   }
 
   public static final class AutoConstants {
