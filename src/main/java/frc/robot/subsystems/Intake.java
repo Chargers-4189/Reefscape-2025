@@ -4,123 +4,60 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
-
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
-  public DoubleEntry kGRAVITY_VOLTS;
-  public DoubleEntry kMAX_POWER;
-  public DoubleEntry kPROPORTIONAL_POWER;
-  public DoubleEntry kUP_ENCODER;
-
   /** Creates a new Intake. */
-
+  
   private final SparkMax actuatorMotor = new SparkMax(
     IntakeConstants.kACTUATOR_MOTOR_ID,
     MotorType.kBrushless
   );
 
-  private final RelativeEncoder encoder = actuatorMotor.getEncoder();
-
-  private final DigitalInput upLimitSwitch = new DigitalInput(
+  private final DigitalInput topLimitSwitch = new DigitalInput(
     IntakeConstants.kDIO_PORT_TOP
   );
 
-  private final DigitalInput downLimitSwitch = new DigitalInput(
+  private final DigitalInput bottomLimitSwitch = new DigitalInput(
     IntakeConstants.kDIO_PORT_BOTTOM
   );
-
-  public Intake() {
-    zeroEncoder();
-    NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
-    NetworkTable datatable = networkInstance.getTable("intakeConstants");
-    kGRAVITY_VOLTS =
-      datatable
-        .getDoubleTopic("GRAVITY_VOLTS")
-        .getEntry(IntakeConstants.kGRAVITY_VOLTS);
-    
-        kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
-    kMAX_POWER =
-      datatable
-        .getDoubleTopic("MAX_POWER")
-        .getEntry(IntakeConstants.kMAX_POWER);
-    kPROPORTIONAL_POWER =
-      datatable
-        .getDoubleTopic("PROPORTIONAL_POWER")
-        .getEntry(IntakeConstants.kPROPORTIONAL_VOLTS);
-    kUP_ENCODER =
-      datatable
-        .getDoubleTopic("UP_ENCODER")
-        .getEntry(IntakeConstants.kUP_ENCODER);
-
-      kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
-      kMAX_POWER.set(kMAX_POWER.get());
-      kPROPORTIONAL_POWER.set(kPROPORTIONAL_POWER.get());
-      kUP_ENCODER.set(kUP_ENCODER.get());
-  }
-
-  /*
-  public void actuateUp() {
-    if (upLimitSwitch.get() != true) {
-      actuatorMotor.set(0.1);
-    } else {
+  public Intake() {}
+    public void ActuateForward(){
+      if(getTopLimitSwitch() != true){
+      actuatorMotor.set(0.5);
+      }
+      else{
+        actuatorMotor.set(0);
+      }
+    }
+    public void ActuateBackward(){
+      if(getBottomLimitSwitch() != true){
+        actuatorMotor.set(-0.5);
+      }
+      else{
+        actuatorMotor.set(0);
+      }
+    }
+  
+    public void stop(){
       actuatorMotor.set(0);
     }
-  }
-
-  public void actuateDown() {
-    if (downLimitSwitch.get() != true) {
-      actuatorMotor.set(-0.1);
-    } else {
-      actuatorMotor.set(0);
+    public boolean getTopLimitSwitch() {
+      return !topLimitSwitch.get();
     }
-  }*/
-
-  public boolean getUpLimitSwitch() {
-    return upLimitSwitch.get();
-  }
-
-  public boolean getDownLimitSwitch() {
-    return downLimitSwitch.get();
-  }
-
-  public double getEncoder() {
-    return encoder.getPosition();
-  }
-
-  public void zeroEncoder() {
-    encoder.setPosition(0);
-  }
-
-  public void setPower(double power) {
-    /*
-    if (downLimitSwitch.get() == true) {
-      power = Math.min(power, 0);
+    public boolean getBottomLimitSwitch() {
+      return !bottomLimitSwitch.get();
     }
-    if (upLimitSwitch.get() == true) {
-      power = Math.max(power, 0);
-    }*/
-    power = Math.min(power, kMAX_POWER.get());
-    power = Math.max(power, - kMAX_POWER.get());
-    actuatorMotor.set(power + kGRAVITY_VOLTS.get());
-  }
-
-  public void stop() {
-    actuatorMotor.set(0);
-  }
+  
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    // System.out.println(getEncoder());
+    System.out.println(getTopLimitSwitch() + " " + getBottomLimitSwitch());
   }
 }

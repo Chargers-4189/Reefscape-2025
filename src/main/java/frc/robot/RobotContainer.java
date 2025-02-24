@@ -15,6 +15,7 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
+import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
@@ -71,8 +72,6 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
-    intake.setDefaultCommand(new ActuateIntakeUp(intake));
-
     swerve.setDefaultCommand(
       swerve.driveCommand(
         () -> driveController.getLeftY() * .7,
@@ -82,37 +81,20 @@ public class RobotContainer {
       )
     );
 
+    driveController.axisGreaterThan(2, 0.8).onTrue(new ActuateIntakeDown(intake));
+    driveController.axisGreaterThan(3, 0.8).onTrue(new ActuateIntakeUp(intake));
+
     
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
     driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
 
-    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
-    //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
-
     driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
     driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
-    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
+    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 3));
     driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
 
     driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
-
-    //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
-
-    /*
-    intake.setDefaultCommand(
-      Commands.run(
-        () -> {
-          intake.setPower(Math.pow(driveController.getLeftY(), 3));
-        },
-        intake
-      )
-    );*/
-
-    /*
-    swerveDrive.setDefaultCommand(
-      new DriveController(swerveDrive, driveController)
-    );*/
 
     /*
     elevator.setDefaultCommand(Commands.run(()->{

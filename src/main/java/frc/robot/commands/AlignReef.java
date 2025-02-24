@@ -68,7 +68,7 @@ public class AlignReef extends Command {
     } else {
       toTravel = tagGoal;
     }
-    System.out.println(toTravel);
+    //System.out.println(toTravel);
     if (toTravel != null) {
       swerve.driveWithAngleSetPoint(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -toTravel.getY() * SwerveConstants.kAlignSpeedY, 0);
     }

@@ -139,8 +139,8 @@ public final class Constants {
   public static final class IntakeConstants {
 
     public static final int kACTUATOR_MOTOR_ID = 41;
-    public static final int kDIO_PORT_TOP = 10;
-    public static final int kDIO_PORT_BOTTOM = 9;
+    public static final int kDIO_PORT_TOP = 2;
+    public static final int kDIO_PORT_BOTTOM = 3;
     public static final double kPOWER_SCALE = .1;
 
     public static final double kGRAVITY_VOLTS = .01;

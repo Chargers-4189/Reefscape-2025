@@ -155,11 +155,11 @@ public class Elevator extends SubsystemBase {
     }
     //System.out.println(getEncoder());
     //System.out.println(encoder.getVelocity());
-    System.out.print(getMinLimitSwitch());
-    System.out.print(" ");
-    System.out.print(getMaxLimitSwitch());
-    System.out.print(" ");
-    System.out.println(getEncoder());
+    // System.out.print(getMinLimitSwitch());
+    // System.out.print(" ");
+    // System.out.print(getMaxLimitSwitch());
+    // System.out.print(" ");
+    // System.out.println(getEncoder());
 
   }
 }
