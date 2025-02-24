@@ -8,12 +8,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class GetAlgae extends Command {
+public class GrabAlgae extends Command {
     private CoralEffector coraleffector;
 
 
   /** Creates a new GetAlgae. */
-  public GetAlgae(CoralEffector coraleffector) {
+  public GrabAlgae(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coraleffector);

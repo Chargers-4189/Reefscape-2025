@@ -8,17 +8,23 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CancelAll extends Command {
+
   private CoralEffector effector;
   private Elevator elevator;
   private Intake intake;
-  private SwerveSubsystem swerve;
-  
+  private Swerve swerve;
+
   /** Creates a new CancelAll. */
-  public CancelAll(CoralEffector effector, Elevator elevator, Intake intake, SwerveSubsystem swerve) {
+  public CancelAll(
+    CoralEffector effector,
+    Elevator elevator,
+    Intake intake,
+    Swerve swerve
+  ) {
     this.effector = effector;
     this.elevator = elevator;
     this.intake = intake;
@@ -33,7 +39,7 @@ public class CancelAll extends Command {
   public void initialize() {
     effector.stop();
     elevator.setVoltage(0);
-    intake.StopActuating();
+    intake.stop();
     swerve.drive(0, 0, 0, false);
   }
 

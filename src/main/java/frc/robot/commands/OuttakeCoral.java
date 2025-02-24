@@ -4,51 +4,50 @@
 
 package frc.robot.commands;
 
+import frc.util.Stopwatch;
+
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.Constants.SwerveConstants;
+import frc.robot.subsystems.CoralEffector;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoIntake extends Command {
-  private final SwerveSubsystem swerve;
-  private final Vision vision;
+public class OuttakeCoral extends Command {
+  private CoralEffector coraleffector;
+  private Stopwatch stopwatch = new Stopwatch();
 
-  /** Creates a new autoIntake. */
-  public AutoIntake(Vision vision, SwerveSubsystem swerve) {
-    this.vision = vision;
-    this.swerve = swerve;
+  /**
+   * Outtakes coral until outake sensor is false
+   * @param coraleffector import coral subsystem
+   */
+  public OuttakeCoral(CoralEffector coraleffector) {
+    this.coraleffector = coraleffector;
+
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(swerve);
+    addRequirements(coraleffector);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
+    stopwatch.start(3000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(vision.getBackTagYaw() > 0){
-      swerve.driveCommand(()->-1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
-    }
-    else{
-      swerve.driveCommand(()->1.0 * SwerveConstants.kDriveSpeedWhileAligning, ()->0.0, ()->0.0, false);
-    }
+    coraleffector.setPower( 0.2);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    swerve.driveCommand(()->0.0, ()->0.0, ()->0.0, false);
+    coraleffector.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-      return (vision.getBackTagYaw() <= SwerveConstants.kAlignDistanceToleranceYaw && vision.getBackTagYaw() >= -SwerveConstants.kAlignDistanceToleranceYaw );
+    return stopwatch.hasTriggered();
   }
 }

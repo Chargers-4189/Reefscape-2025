@@ -5,20 +5,21 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.CoralIntake;
-import frc.robot.commands.CoralOuttake;
-import frc.robot.commands.AutoAlignPose;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.MoveElevator;
+import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.OuttakeCoral;
+import frc.robot.commands.AutoPlaceCoral;
+import frc.robot.commands.CancelAll;
+import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 
 /**
@@ -26,14 +27,14 @@ import frc.robot.subsystems.Vision;
  * Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in
  * the {@link Robot}
- * periodic methods (other than the scheduler calls). Instead, the structure of
+ * periodi+c methods (other than the scheduler calls). Instead, the structure of
  * the robot (including
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final SwerveSubsystem swerve = new SwerveSubsystem();
+  private final Swerve swerve = new Swerve();
   private final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
@@ -41,7 +42,8 @@ public class RobotContainer {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
-      Constants.OperatorConstants.kDriverControllerPort);
+    Constants.OperatorConstants.kDriverControllerPort
+  );
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -66,6 +68,47 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+
+    coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
+
+    intake.setDefaultCommand(new ActuateIntakeUp(intake));
+
+    swerve.setDefaultCommand(
+      swerve.driveCommand(
+        () -> driveController.getLeftY() * .7,
+        () -> driveController.getLeftX() * .7,
+        () -> driveController.getRightX() * .7,
+        true
+      )
+    );
+
+    
+    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
+
+    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
+    //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
+
+    driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
+    driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
+    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
+    driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
+
+    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+
+    //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
+
+    /*
+    intake.setDefaultCommand(
+      Commands.run(
+        () -> {
+          intake.setPower(Math.pow(driveController.getLeftY(), 3));
+        },
+        intake
+      )
+    );*/
+
     /*
     swerveDrive.setDefaultCommand(
       new DriveController(swerveDrive, driveController)
@@ -73,27 +116,8 @@ public class RobotContainer {
 
     /*
     elevator.setDefaultCommand(Commands.run(()->{
-      elevator.setVoltage(Constants.ElevatorConstants.kGRAVITY_VOLTS - driveController.getLeftY());
+      elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
     }, elevator));*/
-
-    coralEffector.setDefaultCommand(new CoralIntake(coralEffector));
-
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
-
-    driveController.axisGreaterThan(3, 0.5).onTrue(new CoralOuttake(coralEffector));
-
-    driveController.x().onTrue(new MoveElevator(elevator, 1));
-    driveController.y().onTrue(new MoveElevator(elevator, 2));
-    driveController.b().onTrue(new MoveElevator(elevator,3));
-    driveController.a().onTrue(new MoveElevator(elevator, 4));
-    //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
-
-
-
-
-    driveController.leftBumper().onTrue(new AutoAlignPose(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AutoAlignPose(swerve, vision, true).withTimeout(3));
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
     //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
@@ -103,9 +127,7 @@ public class RobotContainer {
     //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
     //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
-
-    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY() * .3,
-        () -> driveController.getLeftX() * .3, () -> driveController.getRightX() * .3, false));
+    //driveController.leftTrigger(.3).whileTrue(Commands.run(() -> swerve.driveWithAngleSetPoint(driveController.getLeftY(), driveController.getLeftX(), 30)));
   }
 
   /**
@@ -115,6 +137,6 @@ public class RobotContainer {
    */
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return new PathPlannerAuto("test-001");
+    return new PathPlannerAuto("test-path");
   }
 }

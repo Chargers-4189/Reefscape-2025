@@ -9,7 +9,9 @@ import frc.robot.subsystems.Intake;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ActuateIntakeDown extends Command {
+
   private final Intake intake;
+
   /** Creates a new ActuateIntakeDown. */
   public ActuateIntakeDown(Intake intake) {
     this.intake = intake;
@@ -24,18 +26,18 @@ public class ActuateIntakeDown extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.ActuateBackward();
+    //intake.setPower(-.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    intake.StopActuating();
+    intake.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getBottomLimitSwitch();
+    return intake.getDownLimitSwitch();
   }
 }

@@ -28,12 +28,12 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
-public class SwerveSubsystem extends SubsystemBase {
+public class Swerve extends SubsystemBase {
   File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
   SwerveDrive swerveDrive;
 
   /** Creates a new SwerveDrive. */
-  public SwerveSubsystem() {
+  public Swerve() {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // CHANGE TO LOW IN COMP
     try {
       swerveDrive = new SwerveParser(swerveJsonDirectory)
@@ -74,6 +74,13 @@ public class SwerveSubsystem extends SubsystemBase {
 
   public Pose2d getPose() {
     return swerveDrive.getPose();
+  }
+
+  public void driveWithAngleSetPoint(double x, double y, double setpoint){
+    double rotationPower = (swerveDrive.getOdometryHeading().getDegrees() - setpoint) * SwerveConstants.kAlignAngleSpeed;
+    rotationPower = Math.min(rotationPower, SwerveConstants.kAlignAngleMaxSpeed);
+    rotationPower = Math.max(rotationPower, -SwerveConstants.kAlignAngleMaxSpeed);
+    this.drive(x, y, rotationPower, false);
   }
 
   public void resetPose(Pose2d pose) {
@@ -147,5 +154,6 @@ public class SwerveSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    //System.out.println(swerveDrive.getOdometryHeading().getDegrees());
   }
 }

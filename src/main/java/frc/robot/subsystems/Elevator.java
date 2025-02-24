@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 package frc.robot.subsystems;
-import frc.robot.Constants.ElevatorConstants;
 
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.PersistMode;
@@ -11,16 +10,18 @@ import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
+
   public DoubleEntry kGRAVITY_VOLTS;
   public DoubleEntry kPROPORTIONAL_VOLTS;
   public DoubleEntry kMAX_VOLTS;
@@ -28,7 +29,7 @@ public class Elevator extends SubsystemBase {
   public DoubleEntry kTOLERANCE;
   public DoubleArrayEntry kHEIGHTS;
 
-  private int level = -1;
+  private int level = 0;
 
   private final SparkMax leftMotor = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID,
@@ -40,35 +41,61 @@ public class Elevator extends SubsystemBase {
   );
 
   private final DigitalInput minLimitSwitch = new DigitalInput(
-    ElevatorConstants.kMIN_DIO_PORT
+    ElevatorConstants.kMIN_LIMIT_DIO
   );
   private final DigitalInput maxLimitSwitch = new DigitalInput(
-    ElevatorConstants.kMAX_DIO_PORT
+    ElevatorConstants.kMAX_LIMIT_DIO
   );
 
   private RelativeEncoder encoder = rightMotor.getEncoder();
 
-  private static final SparkMaxConfig LeftSparkMaxConfig = new SparkMaxConfig();
+  private static final SparkMaxConfig leftSparkMaxConfig = new SparkMaxConfig();
+  private static final SparkMaxConfig rightSparkMaxConfig = new SparkMaxConfig();
 
   /** Creates a new Elevator. */
   public Elevator() {
     zeroEncoder();
-    LeftSparkMaxConfig.follow(rightMotor, true);
+    leftSparkMaxConfig.follow(rightMotor, true);
+    leftSparkMaxConfig.idleMode(IdleMode.kBrake);
+    rightSparkMaxConfig.idleMode(IdleMode.kBrake);
     leftMotor.configure(
-      LeftSparkMaxConfig,
+      leftSparkMaxConfig,
+      ResetMode.kResetSafeParameters,
+      PersistMode.kPersistParameters
+    );
+    rightMotor.configure(
+      rightSparkMaxConfig,
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
 
     NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
     NetworkTable datatable = networkInstance.getTable("elevatorConstants");
-    kGRAVITY_VOLTS = datatable.getDoubleTopic("GRAVITY_VOLTS").getEntry(ElevatorConstants.kGRAVITY_VOLTS);
-    kMAX_VOLTS = datatable.getDoubleTopic("MAX_VOLTS").getEntry(ElevatorConstants.kMAX_VOLTS);
-    kMAX_VOLT_CHANGE_PER_SECOND = datatable.getDoubleTopic("MAX_VOLT_CHANGE_PER_SECOND").getEntry(ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND);
-    kPROPORTIONAL_VOLTS = datatable.getDoubleTopic("PROPORTIONAL_VOLTS").getEntry(ElevatorConstants.kPROPORTIONAL_VOLTS);
-    kTOLERANCE = datatable.getDoubleTopic("TOLERANCE").getEntry(ElevatorConstants.kTOLERANCE);
-    kHEIGHTS = datatable.getDoubleArrayTopic("HEIGHTS").getEntry(ElevatorConstants.kHEIGHTS);
-    
+    kGRAVITY_VOLTS =
+      datatable
+        .getDoubleTopic("GRAVITY_VOLTS")
+        .getEntry(ElevatorConstants.kGRAVITY_VOLTS);
+    kMAX_VOLTS =
+      datatable
+        .getDoubleTopic("MAX_VOLTS")
+        .getEntry(ElevatorConstants.kMAX_VOLTS);
+    kMAX_VOLT_CHANGE_PER_SECOND =
+      datatable
+        .getDoubleTopic("MAX_VOLT_CHANGE_PER_SECOND")
+        .getEntry(ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND);
+    kPROPORTIONAL_VOLTS =
+      datatable
+        .getDoubleTopic("PROPORTIONAL_VOLTS")
+        .getEntry(ElevatorConstants.kPROPORTIONAL_VOLTS);
+    kTOLERANCE =
+      datatable
+        .getDoubleTopic("TOLERANCE")
+        .getEntry(ElevatorConstants.kTOLERANCE);
+    kHEIGHTS =
+      datatable
+        .getDoubleArrayTopic("HEIGHTS")
+        .getEntry(ElevatorConstants.kHEIGHTS);
+
     kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
     kPROPORTIONAL_VOLTS.set(kPROPORTIONAL_VOLTS.get());
     kMAX_VOLTS.set(kMAX_VOLTS.get());
@@ -88,7 +115,8 @@ public class Elevator extends SubsystemBase {
   public double getEncoder() {
     return -encoder.getPosition();
   }
-/*
+
+  /*
   public double getVelocityMeters() {
     return -encoder.getVelocity() * ElevatorConstants.kROTATIONS_TO_METERS;
   }
@@ -98,7 +126,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public boolean getMinLimitSwitch() {
-    return !minLimitSwitch.get(); //exclamation mark necesary because we connected the blue instead of white wire.
+    return !minLimitSwitch.get();
   }
 
   public boolean getMaxLimitSwitch() {
@@ -106,11 +134,12 @@ public class Elevator extends SubsystemBase {
   }
 
   public void setVoltage(double voltage) {
-    if(getMinLimitSwitch()) {
+    if (getMinLimitSwitch()) {
       if (voltage < -.2) {
-         voltage = -.2;
+        voltage = -.2;
       }
-    } else if (getMaxLimitSwitch()) {
+    }
+    if (getMaxLimitSwitch()) {
       if (voltage > .2) {
         voltage = .2;
       }
@@ -121,9 +150,16 @@ public class Elevator extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(getMinLimitSwitch()) {
+    if (getMinLimitSwitch()) {
       zeroEncoder();
     }
+    //System.out.println(getEncoder());
+    //System.out.println(encoder.getVelocity());
+    System.out.print(getMinLimitSwitch());
+    System.out.print(" ");
+    System.out.print(getMaxLimitSwitch());
+    System.out.print(" ");
     System.out.println(getEncoder());
+
   }
 }

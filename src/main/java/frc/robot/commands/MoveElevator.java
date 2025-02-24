@@ -4,9 +4,7 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Timer;
 
@@ -14,7 +12,6 @@ import edu.wpi.first.wpilibj.Timer;
 public class MoveElevator extends Command {
   
   private final Elevator elevator;
-  private int level;
   private double goal;
   private double startTime;
   private boolean up;
@@ -28,8 +25,8 @@ public class MoveElevator extends Command {
   public MoveElevator(Elevator elevator, int level) {
 
     this.elevator = elevator;
-    this.level = level;
     this.goal = elevator.kHEIGHTS.get()[level];
+    elevator.setLevel(level);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(elevator);
@@ -47,9 +44,6 @@ public class MoveElevator extends Command {
   public void execute() {
 
     var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * elevator.kPROPORTIONAL_VOLTS.get();
-    if (level == 0) {
-      proportionalVoltage = 10;
-    }
     var maxVoltage = Math.min(elevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * elevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
@@ -61,20 +55,17 @@ public class MoveElevator extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevator.setLevel(level);
     elevator.setVoltage(0);
+    System.out.print(goal);
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (level == 0) {
-      return false;
-    }
     if (up) {
-      return elevator.getEncoder() > goal + elevator.kTOLERANCE.get();
+      return elevator.getEncoder() > goal - elevator.kTOLERANCE.get();
     } else {
-      return elevator.getEncoder() < goal - elevator.kTOLERANCE.get();
+      return elevator.getEncoder() < goal + elevator.kTOLERANCE.get();
     }
   }
 }
