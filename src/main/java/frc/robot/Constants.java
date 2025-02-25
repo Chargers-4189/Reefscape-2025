@@ -4,6 +4,18 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
+
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -82,17 +94,8 @@ public final class Constants {
       );
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-    public static final double kDriveSpeedWhileAligning = 0.020;
-    public static final double kAlignDistanceToleranceYaw = 0.069813;
-    public static final double kProportionalVoltage = 0.008;
-
-    //public static final double kAlignDistanceToleranceYawReef = .5;
-    public static final double kAlignSpeedX = 0.3;
-    public static final double kAlignSpeedY = 0.6;
-    public static final double kAlignAngle = 0.1;
-
-    public static final double kAlignAngleSpeed = .002;
-    public static final double kAlignAngleMaxSpeed = .1;
+    
+    public static final Pose2d kINITIAL_POSE = new Pose2d(2, 7, new Rotation2d());
   }
 
   public static class CoralEffectorConstants {
@@ -161,5 +164,15 @@ public final class Constants {
       kMaxAngularSpeedRadiansPerSecond,
       kMaxAngularSpeedRadiansPerSecondSquared
     );
+  }
+
+  public static class AlignmentConstants {
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
+  }
+
+  public static class AlignmentConstants {
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
   }
 }
