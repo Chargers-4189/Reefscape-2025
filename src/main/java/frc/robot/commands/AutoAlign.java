@@ -4,21 +4,18 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.SwerveSubsystem;
-
+import frc.robot.subsystems.Swerve;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlign extends Command {
-  private final SwerveSubsystem swerve;
+  private final Swerve swerve;
   private final Vision vision;
   private boolean alignRight;
   
   /** Creates a new AutoAlign. */
-  public AutoAlign(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
+  public AutoAlign(Swerve swerve, Vision vision, boolean alignRight) {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;

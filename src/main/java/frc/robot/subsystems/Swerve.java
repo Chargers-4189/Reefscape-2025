@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import java.io.File;
+import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -12,12 +13,16 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,8 +33,14 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+import frc.robot.Constants.AlignmentConstants;
+
 public class Swerve extends SubsystemBase {
-  File swerveJsonDirectory = new File(Filesystem.getDeployDirectory(), "swerve");
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
+  File swerveJsonDirectory = new File(
+      Filesystem.getDeployDirectory(),
+      "swerve");
   SwerveDrive swerveDrive;
 
   /** Creates a new SwerveDrive. */
@@ -37,9 +48,9 @@ public class Swerve extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // CHANGE TO LOW IN COMP
     try {
       swerveDrive = new SwerveParser(swerveJsonDirectory)
-          .createSwerveDrive(SwerveConstants.kMaxVelocity, new Pose2d(2, 7, new Rotation2d()));
+          .createSwerveDrive(SwerveConstants.kMaxVelocity, SwerveConstants.kINITIAL_POSE);
     } catch (Exception e) {
-      System.err.println("Swerve no workie :( " + e.getMessage());
+      System.err.println("SwerveDrive no workie :(");
     }
 
     // ----- PathPlanner ------
@@ -76,13 +87,6 @@ public class Swerve extends SubsystemBase {
     return swerveDrive.getPose();
   }
 
-  public void driveWithAngleSetPoint(double x, double y, double setpoint){
-    double rotationPower = (swerveDrive.getOdometryHeading().getDegrees() - setpoint) * SwerveConstants.kAlignAngleSpeed;
-    rotationPower = Math.min(rotationPower, SwerveConstants.kAlignAngleMaxSpeed);
-    rotationPower = Math.max(rotationPower, -SwerveConstants.kAlignAngleMaxSpeed);
-    this.drive(x, y, rotationPower, false);
-  }
-
   public void resetPose(Pose2d pose) {
     swerveDrive.resetOdometry(pose);
   }
@@ -90,10 +94,19 @@ public class Swerve extends SubsystemBase {
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return swerveDrive.getRobotVelocity();
   }
-
+  
   public void resetGyro() {
     resetGyro();
     swerveDrive.zeroGyro();
+  }
+
+  public void drive(double translationX, double translationY,
+  double angularRotationX, boolean fieldOriented) {
+    swerveDrive.drive(new Translation2d(-translationX * swerveDrive.getMaximumChassisVelocity(),
+          -translationY * swerveDrive.getMaximumChassisVelocity()),
+          -angularRotationX * swerveDrive.getMaximumChassisAngularVelocity(),
+          fieldOriented,
+          false);
   }
 
   /**
@@ -142,18 +155,76 @@ public class Swerve extends SubsystemBase {
     });
   }
 
-  public void drive(double translationX, double translationY,
-  double angularRotationX, boolean fieldOriented) {
-    swerveDrive.drive(new Translation2d(-translationX * swerveDrive.getMaximumChassisVelocity(),
-          -translationY * swerveDrive.getMaximumChassisVelocity()),
-          -angularRotationX * swerveDrive.getMaximumChassisAngularVelocity(),
-          fieldOriented,
-          false);
+  /*
+  public Command goToReefByTagNumber(int aprilTagNumber, boolean right) {
+
+    Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(aprilTagNumber).get().toPose2d();
+    PathConstraints constraints = new PathConstraints(
+      3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    return (
+        AutoBuilder.pathfindToPose(
+          new Pose2d().transformBy(
+            targetAprilTagPose.minus(
+              new Pose2d(
+                new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+                new Rotation2d()
+                )
+              )
+            ),
+          constraints
+        )
+      );
+  }*/
+
+  public Command goToReef(boolean right) {
+    Pose2d[] tags = {
+      aprilTagFieldLayout.getTagPose(6).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(7).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(8).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(9).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(10).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(11).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(17).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(18).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(19).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(20).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(21).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(22).get().toPose2d(),
+    };
+    Pose2d targetAprilTagPose = getPose().nearest(Arrays.asList(tags));
+    PathConstraints constraints = new PathConstraints(
+      3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    return (
+        AutoBuilder.pathfindToPose(
+          new Pose2d().transformBy(
+            targetAprilTagPose.minus(
+              new Pose2d(
+                new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+                new Rotation2d()
+                )
+              )
+            ),
+          constraints
+        )
+      );
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    //System.out.println(swerveDrive.getOdometryHeading().getDegrees());
   }
 }

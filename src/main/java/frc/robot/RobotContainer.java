@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.OuttakeCoral;
@@ -37,7 +36,7 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   private final Swerve swerve = new Swerve();
-  private final Vision vision = new Vision();
+  private final Vision vision = new Vision(false);
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
@@ -95,9 +94,6 @@ public class RobotContainer {
     driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
     driveController.b().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 3));
     driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
-
-    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     /*
     elevator.setDefaultCommand(Commands.run(()->{
