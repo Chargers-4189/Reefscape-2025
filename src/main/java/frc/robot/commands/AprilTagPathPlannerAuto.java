@@ -47,7 +47,7 @@ public class AprilTagPathPlannerAuto extends SequentialCommandGroup {
       //System.out.println(targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d())));
 
       addCommands(
-        swerveSubsystem.driveToPose(
+        AutoBuilder.pathfindToPose(
           new Pose2d().transformBy(targetAprilTagPose.minus(new Pose2d(new Translation2d(distanceFromAprilTag, 0).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),new Rotation2d())))
         ),
         
