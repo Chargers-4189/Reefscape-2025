@@ -34,18 +34,21 @@ import frc.robot.subsystems.SwerveSubsystem;
 public class AprilTagPathPlannerAuto extends SequentialCommandGroup {
   /** Creates a new AprilTagPathPlannerAuto. */
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+  private final int distanceFromAprilTag = 1;
 
   public AprilTagPathPlannerAuto(SwerveSubsystem swerveSubsystem, int apriltagnumber) {
+      Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+      
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-      Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+      //Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
 
-      System.out.println(targetAprilTagPose);
-      System.out.println(targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d())));
+      //System.out.println(targetAprilTagPose);
+      //System.out.println(targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d())));
 
       addCommands(
         swerveSubsystem.driveToPose(
-          targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d()))
+          new Pose2d().transformBy(targetAprilTagPose.minus(new Pose2d(new Translation2d(distanceFromAprilTag, 0).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),new Rotation2d())))
         ),
         
         swerveSubsystem.driveToPose(aprilTagFieldLayout.getTagPose(12).get().toPose2d())
