@@ -35,6 +35,7 @@ public class MoveElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Running!");
     this.startTime = Timer.getFPGATimestamp();
     this.up = elevator.getEncoder() < goal;
   };
@@ -56,7 +57,8 @@ public class MoveElevator extends Command {
   @Override
   public void end(boolean interrupted) {
     elevator.setVoltage(0);
-    System.out.print(goal);
+    
+    //System.out.print(goal);
   }
 
   // Returns true when the command should end.

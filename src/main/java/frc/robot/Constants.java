@@ -123,17 +123,14 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { 0.15, 0.15, 7.9, 26.1, 
-      52.5 }; // Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5 }; // Intake, L1, L2, L3, L4
 
-    public static final double kELEVATOR_BASE_HEIGHT = .686;
-
-    public static final double kGRAVITY_VOLTS = .3;
+    public static final double kGRAVITY_VOLTS = 1;
     public static final double kPROPORTIONAL_VOLTS = .8;
-    public static final double kMAX_VOLTS = 8;
-    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 12;
+    public static final double kMAX_VOLTS = 12;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
-    public static final double kTOLERANCE = .5;
+    public static final double kTOLERANCE = 1;
   }
 
   public static final class IntakeConstants {
@@ -155,8 +152,8 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
-      Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;

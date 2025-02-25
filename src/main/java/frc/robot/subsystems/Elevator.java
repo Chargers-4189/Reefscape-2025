@@ -47,7 +47,7 @@ public class Elevator extends SubsystemBase {
     ElevatorConstants.kMAX_LIMIT_DIO
   );
 
-  private RelativeEncoder encoder = rightMotor.getEncoder();
+  private RelativeEncoder encoder = leftMotor.getEncoder();
 
   private static final SparkMaxConfig leftSparkMaxConfig = new SparkMaxConfig();
   private static final SparkMaxConfig rightSparkMaxConfig = new SparkMaxConfig();
@@ -147,6 +147,20 @@ public class Elevator extends SubsystemBase {
     rightMotor.setVoltage(-voltage - kGRAVITY_VOLTS.getAsDouble());
   }
 
+  public void setVoltageNoGravity(double voltage) {
+    if (getMinLimitSwitch()) {
+      if (voltage < -.3) {
+        voltage = -.3;
+      }
+    }
+    if (getMaxLimitSwitch()) {
+      if (voltage > .3) {
+        voltage = .3;
+      }
+    }
+    rightMotor.setVoltage(-voltage);
+  }
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -155,11 +169,13 @@ public class Elevator extends SubsystemBase {
     }
     //System.out.println(getEncoder());
     //System.out.println(encoder.getVelocity());
-    // System.out.print(getMinLimitSwitch());
-    // System.out.print(" ");
-    // System.out.print(getMaxLimitSwitch());
-    // System.out.print(" ");
-    // System.out.println(getEncoder());
+    /*
+    System.out.print("Bottom: ");
+    System.out.print(getMinLimitSwitch());
+    System.out.print("   Top: ");
+    System.out.print(getMaxLimitSwitch());
+    System.out.print("   Encoder: ");
+    System.out.println(getEncoder());*/
 
   }
 }
