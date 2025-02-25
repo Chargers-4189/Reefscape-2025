@@ -5,25 +5,15 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.AprilTagPathPlannerAuto;
-import frc.robot.commands.AutoAlign;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
-import java.util.Map;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.pathfinding.Pathfinding;
 
-import edu.wpi.first.networktables.GenericEntry;
-import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.shuffleboard.SimpleWidget;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandPS4Controller;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,8 +30,8 @@ public class RobotContainer {
   private final Vision vision = new Vision(Robot.isSimulation());
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandPS4Controller m_driverController =
-      new CommandPS4Controller(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_driverController =
+      new CommandXboxController(OperatorConstants.kDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -63,14 +53,10 @@ public class RobotContainer {
 
     //m_driverController.cross().onTrue(new AutoAlign(swerve, vision, false));
     //m_driverController.circle().onTrue(new AutoAlign(swerve, vision, true));
-    m_driverController.options().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
+    m_driverController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
 
-    m_driverController.povDownRight().onTrue(new AprilTagPathPlannerAuto(swerve, 6));
-    m_driverController.povRight().onTrue(new AprilTagPathPlannerAuto(swerve, 7));
-    m_driverController.povUpRight().onTrue(new AprilTagPathPlannerAuto(swerve, 8));
-    m_driverController.povUpLeft().onTrue(new AprilTagPathPlannerAuto(swerve, 9));
-    m_driverController.povLeft().onTrue(new AprilTagPathPlannerAuto(swerve, 10));
-    m_driverController.povDownLeft().toggleOnTrue(new AprilTagPathPlannerAuto(swerve, 11));
+    m_driverController.leftTrigger(.5).onTrue(swerve.goToReef(false));
+    m_driverController.rightTrigger(.5).onTrue(swerve.goToReef(true));
 
     // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
     // cancelling on release.

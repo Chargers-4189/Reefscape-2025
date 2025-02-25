@@ -4,6 +4,10 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
 
 /**
@@ -31,10 +35,17 @@ public final class Constants {
     public static final double kMOI = ((1.0/12.0) * kRobotWeight * (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2)));
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
+
+    public static final Pose2d kINITIAL_POSE = new Pose2d(2, 7, new Rotation2d());
   }
 
 
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+
+  public static class AlignmentConstants {
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
   }
 }

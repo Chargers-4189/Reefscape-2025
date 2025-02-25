@@ -6,6 +6,7 @@ package frc.util;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.apriltag.AprilTagFieldLayout.OriginPosition;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform3d;
@@ -33,8 +34,7 @@ public class AprilTagCamera {
   public AprilTagCamera(String cameraName, Transform3d cameraTranslation) {
     camera = new PhotonCamera(cameraName);
     try {
-      tagLayout = AprilTagFieldLayout.loadFromResource(
-          AprilTagFields.k2024Crescendo.m_resourceFile);
+      tagLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
     } catch (Exception e) {
       System.err.println(e);
     }

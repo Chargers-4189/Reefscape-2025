@@ -5,6 +5,11 @@
 package frc.robot.subsystems;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 import java.util.function.DoubleSupplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -12,12 +17,18 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -28,7 +39,11 @@ import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
+import frc.robot.Constants.AlignmentConstants;
+
 public class SwerveSubsystem extends SubsystemBase {
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
+
   File swerveJsonDirectory = new File(
       Filesystem.getDeployDirectory(),
       "swerve");
@@ -39,7 +54,7 @@ public class SwerveSubsystem extends SubsystemBase {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // CHANGE TO LOW IN COMP
     try {
       swerveDrive = new SwerveParser(swerveJsonDirectory)
-          .createSwerveDrive(SwerveConstants.kMaxVelocity, new Pose2d(2, 7, new Rotation2d()));
+          .createSwerveDrive(SwerveConstants.kMaxVelocity, SwerveConstants.kINITIAL_POSE);
     } catch (Exception e) {
       System.err.println("SwerveDrive no workie :(");
     }
@@ -135,6 +150,74 @@ public class SwerveSubsystem extends SubsystemBase {
           fieldOriented,
           false);
     });
+  }
+
+  /*
+  public Command goToReefByTagNumber(int aprilTagNumber, boolean right) {
+
+    Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(aprilTagNumber).get().toPose2d();
+    PathConstraints constraints = new PathConstraints(
+      3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    return (
+        AutoBuilder.pathfindToPose(
+          new Pose2d().transformBy(
+            targetAprilTagPose.minus(
+              new Pose2d(
+                new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+                new Rotation2d()
+                )
+              )
+            ),
+          constraints
+        )
+      );
+  }*/
+
+  public Command goToReef(boolean right) {
+    Pose2d[] tags = {
+      aprilTagFieldLayout.getTagPose(6).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(7).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(8).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(9).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(10).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(11).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(17).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(18).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(19).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(20).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(21).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(22).get().toPose2d(),
+    };
+    Pose2d targetAprilTagPose = getPose().nearest(Arrays.asList(tags));
+    PathConstraints constraints = new PathConstraints(
+      3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    return (
+        AutoBuilder.pathfindToPose(
+          new Pose2d().transformBy(
+            targetAprilTagPose.minus(
+              new Pose2d(
+                new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+                new Rotation2d()
+                )
+              )
+            ),
+          constraints
+        )
+      );
   }
 
   @Override
