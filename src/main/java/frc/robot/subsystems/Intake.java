@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
   /** Creates a new Intake. */
@@ -27,26 +28,14 @@ public class Intake extends SubsystemBase {
     IntakeConstants.kDIO_PORT_BOTTOM
   );
   public Intake() {}
-    public void ActuateForward(){
-      if(getTopLimitSwitch() != true){
-      actuatorMotor.set(0.5);
-      }
-      else{
-        actuatorMotor.set(0);
-      }
-    }
-    public void ActuateBackward(){
-      if(getBottomLimitSwitch() != true){
-        actuatorMotor.set(-0.5);
-      }
-      else{
-        actuatorMotor.set(0);
-      }
+    public void setPower(double power) {
+      actuatorMotor.set(power);
     }
   
     public void stop(){
       actuatorMotor.set(0);
     }
+
     public boolean getTopLimitSwitch() {
       return !topLimitSwitch.get();
     }

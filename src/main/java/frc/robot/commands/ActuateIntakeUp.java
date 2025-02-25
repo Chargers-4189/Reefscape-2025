@@ -8,6 +8,8 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.robot.Constants.IntakeConstants;
 
+import frc.util.Elastic.ElasticIntake;
+
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ActuateIntakeUp extends Command {
 
@@ -27,7 +29,7 @@ public class ActuateIntakeUp extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.ActuateForward();
+    intake.setPower(ElasticIntake.kPOWER.get());
   }
 
   // Called once the command ends or is interrupted.

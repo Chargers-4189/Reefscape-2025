@@ -22,6 +22,7 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.util.Elastic;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -51,6 +52,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the trigger bindings
+    Elastic.initialize();
+    
     configureBindings();
   }
 
@@ -81,8 +84,8 @@ public class RobotContainer {
       )
     );
 
-    driveController.axisGreaterThan(2, 0.8).onTrue(new ActuateIntakeDown(intake));
-    driveController.axisGreaterThan(3, 0.8).onTrue(new ActuateIntakeUp(intake));
+    driveController.leftTrigger(.8).onTrue(new ActuateIntakeDown(intake));
+    driveController.rightTrigger(.8).onTrue(new ActuateIntakeUp(intake));
 
     
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
