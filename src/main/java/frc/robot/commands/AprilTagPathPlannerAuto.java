@@ -36,23 +36,19 @@ public class AprilTagPathPlannerAuto extends SequentialCommandGroup {
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025Reefscape);
 
   public AprilTagPathPlannerAuto(SwerveSubsystem swerveSubsystem, int apriltagnumber) {
-    // Create the constraints to use while pathfinding
-    PathConstraints constraints = new PathConstraints(
-            3.0, 4.0,
-            Units.degreesToRadians(540), Units.degreesToRadians(720));
-    // Since AutoBuilder is configured, we can use it to build pathfinding commands
-    Command ReefPath = AutoBuilder.pathfindToPose(
-            aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d(),
-            constraints,
-            0.0 // Goal end velocity in meters/sec
-    );
-    Command StationPath = AutoBuilder.pathfindToPose(
-      aprilTagFieldLayout.getTagPose(2).get().toPose2d(),
-      constraints,
-      0.0 // Goal end velocity in meters/sec
-);
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(ReefPath,StationPath);
+      Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+
+      System.out.println(targetAprilTagPose);
+      System.out.println(targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d())));
+
+      addCommands(
+        swerveSubsystem.driveToPose(
+          targetAprilTagPose.plus(new Transform2d(new Translation2d(12, 0).rotateBy(targetAprilTagPose.getRotation()),new Rotation2d()))
+        ),
+        
+        swerveSubsystem.driveToPose(aprilTagFieldLayout.getTagPose(12).get().toPose2d())
+      );
   }
 }
