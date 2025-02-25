@@ -27,6 +27,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.SwerveSubsystem;
+import edu.wpi.first.math.geometry.Translation2d;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
@@ -38,6 +39,14 @@ public class AprilTagPathPlannerAuto extends SequentialCommandGroup {
 
   public AprilTagPathPlannerAuto(SwerveSubsystem swerveSubsystem, int apriltagnumber) {
       Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+    PathConstraints constraints = new PathConstraints(
+
+
+
+            3.0, 4.0,
+
+
+            Units.degreesToRadians(540), Units.degreesToRadians(720));
       
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
