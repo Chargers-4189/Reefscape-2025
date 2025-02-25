@@ -8,7 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import edu.wpi.first.wpilibj.Timer;
 
-import frc.util.Elastic;
+import frc.util.Elastic.ElasticElevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
@@ -27,7 +27,7 @@ public class MoveElevator extends Command {
   public MoveElevator(Elevator elevator, int level) {
 
     this.elevator = elevator;
-    this.goal = Elastic.kHEIGHTS.get()[level];
+    this.goal = ElasticElevator.kHEIGHTS.get()[level];
     elevator.setLevel(level);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -46,8 +46,8 @@ public class MoveElevator extends Command {
   @Override
   public void execute() {
 
-    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * Elastic.kPROPORTIONAL_VOLTS.get();
-    var maxVoltage = Math.min(Elastic.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * Elastic.kMAX_VOLT_CHANGE_PER_SECOND.get());
+    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * ElasticElevator.kPROPORTIONAL_VOLTS.get();
+    var maxVoltage = Math.min(ElasticElevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * ElasticElevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
     } else {
@@ -67,9 +67,9 @@ public class MoveElevator extends Command {
   @Override
   public boolean isFinished() {
     if (up) {
-      return elevator.getEncoder() > goal - Elastic.kTOLERANCE.get();
+      return elevator.getEncoder() > goal - ElasticElevator.kTOLERANCE.get();
     } else {
-      return elevator.getEncoder() < goal + Elastic.kTOLERANCE.get();
+      return elevator.getEncoder() < goal + ElasticElevator.kTOLERANCE.get();
     }
   }
 }
