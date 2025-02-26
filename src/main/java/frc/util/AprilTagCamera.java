@@ -26,6 +26,7 @@ public class AprilTagCamera {
   private boolean estimateAvailable = false;
   public Pose2d estimatedPose;
   public Double estimatedTagYaw;
+  public double estStdDevs;
 
   protected PhotonCamera camera;
   private PhotonPoseEstimator poseEstimator;
@@ -33,17 +34,22 @@ public class AprilTagCamera {
   public AprilTagCamera(String cameraName, Transform3d cameraTranslation) {
     camera = new PhotonCamera(cameraName);
     try {
-      tagLayout = AprilTagFieldLayout.loadFromResource(
-          AprilTagFields.k2025ReefscapeWelded.m_resourceFile);
+      tagLayout =
+        AprilTagFieldLayout.loadFromResource(
+          AprilTagFields.k2025ReefscapeWelded.m_resourceFile
+        );
     } catch (Exception e) {
       System.err.println(e);
     }
-    poseEstimator = new PhotonPoseEstimator(
+    poseEstimator =
+      new PhotonPoseEstimator(
         tagLayout,
         PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
-        cameraTranslation);
+        cameraTranslation
+      );
     poseEstimator.setMultiTagFallbackStrategy(
-        PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY);
+      PhotonPoseEstimator.PoseStrategy.LOWEST_AMBIGUITY
+    );
   }
 
   public Pose2d getEstimatedRobotPose() {
@@ -77,15 +83,21 @@ public class AprilTagCamera {
 
   private EstimatedRobotPose targetFilter(List<PhotonPipelineResult> results) {
     if (!results.isEmpty()) {
+      int numTags = 0;
+      double avgDist = 0;
       var result = results.get(results.size() - 1);
       result.targets.removeIf(tag -> {
         double maxDistance = 6.0;
         Transform3d transform = tag.getBestCameraToTarget();
-        return (transform.getX() > maxDistance || transform.getY() > maxDistance);
+        return (
+          transform.getX() > maxDistance || transform.getY() > maxDistance
+        );
       });
-      if (result.hasTargets() &&
-          result.getTargets().size() < 16 &&
-          result.getTargets().size() > 0) {
+      if (
+        result.hasTargets() &&
+        result.getTargets().size() < 16 &&
+        result.getTargets().size() > 0
+      ) {
         estimatedTagYaw = result.getBestTarget().getYaw();
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
@@ -97,11 +109,13 @@ public class AprilTagCamera {
   }
 
   public static class AprilTagCameraSim extends AprilTagCamera {
+
     public AprilTagCameraSim(
-        String cameraName,
-        Transform3d cameraTranslation,
-        boolean stream,
-        VisionSystemSim visionSimField) {
+      String cameraName,
+      Transform3d cameraTranslation,
+      boolean stream,
+      VisionSystemSim visionSimField
+    ) {
       super(cameraName, cameraTranslation);
       SimCameraProperties simCameraProp = new SimCameraProperties();
       simCameraProp.setCalibration(1280, 720, Rotation2d.fromDegrees(100));
@@ -109,7 +123,10 @@ public class AprilTagCamera {
       simCameraProp.setFPS(20);
       simCameraProp.setAvgLatencyMs(35);
       simCameraProp.setLatencyStdDevMs(5);
-      PhotonCameraSim cameraSim = new PhotonCameraSim(super.camera, simCameraProp);
+      PhotonCameraSim cameraSim = new PhotonCameraSim(
+        super.camera,
+        simCameraProp
+      );
 
       cameraSim.enableRawStream(stream);
       cameraSim.enableProcessedStream(stream);

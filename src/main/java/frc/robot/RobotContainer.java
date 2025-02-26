@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -29,13 +28,13 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
   public final SwerveSubsystem swerve = new SwerveSubsystem();
-  public final Vision vision = new Vision();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralIntake = new CoralEffector();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
-      Constants.OperatorConstants.kDriverControllerPort);
+    Constants.OperatorConstants.kDriverControllerPort
+  );
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -60,13 +59,28 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     driveController.a().onTrue(new AutoAlign(swerve, vision, false));
     driveController.b().onTrue(new AutoAlign(swerve, vision, true));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(()->{swerve.resetGyro();}, swerve));
+    driveController
+      .start()
+      .debounce(1)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            swerve.zeroGyro();
+          },
+          swerve
+        )
+      );
 
-    swerve.setDefaultCommand(swerve.driveCommand(() -> driveController.getLeftY(),
-        () -> driveController.getLeftX(), () -> driveController.getRightX(), false));
+    swerve.setDefaultCommand(
+      swerve.driveCommand(
+        () -> driveController.getLeftY(),
+        () -> driveController.getLeftX(),
+        () -> driveController.getRightX(),
+        false
+      )
+    );
   }
 
   /**
