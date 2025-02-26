@@ -13,14 +13,11 @@ import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
-import frc.robot.commands.OuttakeCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
 
 /**
@@ -93,24 +90,16 @@ public class RobotContainer {
       .onTrue(
         Commands.runOnce(
           () -> {
-            swerve.resetGyro();
+            swerve.zeroGyro();
           },
           swerve
         )
       );
 
-    driveController
-      .x()
-      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
-    driveController
-      .y()
-      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
-    driveController
-      .b()
-      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 3));
-    driveController
-      .a()
-      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
+    driveController.x().onTrue(new AutoPlaceCoral(elevator, coralEffector, 1));
+    driveController.y().onTrue(new AutoPlaceCoral(elevator, coralEffector, 2));
+    driveController.b().onTrue(new AutoPlaceCoral(elevator, coralEffector, 3));
+    driveController.a().onTrue(new AutoPlaceCoral(elevator, coralEffector, 4));
     /*
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);

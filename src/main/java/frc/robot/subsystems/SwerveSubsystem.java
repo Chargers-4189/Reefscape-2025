@@ -481,6 +481,23 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.drive(translation, rotation, fieldRelative, false); // Open loop is disabled since it shouldn't be used most of the time.
   }
 
+  public void drive(
+    double translationX,
+    double translationY,
+    double angularRotationX,
+    boolean fieldOriented
+  ) {
+    swerveDrive.drive(
+      new Translation2d(
+        -translationX * swerveDrive.getMaximumChassisVelocity(),
+        -translationY * swerveDrive.getMaximumChassisVelocity()
+      ),
+      -angularRotationX * swerveDrive.getMaximumChassisAngularVelocity(),
+      fieldOriented,
+      false
+    );
+  }
+
   /**
    * Drive the robot given a chassis field oriented velocity.
    *

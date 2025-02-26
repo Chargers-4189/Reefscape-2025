@@ -4,14 +4,11 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 
@@ -79,12 +76,6 @@ public final class Constants {
     public static final double kWheelCOF = 1.19;
     public static final double kDriveRatio = 5.5;
     public static final double kSteerRatio = 46.423645320197;
-    public static final double kMOI =
-      (
-        (1.0 / 12.0) *
-        kRobotWeight *
-        (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2))
-      );
     public static final double kMOI =
       (
         (1.0 / 12.0) *
@@ -174,8 +165,6 @@ public final class Constants {
 
     public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
-  }
-}
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
       Math.PI;
@@ -188,10 +177,5 @@ public final class Constants {
       kMaxAngularSpeedRadiansPerSecond,
       kMaxAngularSpeedRadiansPerSecondSquared
     );
-  }
-
-  public static class AlignmentConstants {
-    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
-    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
   }
 }
