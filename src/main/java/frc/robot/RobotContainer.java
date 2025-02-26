@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.MoveElevator;
 import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
@@ -39,12 +40,15 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
+  
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
     Constants.OperatorConstants.kDriverControllerPort
   );
-
+  private final CommandXboxController secondaryController = new CommandXboxController(
+    Constants.OperatorConstants.kSecondaryControllerPort
+  );
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -97,6 +101,35 @@ public class RobotContainer {
     driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
+    final Trigger elevatorControlTriggerUp = new Trigger(()->(secondaryController.getLeftY() > Constants.OperatorConstants.kSecondaryDeadband)); 
+    final Trigger elevatorControlTriggerDown = new Trigger(()->(secondaryController.getLeftY() < -Constants.OperatorConstants.kSecondaryDeadband)); 
+
+    final Trigger effectorForwardTrigger = new Trigger(() ->(secondaryController.getLeftTriggerAxis() < Constants.OperatorConstants.kSecondaryDeadband));
+    final Trigger effectorBackTrigger = new Trigger(() ->(secondaryController.getRightTriggerAxis() < Constants.OperatorConstants.kSecondaryDeadband));
+  
+    final Trigger chuteUpTrigger = new Trigger(() ->(secondaryController.getRightY() > Constants.OperatorConstants.kSecondaryDeadband));
+    final Trigger chuteDownTrigger = new Trigger(() ->(secondaryController.getRightY() < -Constants.OperatorConstants.kSecondaryDeadband));
+
+    elevatorControlTriggerUp.onTrue(Commands.run(()->{
+      elevator.setVoltage(secondaryController.getLeftY() * 4);
+    },elevator));
+    elevatorControlTriggerDown.onTrue(Commands.run(()->{
+      elevator.setVoltage(secondaryController.getLeftY() * 4);
+    },elevator));
+    
+    effectorBackTrigger.onTrue(Commands.run(()-> {
+      coralEffector.setPower(secondaryController.getRightTriggerAxis());
+    },coralEffector));
+    effectorForwardTrigger.onTrue(Commands.run(()->{
+      coralEffector.setPower(secondaryController.getLeftTriggerAxis());
+    },coralEffector));
+
+    chuteUpTrigger.onTrue(Commands.run(()->{
+      intake.setPower(secondaryController.getRightY());
+    },intake));
+    chuteDownTrigger.onTrue(Commands.run(() -> {
+      secondaryController.getRightY();
+    }));
     //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
 
     /*

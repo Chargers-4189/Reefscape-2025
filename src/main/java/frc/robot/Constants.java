@@ -25,9 +25,10 @@ import edu.wpi.first.math.util.Units;
 public final class Constants {
 
   public static class OperatorConstants {
-
+    public static final int kSecondaryControllerPort = 1;
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
+    public static final double kSecondaryDeadband = 0.05;
   }
 
   public static class VisionConstants {
