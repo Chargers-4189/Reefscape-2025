@@ -5,20 +5,18 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
-
-import frc.util.Elastic.ElasticIntake;
+import frc.robot.subsystems.Elevator;
+import frc.util.Stopwatch;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ActuateIntakeDown extends Command {
-
-  private final Intake intake;
-
-  /** Creates a new ActuateIntakeDown. */
-  public ActuateIntakeDown(Intake intake) {
-    this.intake = intake;
+public class MoveElevatorSlightlyDown extends Command {
+  private static Elevator elevator;
+  private static Stopwatch stopwatch = new Stopwatch();
+  /** Creates a new MoveElevatorSlightlyDown. */
+  public MoveElevatorSlightlyDown(Elevator elevator) {
+    this.elevator = elevator;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    addRequirements(elevator);
   }
 
   // Called when the command is initially scheduled.
@@ -28,18 +26,16 @@ public class ActuateIntakeDown extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setPower(-ElasticIntake.kPOWER.get());
+    elevator.setVoltageNoGravity(-.1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {
-    intake.stop();
-  }
+  public void end(boolean interrupted) {}
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getBottomLimitSwitch();
+    return true;
   }
 }

@@ -16,12 +16,12 @@ import frc.robot.commands.MoveElevator;
 import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.IntakeCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.util.Elastic;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -35,8 +35,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final Swerve swerve = new Swerve();
-  private final Vision vision = new Vision();
+  public final SwerveSubsystem swerve = new SwerveSubsystem();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
@@ -54,6 +53,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the trigger bindings
+    Elastic.initialize();
+
     configureBindings();
   }
 
@@ -72,10 +73,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
-
-    intake.setDefaultCommand(new ActuateIntakeUp(intake));
 
     swerve.setDefaultCommand(
       swerve.driveCommand(
@@ -85,6 +83,7 @@ public class RobotContainer {
         true
       )
     );
+
 
     
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
@@ -146,6 +145,7 @@ public class RobotContainer {
     swerveDrive.setDefaultCommand(
       new DriveController(swerveDrive, driveController)
     );*/
+
 
     /*
     elevator.setDefaultCommand(Commands.run(()->{

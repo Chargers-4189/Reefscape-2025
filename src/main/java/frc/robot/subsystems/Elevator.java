@@ -12,22 +12,13 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import edu.wpi.first.networktables.DoubleArrayEntry;
-import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.NetworkTable;
-import edu.wpi.first.networktables.NetworkTableInstance;
+import frc.util.Elastic.ElasticElevator;
+
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
-
-  public DoubleEntry kGRAVITY_VOLTS;
-  public DoubleEntry kPROPORTIONAL_VOLTS;
-  public DoubleEntry kMAX_VOLTS;
-  public DoubleEntry kMAX_VOLT_CHANGE_PER_SECOND;
-  public DoubleEntry kTOLERANCE;
-  public DoubleArrayEntry kHEIGHTS;
 
   private int level = 0;
 
@@ -47,7 +38,7 @@ public class Elevator extends SubsystemBase {
     ElevatorConstants.kMAX_LIMIT_DIO
   );
 
-  private RelativeEncoder encoder = rightMotor.getEncoder();
+  private RelativeEncoder encoder = leftMotor.getEncoder();
 
   private static final SparkMaxConfig leftSparkMaxConfig = new SparkMaxConfig();
   private static final SparkMaxConfig rightSparkMaxConfig = new SparkMaxConfig();
@@ -68,40 +59,6 @@ public class Elevator extends SubsystemBase {
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
-
-    NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
-    NetworkTable datatable = networkInstance.getTable("elevatorConstants");
-    kGRAVITY_VOLTS =
-      datatable
-        .getDoubleTopic("GRAVITY_VOLTS")
-        .getEntry(ElevatorConstants.kGRAVITY_VOLTS);
-    kMAX_VOLTS =
-      datatable
-        .getDoubleTopic("MAX_VOLTS")
-        .getEntry(ElevatorConstants.kMAX_VOLTS);
-    kMAX_VOLT_CHANGE_PER_SECOND =
-      datatable
-        .getDoubleTopic("MAX_VOLT_CHANGE_PER_SECOND")
-        .getEntry(ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND);
-    kPROPORTIONAL_VOLTS =
-      datatable
-        .getDoubleTopic("PROPORTIONAL_VOLTS")
-        .getEntry(ElevatorConstants.kPROPORTIONAL_VOLTS);
-    kTOLERANCE =
-      datatable
-        .getDoubleTopic("TOLERANCE")
-        .getEntry(ElevatorConstants.kTOLERANCE);
-    kHEIGHTS =
-      datatable
-        .getDoubleArrayTopic("HEIGHTS")
-        .getEntry(ElevatorConstants.kHEIGHTS);
-
-    kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
-    kPROPORTIONAL_VOLTS.set(kPROPORTIONAL_VOLTS.get());
-    kMAX_VOLTS.set(kMAX_VOLTS.get());
-    kMAX_VOLT_CHANGE_PER_SECOND.set(kMAX_VOLT_CHANGE_PER_SECOND.get());
-    kTOLERANCE.set(kTOLERANCE.get());
-    kHEIGHTS.set(kHEIGHTS.get());
   }
 
   public int getLevel() {
@@ -144,7 +101,21 @@ public class Elevator extends SubsystemBase {
         voltage = .2;
       }
     }
-    rightMotor.setVoltage(-voltage - kGRAVITY_VOLTS.getAsDouble());
+    rightMotor.setVoltage(-voltage - ElasticElevator.kGRAVITY_VOLTS.get());
+  }
+
+  public void setVoltageNoGravity(double voltage) {
+    if (getMinLimitSwitch()) {
+      if (voltage < -.3) {
+        voltage = -.3;
+      }
+    }
+    if (getMaxLimitSwitch()) {
+      if (voltage > .3) {
+        voltage = .3;
+      }
+    }
+    rightMotor.setVoltage(-voltage);
   }
 
   
@@ -156,11 +127,13 @@ public class Elevator extends SubsystemBase {
     }
     //System.out.println(getEncoder());
     //System.out.println(encoder.getVelocity());
+    /*
+    System.out.print("Bottom: ");
     System.out.print(getMinLimitSwitch());
-    System.out.print(" ");
+    System.out.print("   Top: ");
     System.out.print(getMaxLimitSwitch());
-    System.out.print(" ");
-    System.out.println(getEncoder());
+    System.out.print("   Encoder: ");
+    System.out.println(getEncoder());*/
 
   }
 }
