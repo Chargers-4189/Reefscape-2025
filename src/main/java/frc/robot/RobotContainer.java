@@ -9,18 +9,16 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.AlignReef;
-import frc.robot.commands.CancelAll;
-import frc.robot.commands.IntakeCoral;
-import frc.robot.commands.OuttakeCoral;
+import frc.robot.commands.ActuateIntakeDown;
+import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.IntakeCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Swerve;
-import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.SwerveSubsystem;
+import frc.util.Elastic;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -34,8 +32,7 @@ import frc.robot.subsystems.Vision;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final Swerve swerve = new Swerve();
-  private final Vision vision = new Vision();
+  public final SwerveSubsystem swerve = new SwerveSubsystem();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
@@ -50,6 +47,8 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the trigger bindings
+    Elastic.initialize();
+
     configureBindings();
   }
 
@@ -68,10 +67,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
-
-    intake.setDefaultCommand(new ActuateIntakeUp(intake));
 
     swerve.setDefaultCommand(
       swerve.driveCommand(
@@ -82,38 +78,28 @@ public class RobotContainer {
       )
     );
 
-    
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
+    driveController.leftTrigger(.8).onTrue(new ActuateIntakeDown(intake));
+    driveController.rightTrigger(.8).onTrue(new ActuateIntakeUp(intake));
 
-    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
-    //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
+    driveController
+      .back()
+      .onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController
+      .start()
+      .debounce(1)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            swerve.zeroGyro();
+          },
+          swerve
+        )
+      );
 
-    driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
-    driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
-    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
-    driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
-
-    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
-
-    //driveController.start().whileTrue(Commands.run(() -> elevator.zeroEncoder()));
-
-    /*
-    intake.setDefaultCommand(
-      Commands.run(
-        () -> {
-          intake.setPower(Math.pow(driveController.getLeftY(), 3));
-        },
-        intake
-      )
-    );*/
-
-    /*
-    swerveDrive.setDefaultCommand(
-      new DriveController(swerveDrive, driveController)
-    );*/
-
+    driveController.x().onTrue(new AutoPlaceCoral(elevator, coralEffector, 1));
+    driveController.y().onTrue(new AutoPlaceCoral(elevator, coralEffector, 2));
+    driveController.b().onTrue(new AutoPlaceCoral(elevator, coralEffector, 3));
+    driveController.a().onTrue(new AutoPlaceCoral(elevator, coralEffector, 4));
     /*
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);

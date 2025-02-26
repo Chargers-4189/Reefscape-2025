@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -82,17 +84,12 @@ public final class Constants {
       );
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-    public static final double kDriveSpeedWhileAligning = 0.020;
-    public static final double kAlignDistanceToleranceYaw = 0.069813;
-    public static final double kProportionalVoltage = 0.008;
 
-    //public static final double kAlignDistanceToleranceYawReef = .5;
-    public static final double kAlignSpeedX = 0.3;
-    public static final double kAlignSpeedY = 0.6;
-    public static final double kAlignAngle = 0.1;
-
-    public static final double kAlignAngleSpeed = .002;
-    public static final double kAlignAngleMaxSpeed = .1;
+    public static final Pose2d kINITIAL_POSE = new Pose2d(
+      2,
+      7,
+      new Rotation2d()
+    );
   }
 
   public static class CoralEffectorConstants {
@@ -123,31 +120,27 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { 0.15, 0.15, 7.9, 26.1, 
-      52.5 }; // Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5 }; // Intake, L1, L2, L3, L4
 
-    public static final double kELEVATOR_BASE_HEIGHT = .686;
-
-    public static final double kGRAVITY_VOLTS = .3;
+    public static final double kGRAVITY_VOLTS = 1;
     public static final double kPROPORTIONAL_VOLTS = .8;
-    public static final double kMAX_VOLTS = 8;
-    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 12;
+    public static final double kMAX_VOLTS = 12;
+    public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
-    public static final double kTOLERANCE = .5;
+    public static final double kTOLERANCE = 1;
   }
 
   public static final class IntakeConstants {
 
     public static final int kACTUATOR_MOTOR_ID = 41;
-    public static final int kDIO_PORT_TOP = 10;
-    public static final int kDIO_PORT_BOTTOM = 9;
+    public static final int kDIO_PORT_TOP = 2;
+    public static final int kDIO_PORT_BOTTOM = 3;
     public static final double kPOWER_SCALE = .1;
 
     public static final double kGRAVITY_VOLTS = .01;
 
     public static final double kUP_ENCODER = 22.5;
-    public static final double kMAX_POWER = .5;
-    public static final double kPROPORTIONAL_VOLTS = .01;
+    public static final double kPOWER = .1;
   }
 
   public static final class AutoConstants {
@@ -157,6 +150,25 @@ public final class Constants {
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
       Math.PI;
+
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 1;
+    // Constraint for the motion profiled robot angle controller
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+      kMaxAngularSpeedRadiansPerSecond,
+      kMaxAngularSpeedRadiansPerSecondSquared
+    );
+  }
+
+  public static class AlignmentConstants {
+
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+      Math.PI;
+
     public static final double kPXController = 1;
     public static final double kPYController = 1;
     public static final double kPThetaController = 1;

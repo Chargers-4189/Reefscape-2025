@@ -60,7 +60,12 @@ public class CoralEffector extends SubsystemBase {
     }
     System.out.println(inMeasurement.distance_mm);
     */
-    return (inMeasurement.distance_mm < CoralEffectorConstants.kMEASURE_THRESHOLD);
+    try {
+      return (inMeasurement.distance_mm < CoralEffectorConstants.kMEASURE_THRESHOLD);
+
+    } catch (Exception e) {
+      return false;
+    }
   }
   /*
   public boolean getOuttakeSensor() {
