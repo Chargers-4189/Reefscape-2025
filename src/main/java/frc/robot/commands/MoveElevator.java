@@ -4,20 +4,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
-import edu.wpi.first.wpilibj.Timer;
-
 import frc.util.Elastic.ElasticElevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
-  
+
   private final Elevator elevator;
   private double goal;
   private double startTime;
   private boolean up;
-
 
   /**
    * Creates a new moveElevator command.
@@ -25,7 +23,6 @@ public class MoveElevator extends Command {
    * @param level The level to move the elevator to. 0 moves to the intake.
    */
   public MoveElevator(Elevator elevator, int level) {
-
     this.elevator = elevator;
     this.goal = ElasticElevator.kHEIGHTS.get()[level];
     elevator.setLevel(level);
@@ -40,14 +37,19 @@ public class MoveElevator extends Command {
     System.out.println("Running!");
     this.startTime = Timer.getFPGATimestamp();
     this.up = elevator.getEncoder() < goal;
-  };
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    var proportionalVoltage = Math.abs(goal - elevator.getEncoder()) * ElasticElevator.kPROPORTIONAL_VOLTS.get();
-    var maxVoltage = Math.min(ElasticElevator.kMAX_VOLTS.get(), (Timer.getFPGATimestamp() - startTime) * ElasticElevator.kMAX_VOLT_CHANGE_PER_SECOND.get());
+    var proportionalVoltage =
+      Math.abs(goal - elevator.getEncoder()) *
+      ElasticElevator.kPROPORTIONAL_VOLTS.get();
+    var maxVoltage = Math.min(
+      ElasticElevator.kMAX_VOLTS.get(),
+      (Timer.getFPGATimestamp() - startTime) *
+      ElasticElevator.kMAX_VOLT_CHANGE_PER_SECOND.get()
+    );
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
     } else {
@@ -59,7 +61,6 @@ public class MoveElevator extends Command {
   @Override
   public void end(boolean interrupted) {
     elevator.setVoltage(0);
-    
     //System.out.print(goal);
   }
 

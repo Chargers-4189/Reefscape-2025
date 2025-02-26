@@ -4,14 +4,16 @@
 
 package frc.robot;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
-
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.geometry.Translation3d;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -83,10 +85,20 @@ public final class Constants {
         kRobotWeight *
         (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2))
       );
+    public static final double kMOI =
+      (
+        (1.0 / 12.0) *
+        kRobotWeight *
+        (Math.pow(kWheelBase, 2) + Math.pow(kTrackWidth, 2))
+      );
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-    
-    public static final Pose2d kINITIAL_POSE = new Pose2d(2, 7, new Rotation2d());
+
+    public static final Pose2d kINITIAL_POSE = new Pose2d(
+      2,
+      7,
+      new Rotation2d()
+    );
   }
 
   public static class CoralEffectorConstants {
@@ -145,7 +157,28 @@ public final class Constants {
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
-    public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+      Math.PI;
+
+    public static final double kPXController = 1;
+    public static final double kPYController = 1;
+    public static final double kPThetaController = 1;
+    // Constraint for the motion profiled robot angle controller
+    public static final TrapezoidProfile.Constraints kThetaControllerConstraints = new TrapezoidProfile.Constraints(
+      kMaxAngularSpeedRadiansPerSecond,
+      kMaxAngularSpeedRadiansPerSecondSquared
+    );
+  }
+
+  public static class AlignmentConstants {
+
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
+  }
+}
+    public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
+    public static final double kMaxAngularSpeedRadiansPerSecondSquared =
+      Math.PI;
 
     public static final double kPXController = 1;
     public static final double kPYController = 1;

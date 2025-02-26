@@ -9,17 +9,17 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.ActuateIntakeDown;
+import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.AutoPlaceCoral;
+import frc.robot.commands.CancelAll;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.OuttakeCoral;
-import frc.robot.commands.AutoPlaceCoral;
-import frc.robot.commands.CancelAll;
-import frc.robot.commands.ActuateIntakeDown;
-import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
 
@@ -35,8 +35,7 @@ import frc.util.Elastic;
 public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
-  private final Swerve swerve = new Swerve();
-  private final Vision vision = new Vision(false);
+  public final SwerveSubsystem swerve = new SwerveSubsystem();
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
@@ -52,7 +51,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     Elastic.initialize();
-    
+
     configureBindings();
   }
 
@@ -71,7 +70,6 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
     swerve.setDefaultCommand(
@@ -86,15 +84,33 @@ public class RobotContainer {
     driveController.leftTrigger(.8).onTrue(new ActuateIntakeDown(intake));
     driveController.rightTrigger(.8).onTrue(new ActuateIntakeUp(intake));
 
-    
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-    driveController.start().debounce(1).onTrue(Commands.runOnce(() -> {swerve.resetGyro();}, swerve));
+    driveController
+      .back()
+      .onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    driveController
+      .start()
+      .debounce(1)
+      .onTrue(
+        Commands.runOnce(
+          () -> {
+            swerve.resetGyro();
+          },
+          swerve
+        )
+      );
 
-    driveController.x().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
-    driveController.y().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
-    driveController.b().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 3));
-    driveController.a().onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
-
+    driveController
+      .x()
+      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
+    driveController
+      .y()
+      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
+    driveController
+      .b()
+      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 3));
+    driveController
+      .a()
+      .onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
     /*
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
