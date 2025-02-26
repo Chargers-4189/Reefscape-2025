@@ -36,8 +36,8 @@ public final class Constants {
 
     public static final Transform3d flCamPose = new Transform3d(
       new Translation3d(
-        Units.inchesToMeters(6.25),
         Units.inchesToMeters(15.25),
+        Units.inchesToMeters(6.25),
         Units.inchesToMeters(9)
       ),
       new Rotation3d(0, Math.toRadians(0), 0)
@@ -45,8 +45,8 @@ public final class Constants {
 
     public static final Transform3d frCamPose = new Transform3d(
       new Translation3d(
+        Units.inchesToMeters(15.25),
         Units.inchesToMeters(-6.25),
-        Units.inchesToMeters(-15.25),
         Units.inchesToMeters(9)
       ),
       new Rotation3d(0, Math.toRadians(0), 0)
