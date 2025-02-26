@@ -78,9 +78,50 @@ public class RobotContainer {
       )
     );
 
-    driveController.leftTrigger(.8).onTrue(new ActuateIntakeDown(intake));
-    driveController.rightTrigger(.8).onTrue(new ActuateIntakeUp(intake));
+    driveController.leftTrigger(.8).and(!effectorForwardTrigger.getAsBoolean()).onTrue(new ActuateIntakeDown(intake));
+    driveController.rightTrigger(.8).and(!effectorForwardTrigger.getAsBoolean()).onTrue(new ActuateIntakeUp(intake));
 
+<<<<<<< HEAD
+    //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
+    //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
+
+    driveController.x().and(!elevatorControlTriggerUp.getAsBoolean() && !elevatorControlTriggerDown.getAsBoolean()).onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 1));
+    driveController.y().and(!elevatorControlTriggerUp.getAsBoolean() && !elevatorControlTriggerDown.getAsBoolean()).onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 2));
+    driveController.b().and(!elevatorControlTriggerUp.getAsBoolean() && !elevatorControlTriggerDown.getAsBoolean()).onTrue(new AutoPlaceCoral(vision, elevator,coralEffector, 3));
+    driveController.a().and(!elevatorControlTriggerUp.getAsBoolean() && !elevatorControlTriggerDown.getAsBoolean()).onTrue(new AutoPlaceCoral(vision, elevator, coralEffector, 4));
+
+    driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+
+    final Trigger elevatorControlTriggerUp = new Trigger(()->(secondaryController.getLeftY() > Constants.OperatorConstants.kSecondaryDeadband)); 
+    final Trigger elevatorControlTriggerDown = new Trigger(()->(secondaryController.getLeftY() < -Constants.OperatorConstants.kSecondaryDeadband)); 
+
+    final Trigger effectorForwardTrigger = new Trigger(() ->(secondaryController.getLeftTriggerAxis() < Constants.OperatorConstants.kSecondaryDeadband));
+    final Trigger effectorBackTrigger = new Trigger(() ->(secondaryController.getRightTriggerAxis() < Constants.OperatorConstants.kSecondaryDeadband));
+  
+    final Trigger chuteUpTrigger = new Trigger(() ->(secondaryController.getRightY() > Constants.OperatorConstants.kSecondaryDeadband));
+    final Trigger chuteDownTrigger = new Trigger(() ->(secondaryController.getRightY() < -Constants.OperatorConstants.kSecondaryDeadband));
+
+    elevatorControlTriggerUp.onTrue(Commands.run(()->{
+      elevator.setVoltage(secondaryController.getLeftY() * 4);
+    },elevator));
+    elevatorControlTriggerDown.onTrue(Commands.run(()->{
+      elevator.setVoltage(secondaryController.getLeftY() * 4);
+    },elevator));
+    
+    effectorBackTrigger.onTrue(Commands.run(()-> {
+      coralEffector.setPower(secondaryController.getRightTriggerAxis());
+    },coralEffector));
+    effectorForwardTrigger.onTrue(Commands.run(()->{
+      coralEffector.setPower(secondaryController.getLeftTriggerAxis());
+    },coralEffector));
+
+    chuteUpTrigger.onTrue(Commands.run(()->{
+      intake.setPower(secondaryController.getRightY());
+    },intake));
+    chuteDownTrigger.onTrue(Commands.run(() -> {
+      intake.setPower(secondaryController.getRightY());
+    },intake));
     driveController
       .back()
       .onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
@@ -96,10 +137,6 @@ public class RobotContainer {
         )
       );
 
-    driveController.x().onTrue(new AutoPlaceCoral(elevator, coralEffector, 1));
-    driveController.y().onTrue(new AutoPlaceCoral(elevator, coralEffector, 2));
-    driveController.b().onTrue(new AutoPlaceCoral(elevator, coralEffector, 3));
-    driveController.a().onTrue(new AutoPlaceCoral(elevator, coralEffector, 4));
     /*
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.setVoltage(-Math.pow(driveController.getRightY(), 3) * 1.5);
