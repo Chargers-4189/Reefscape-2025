@@ -64,9 +64,15 @@ public class Elastic {
         public static StructPublisher<Pose2d> kROBOT_POSITION =
             swerveTable
                 .getStructTopic("ROBOT_POSITION", Pose2d.struct).publish();
+        public static StructPublisher<Pose2d> kGOAL_POSITION =
+            swerveTable
+                .getStructTopic("GOAL_POSITION", Pose2d.struct).publish();
         
         public static void setrobotPose(Pose2d robotPose) {
             kROBOT_POSITION.set(robotPose);
+        }
+        public static void setGoalPose(Pose2d goalPose) {
+            kGOAL_POSITION.set(goalPose);
         }
     }
 

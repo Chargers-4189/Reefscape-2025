@@ -18,6 +18,8 @@ import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -34,6 +36,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Vision.Cameras;
 import frc.util.Elastic.ElasticSwerve;
@@ -57,6 +60,9 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
+
+
   private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
    /**
    * Swerve drive object.
@@ -122,10 +128,53 @@ public class SwerveSubsystem extends SubsystemBase {
       vision.updatePoseEstimation(swerveDrive);
     }
     ElasticSwerve.setrobotPose(getPose());
+    System.out.println(getPose());
+    goToReef(true);
   }
 
   @Override
   public void simulationPeriodic() {}
+
+  public Command goToReef(boolean right) {
+    Pose2d[] tags = {
+      aprilTagFieldLayout.getTagPose(6).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(7).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(8).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(9).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(10).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(11).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(17).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(18).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(19).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(20).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(21).get().toPose2d(),
+      aprilTagFieldLayout.getTagPose(22).get().toPose2d(),
+    };
+    Pose2d targetAprilTagPose = getPose().nearest(Arrays.asList(tags));
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    Pose2d targetPose = new Pose2d().transformBy(
+      targetAprilTagPose.minus(
+        new Pose2d(
+          new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+          new Rotation2d()
+        )
+      )
+    );
+
+    ElasticSwerve.setGoalPose(targetPose);
+
+    return (
+        AutoBuilder.pathfindToPose(
+          targetPose,
+          AlignmentConstants.kPATH_CONSTRAINTS
+        )
+      );
+  }
 
   /**
    * Setup AutoBuilder for PathPlanner.
@@ -292,7 +341,7 @@ public class SwerveSubsystem extends SubsystemBase {
     );
   }
 
-  /**
+  /**pw
    * Drive with 254's Setpoint generator; port written by PathPlanner.
    *
    * @param fieldRelativeSpeeds Field-Relative {@link ChassisSpeeds}

@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.path.PathConstraints;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -177,5 +179,9 @@ public final class Constants {
       kMaxAngularSpeedRadiansPerSecond,
       kMaxAngularSpeedRadiansPerSecondSquared
     );
+
+    public static final PathConstraints kPATH_CONSTRAINTS = new PathConstraints(
+      3.0, 4.0,
+      Units.degreesToRadians(540), Units.degreesToRadians(720));
   }
 }
