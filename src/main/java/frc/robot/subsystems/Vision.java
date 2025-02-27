@@ -96,14 +96,6 @@ public class Vision extends SubsystemBase {
     return cameras[1].getEstimatedTagPose();
   }
 
-  public Double getBackTagYaw() {
-    if (cameras[2].getEstimatedTagYaw() != null) {
-      return cameras[2].getEstimatedTagYaw();
-    } else {
-      return null;
-    }
-  }
-
   public Pose2d getEstimatedRobotPosition() {
     if (avgEstimateAvailable) {
       return avgEstimatedRobotPosition;
@@ -142,6 +134,11 @@ public class Vision extends SubsystemBase {
     }
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
-    //System.out.println(cameras[1].getEstimatedTagPose().getTranslation());
+    try {
+      System.out.println(cameras[0].getEstimatedTagPose().getTranslation() + " --- " + cameras[1].getEstimatedTagPose().getTranslation());
+
+    } catch (Exception e) {
+      // TODO: handle exception
+    }
   }
 }

@@ -8,7 +8,9 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
@@ -57,7 +59,7 @@ public class AlignReef extends Command {
                 tagPose.getX(),
                 tagPose.getY(),
                 new Rotation2d(
-                  tagPose.getRotation().getX(),
+                  tagPose.getRotation().getX() - AlignmentConstants.kDIST_FROM_REEF,
                   tagPose.getRotation().getY()
                 )
               )
@@ -74,7 +76,7 @@ public class AlignReef extends Command {
                 tagPose.getX(),
                 tagPose.getY(),
                 new Rotation2d(
-                  tagPose.getRotation().getX(),
+                  tagPose.getRotation().getX() - AlignmentConstants.kDIST_FROM_REEF,
                   tagPose.getRotation().getY()
                 )
               )
@@ -89,10 +91,11 @@ public class AlignReef extends Command {
     }
     System.out.println(toTravel);
     if (toTravel != null) {
-      swerve.driveWithAngleSetPoint(
+      swerve.drive(
         -toTravel.getX() * SwerveConstants.kAlignSpeedX,
         -toTravel.getY() * SwerveConstants.kAlignSpeedY,
-        0
+        0.0,
+        false
       );
     }
     /*
@@ -114,6 +117,15 @@ public class AlignReef extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (alignRight) {
+      if (vision.getFLTagPose() != null) {
+        return vision.getFLTagPose().getX() <= 0.15 && vision.getFLTagPose().getY() <= 0.05;
+      }
+    } else {
+      if (vision.getFRTagPose() != null) {
+        return vision.getFRTagPose().getX() <= 0.15 && vision.getFRTagPose().getY() <= 0.05;
+      }
+    }
+    return toTravel.getX() <= 0.15 && toTravel.getY() <= 0.05;
   }
 }

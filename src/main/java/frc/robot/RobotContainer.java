@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AlignReef;
-import frc.robot.commands.AutoAlignPose;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
@@ -87,10 +86,10 @@ public class RobotContainer {
 
     driveController
       .leftBumper()
-      .onTrue(new AlignReef(swerve, vision, false).withTimeout(6));
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     driveController
       .rightBumper()
-      .onTrue(new AlignReef(swerve, vision, true).withTimeout(6));
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     driveController
       .back()
