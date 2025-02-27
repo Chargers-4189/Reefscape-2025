@@ -9,11 +9,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AutoAlignPose extends Command {
+public class AlignReef extends Command {
 
   private SwerveSubsystem swerve;
   private Vision vision;
@@ -24,11 +25,7 @@ public class AutoAlignPose extends Command {
   private Pose2d toTravel;
 
   /** Creates a new AutoAlignPose. */
-  public AutoAlignPose(
-    SwerveSubsystem swerve,
-    Vision vision,
-    boolean alignRight
-  ) {
+  public AlignReef(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;
@@ -82,6 +79,7 @@ public class AutoAlignPose extends Command {
                 )
               )
             );
+        lastPos = swerve.getPose();
       }
     }
     if (lastPos != null) {
@@ -89,15 +87,29 @@ public class AutoAlignPose extends Command {
     } else {
       toTravel = tagGoal;
     }
-
+    System.out.println(toTravel);
     if (toTravel != null) {
-      swerve.drive(-toTravel.getX() * .3, -toTravel.getY() * .6, 0.0, false);
+      swerve.driveWithAngleSetPoint(
+        -toTravel.getX() * SwerveConstants.kAlignSpeedX,
+        -toTravel.getY() * SwerveConstants.kAlignSpeedY,
+        0
+      );
     }
+    /*
+    if (vision.getFLTagPose() != null) {
+      tagPose3d = vision.getFLTagPose();
+      tagPose = new Pose2d(tagPose3d.getX(), tagPose3d.getY(), tagPose3d.getRotation().toRotation2d());
+      tagField = swerve.getPose().relativeTo(tagPose.rotateBy(swerve.getPose().getRotation()));
+      lastPos = swerve.getPose();
+    }*/
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    swerve.drive(0, 0, 0, false);
+  }
 
   // Returns true when the command should end.
   @Override

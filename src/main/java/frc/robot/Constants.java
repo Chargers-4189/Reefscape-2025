@@ -85,6 +85,13 @@ public final class Constants {
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
 
+    public static final double kAlignSpeedX = 0.3;
+    public static final double kAlignSpeedY = 0.6;
+    public static final double kAlignAngle = 0.1;
+
+    public static final double kAlignAngleSpeed = .002;
+    public static final double kAlignAngleMaxSpeed = .1;
+
     public static final Pose2d kINITIAL_POSE = new Pose2d(
       2,
       7,

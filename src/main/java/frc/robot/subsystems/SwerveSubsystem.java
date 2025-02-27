@@ -104,6 +104,17 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.zeroGyro();
   }
 
+  public void driveWithAngleSetPoint(double x, double y, double setpoint) {
+    double rotationPower =
+      (swerveDrive.getOdometryHeading().getDegrees() - setpoint) *
+      SwerveConstants.kAlignAngleSpeed;
+    rotationPower =
+      Math.min(rotationPower, SwerveConstants.kAlignAngleMaxSpeed);
+    rotationPower =
+      Math.max(rotationPower, -SwerveConstants.kAlignAngleMaxSpeed);
+    this.drive(x, y, rotationPower, false);
+  }
+
   /**
    * Command to drive the robot using translative values and heading as a
    * setpoint.
