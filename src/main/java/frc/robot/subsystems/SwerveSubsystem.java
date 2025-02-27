@@ -15,6 +15,9 @@ import com.pathplanner.lib.path.PathPlannerPath;
 import com.pathplanner.lib.util.DriveFeedforwards;
 import com.pathplanner.lib.util.swerve.SwerveSetpoint;
 import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -33,6 +36,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.Vision.Cameras;
+import frc.util.Elastic.ElasticSwerve;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -52,8 +57,8 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-
-  /**
+  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+   /**
    * Swerve drive object.
    */
   File swerveJsonDirectory = new File(
@@ -116,6 +121,7 @@ public class SwerveSubsystem extends SubsystemBase {
       swerveDrive.updateOdometry();
       vision.updatePoseEstimation(swerveDrive);
     }
+    ElasticSwerve.setrobotPose(getPose());
   }
 
   @Override
@@ -578,7 +584,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * Resets the gyro angle to zero and resets odometry to the same position, but facing toward 0.
    */
   public void zeroGyro() {
-    swerveDrive.zeroGyro();
+    gyro.reset();
   }
 
   /**
