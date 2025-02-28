@@ -95,11 +95,6 @@ public class Elastic {
             kPOWER.set(kPOWER.get());
         }
     }
-    public static final class ElasticEffector {
-        static NetworkTable effectorTable = networkInstance.getTable("effectorTable");
-        public static DoubleEntry kPOWER = 
-        effectorTable.getDoubleTopic("POWER").getEntry(.1);
-    }
 
     public static final class ElasticEffector {
         static NetworkTable effectorTable = networkInstance.getTable("effectorConstants");
@@ -112,13 +107,16 @@ public class Elastic {
         
         public static IntegerEntry kEJECT_ALGAE_MILISECONDS =
         effectorTable.getIntegerTopic("EJECT_ALGAE_MILISECONDS").getEntry(Constants.CoralEffectorConstants.kEJECT_ALGAE_MILISECONDS);
+
+        public static DoubleEntry kCORAL_POWER = 
+        effectorTable.getDoubleTopic("CORAL_POWER").getEntry(.1);
         
 
         public static void initialize() {
             kALGAE_POWER.set(kALGAE_POWER.get());
             kMILISECONDS_EXTRA_PULLBACK.set(kMILISECONDS_EXTRA_PULLBACK.get());
             kEJECT_ALGAE_MILISECONDS.set(kEJECT_ALGAE_MILISECONDS.get());
-
+            kCORAL_POWER.set(kCORAL_POWER.get());
         }
     }
 
