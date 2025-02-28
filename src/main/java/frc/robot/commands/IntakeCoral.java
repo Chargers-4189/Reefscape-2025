@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
+import frc.util.Elastic.ElasticEffector;
 import frc.util.Stopwatch;
 
 
@@ -34,22 +35,10 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*
-    if (!coralEffector.getIntakeSensor() && !coralPassed && !coralEntered) {
-      coralEffector.setPower(0.2);
-    } else if (coralEffector.getIntakeSensor() && !coralPassed) {
-      coralEffector.setPower(0.1);
-      coralEntered = true;
-    } else if (!coralEffector.getIntakeSensor()) {
-      coralEffector.setPower(-0.05);
-      coralPassed = true;
-    } else if (coralEffector.getIntakeSensor()) {
-      coralEffector.stop();
-      coralSecured = true;
-    }*/
-    /*
+
     switch(coralEffector.state) {
       case "empty":
+        coralEffector.stop();
         if (coralEffector.getIntakeSensor()) {
           coralEffector.state = "pull_in";
         }
@@ -62,17 +51,10 @@ public class IntakeCoral extends Command {
         return;
       case "back_up_1": 
         coralEffector.setPower(-0.05);
-        if (coralEffector.getIntakeSensor()) {
-          stopwatch.start(160);
-          coralEffector.state = "back_up_2";
-        }
-        if (coralEffector.getOuttakeSensor()) {
+        if (!coralEffector.getOuttakeSensor()) {
           coralEffector.state = "empty";
         }
-        return;
-      case "back_up_2":
-        coralEffector.setPower(-0.05);
-        if (stopwatch.hasTriggered()) {
+        if (coralEffector.getIntakeSensor()) {
           coralEffector.state = "done";
         }
         return;
@@ -84,11 +66,6 @@ public class IntakeCoral extends Command {
         return;
       default:
         System.out.println("ERROR: Invalid Coral Intake State");
-    }*/
-    if (coralEffector.getIntakeSensor()) {
-      coralEffector.setPower(.05);
-    } else {
-      coralEffector.stop();
     }
 
   }

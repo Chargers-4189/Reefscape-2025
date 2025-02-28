@@ -7,11 +7,14 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.util.Elastic.ElasticIntake;
+import frc.util.Stopwatch;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class ActuateIntakeUp extends Command {
 
   private final Intake intake;
+  private final Stopwatch stopwatch = new Stopwatch();
+
 
   /** Creates a new ActuateIntakeUp. */
   public ActuateIntakeUp(Intake intake) {
@@ -22,7 +25,9 @@ public class ActuateIntakeUp extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stopwatch.start(2500);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -39,6 +44,6 @@ public class ActuateIntakeUp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return intake.getTopLimitSwitch();
+    return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
   }
 }

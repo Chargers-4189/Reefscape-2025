@@ -7,11 +7,9 @@ package frc.util;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
-import edu.wpi.first.networktables.GenericPublisher;
-import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.IntegerEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.NetworkTableValue;
 import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.Constants;
 
@@ -47,14 +45,24 @@ public class Elastic {
         elevatorTable
             .getDoubleArrayTopic("HEIGHTS")
             .getEntry(Constants.ElevatorConstants.kHEIGHTS);
+        public static DoubleEntry kTEST_HEIGHT =
+        elevatorTable
+            .getDoubleTopic("TEST_HEIGHT")
+            .getEntry(0);
+        public static IntegerEntry kDOWN_TIMEOUT =
+        elevatorTable
+            .getIntegerTopic("DOWN_TIMEOUT")
+            .getEntry(Constants.ElevatorConstants.kDOWN_TIMEOUT);
 
-        public static void initializeElevator() {
+        public static void initialize() {
             kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
             kMAX_VOLTS.set(kMAX_VOLTS.get());
             kMAX_VOLT_CHANGE_PER_SECOND.set(kMAX_VOLT_CHANGE_PER_SECOND.get());
             kPROPORTIONAL_VOLTS.set(kPROPORTIONAL_VOLTS.get());
             kTOLERANCE.set(kTOLERANCE.get());
             kHEIGHTS.set(kHEIGHTS.get());
+            kTEST_HEIGHT.set(kTEST_HEIGHT.get());
+            kDOWN_TIMEOUT.set(kDOWN_TIMEOUT.get());
         }
     }
     public static final class ElasticSwerve {
@@ -73,6 +81,8 @@ public class Elastic {
         public static void setGoalPose(Pose2d goalPose) {
             kGOAL_POSITION.set(goalPose);
         }
+
+        public static void initialize() {}
     }
 
     public static final class ElasticIntake {
@@ -80,19 +90,61 @@ public class Elastic {
 
         public static DoubleEntry kPOWER =
         intakeTable.getDoubleTopic("INTAKE_POWER").getEntry(Constants.IntakeConstants.kPOWER);
-        
-        public static void initializeIntake() {
+
+        public static void initialize() {
             kPOWER.set(kPOWER.get());
         }
     }
+
     public static final class ElasticEffector {
-        static NetworkTable effectorTable = networkInstance.getTable("effectorTable");
-        public static DoubleEntry kPOWER = 
-        effectorTable.getDoubleTopic("POWER").getEntry(.1);
+        static NetworkTable effectorTable = networkInstance.getTable("effectorConstants");
+
+        public static DoubleEntry kALGAE_POWER =
+        effectorTable.getDoubleTopic("ALGAE_POWER").getEntry(Constants.CoralEffectorConstants.kALGAE_POWER);
+
+        public static IntegerEntry kMILISECONDS_EXTRA_PULLBACK =
+        effectorTable.getIntegerTopic("MILISECONDS_EXTRA_PULLBACK").getEntry(Constants.CoralEffectorConstants.kMILISECONDS_EXTRA_PULLBACK);
+        
+        public static IntegerEntry kEJECT_ALGAE_MILISECONDS =
+        effectorTable.getIntegerTopic("EJECT_ALGAE_MILISECONDS").getEntry(Constants.CoralEffectorConstants.kEJECT_ALGAE_MILISECONDS);
+
+        public static DoubleEntry kCORAL_POWER = 
+        effectorTable.getDoubleTopic("CORAL_POWER").getEntry(.1);
+        
+
+        public static void initialize() {
+            kALGAE_POWER.set(kALGAE_POWER.get());
+            kMILISECONDS_EXTRA_PULLBACK.set(kMILISECONDS_EXTRA_PULLBACK.get());
+            kEJECT_ALGAE_MILISECONDS.set(kEJECT_ALGAE_MILISECONDS.get());
+            kCORAL_POWER.set(kCORAL_POWER.get());
+        }
+    }
+
+    public static final class ElasticHumanDrive {
+        static NetworkTable humanDriveTable = networkInstance.getTable("humanDriveConstants");
+
+        public static DoubleEntry kDRIVE_POWER =
+        humanDriveTable.getDoubleTopic("DRIVE_POWER").getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
+        public static DoubleEntry kROTATIONAL_POWER =
+        humanDriveTable.getDoubleTopic("ROTATIONAL_POWER").getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
+        public static DoubleEntry kDRIVE_EXPONENT =
+        humanDriveTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
+        public static DoubleEntry kROTATIONAL_EXPONENT =
+        humanDriveTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+
+        public static void initialize() {
+            kDRIVE_POWER.set(kDRIVE_POWER.get());
+            kROTATIONAL_POWER.set(kROTATIONAL_POWER.get());
+            kDRIVE_EXPONENT.set(kDRIVE_EXPONENT.get());
+            kROTATIONAL_EXPONENT.set(kDRIVE_EXPONENT.get());
+        }
     }
 
     public static void initialize() {
-        ElasticElevator.initializeElevator();
-        ElasticIntake.initializeIntake();
+        ElasticElevator.initialize();
+        ElasticIntake.initialize();
+        ElasticSwerve.initialize();
+        ElasticEffector.initialize();
+        ElasticHumanDrive.initialize();
     }
 }
