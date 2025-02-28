@@ -30,21 +30,22 @@ public class TeleopDrive extends Command {
   public void execute() {
     if (driveController.getRightTriggerAxis() > .5) {
       swerve.drive(
-        Math.pow(-driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(-driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(-driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get()),
+        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
+        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
+        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get()),
         true
       );
-    }
-    swerve.drive(
-        Math.pow(-driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
+    } else {
+      swerve.drive(
+        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
         * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(-driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
+        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
         * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(-driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
+        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
         * ElasticHumanDrive.kROTATIONAL_POWER.get(),
         true
       );
+    }
   }
 
   // Called once the command ends or is interrupted.

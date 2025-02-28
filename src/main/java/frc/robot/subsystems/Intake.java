@@ -29,6 +29,16 @@ public class Intake extends SubsystemBase {
   );
   public Intake() {}
     public void setPower(double power) {
+      if (getBottomLimitSwitch()) {
+        if (power < 0) {
+          power = 0;
+        }
+      }
+      if (getTopLimitSwitch()) {
+        if (power > .05) {
+          power = .05;
+        }
+      }
       actuatorMotor.set(power);
     }
   
