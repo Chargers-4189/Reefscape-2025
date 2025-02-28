@@ -24,9 +24,9 @@ public class CoralEffector extends SubsystemBase {
 
   private AbsoluteEncoder encoder = mainMotor.getAbsoluteEncoder();
 
-  private final DigitalInput intakeSensor = new DigitalInput(0);
+  private final DigitalInput intakeSensor = new DigitalInput(6);
   //private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
-  private final DigitalInput outtakeSensor = new DigitalInput(0);
+  //private final DigitalInput outtakeSensor = new DigitalInput(6);
 
 
   public String state = "empty";
@@ -49,7 +49,7 @@ public class CoralEffector extends SubsystemBase {
   }
   
   public boolean getOuttakeSensor() {
-    return outtakeSensor.get();
+    return false;//outtakeSensor.get();
   }
 
   public double getAbsoluteEncoderValue(){
