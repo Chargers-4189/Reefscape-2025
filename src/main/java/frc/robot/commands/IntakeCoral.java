@@ -47,7 +47,7 @@ public class IntakeCoral extends Command {
       coralEffector.stop();
       coralSecured = true;
     }*/
-    switch(coralEffector.state) {
+    /*switch(coralEffector.state) {
       case "empty":
         if (coralEffector.getIntakeSensor()) {
           coralEffector.state = "pull_in";
@@ -80,7 +80,10 @@ public class IntakeCoral extends Command {
         return;
       default:
         System.out.println("ERROR: Invalid Coral Intake State");
-    }
+    } **/
+   if(coralEffector.getIntakeSensor() == true){
+    coralEffector.setPower(-0.2);
+   }
 
   }
 
@@ -93,6 +96,6 @@ public class IntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return coralEffector.getOuttakeSensor();
   }
 }
