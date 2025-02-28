@@ -202,8 +202,8 @@ public final class Constants {
 
   }
   public static class HumanDriveConstants {
-    public static final double kDRIVE_POWER = .6;
-    public static final double kROTATIONAL_POWER = 1;
+    public static final double kDRIVE_POWER = .8;
+    public static final double kROTATIONAL_POWER = .8;
     public static final double kDRIVE_EXPONENT = 3;
     public static final double kROTATIONAL_EXPONENT = 1;
   }

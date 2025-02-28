@@ -38,32 +38,23 @@ public class IntakeCoral extends Command {
 
     switch(coralEffector.state) {
       case "empty":
+        coralEffector.stop();
         if (coralEffector.getIntakeSensor()) {
           coralEffector.state = "pull_in";
         }
         return;
       case "pull_in":
         coralEffector.setPower(0.1);
-        if (!coralEffector.getIntakeSensor() && coralEffector.getOuttakeSensor()) {
+        if (!coralEffector.getIntakeSensor()) {
           coralEffector.state = "back_up_1";
         }
         return;
       case "back_up_1": 
         coralEffector.setPower(-0.05);
         if (!coralEffector.getOuttakeSensor()) {
-          coralEffector.state = "pull_in";
+          coralEffector.state = "empty";
         }
         if (coralEffector.getIntakeSensor()) {
-          stopwatch.start((int) ElasticEffector.kMILISECONDS_EXTRA_PULLBACK.get());
-          coralEffector.state = "back_up_2";
-        }
-        return;
-      case "back_up_2":
-        if (!coralEffector.getOuttakeSensor()) {
-          coralEffector.state = "pull_in";
-        }
-        coralEffector.setPower(-0.05);
-        if (stopwatch.hasTriggered()) {
           coralEffector.state = "done";
         }
         return;
