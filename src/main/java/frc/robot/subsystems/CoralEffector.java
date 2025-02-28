@@ -8,7 +8,6 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.AnalogInput;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -35,8 +34,7 @@ public class CoralEffector extends SubsystemBase {
   public String state = "empty";
 
   /** Creates a new CoralEffector. */
-  public CoralEffector() {
-  }
+  public CoralEffector() {}
 
   public void setPower(double mainMotorPower) {
     mainMotor.set(-mainMotorPower);
@@ -45,17 +43,16 @@ public class CoralEffector extends SubsystemBase {
   public void stop() {
     mainMotor.set(0);
   }
-  
 
   public boolean getIntakeSensor() {
     return intakeSensor.get();
   }
-  
+
   public boolean getOuttakeSensor() {
     return outtakeSensor.getVoltage() < 2;
   }
 
-  public double getAbsoluteEncoderValue(){
+  public double getAbsoluteEncoderValue() {
     return encoder.getPosition();
   }
 

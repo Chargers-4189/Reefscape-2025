@@ -87,6 +87,13 @@ public final class Constants {
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
 
+    public static final double kAlignSpeedX = 0.4;
+    public static final double kAlignSpeedY = 0.5;
+    public static final double kAlignAngle = 0.1;
+
+    public static final double kAlignAngleSpeed = .002;
+    public static final double kAlignAngleMaxSpeed = .1;
+
     public static final Pose2d kINITIAL_POSE = new Pose2d(
       2,
       7,
@@ -167,7 +174,7 @@ public final class Constants {
 
   public static class AlignmentConstants {
 
-    public static final double kDIST_FROM_REEF = Units.inchesToMeters(15.75);
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(0);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
