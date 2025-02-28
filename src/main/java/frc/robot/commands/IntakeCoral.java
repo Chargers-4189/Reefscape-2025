@@ -65,6 +65,9 @@ public class IntakeCoral extends Command {
           stopwatch.start(160);
           coralEffector.state = "back_up_2";
         }
+        if (coralEffector.getOuttakeSensor()) {
+          coralEffector.state = "empty";
+        }
         return;
       case "back_up_2":
         coralEffector.setPower(-0.05);

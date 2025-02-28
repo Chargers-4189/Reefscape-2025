@@ -11,8 +11,8 @@ import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
+//import au.grapplerobotics.ConfigurationFailedException;
+//import au.grapplerobotics.LaserCan;
 import frc.robot.Constants.CoralEffectorConstants;
 
 public class CoralEffector extends SubsystemBase {
