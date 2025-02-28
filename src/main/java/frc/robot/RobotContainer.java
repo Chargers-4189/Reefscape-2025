@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.EjectAlgae;
@@ -22,6 +23,7 @@ import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
 import frc.util.Elastic.ElasticHumanDrive;
 
@@ -41,6 +43,7 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
+  private final Vision vision = new Vision();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -108,6 +111,13 @@ public class RobotContainer {
 
     //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+
+    driveController
+      .leftBumper()
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+    driveController
+      .rightBumper()
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
     /*

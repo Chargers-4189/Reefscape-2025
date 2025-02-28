@@ -95,6 +95,11 @@ public class Elastic {
             kPOWER.set(kPOWER.get());
         }
     }
+    public static final class ElasticEffector {
+        static NetworkTable effectorTable = networkInstance.getTable("effectorTable");
+        public static DoubleEntry kPOWER = 
+        effectorTable.getDoubleTopic("POWER").getEntry(.1);
+    }
 
     public static final class ElasticEffector {
         static NetworkTable effectorTable = networkInstance.getTable("effectorConstants");
