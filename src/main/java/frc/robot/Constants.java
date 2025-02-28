@@ -170,7 +170,7 @@ public final class Constants {
 
   public static class AlignmentConstants {
 
-    public static final double kDIST_FROM_REEF = Units.inchesToMeters(36);
+    public static final double kDIST_FROM_REEF = Units.inchesToMeters(0);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =

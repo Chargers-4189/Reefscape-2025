@@ -99,7 +99,7 @@ public class AprilTagCamera {
       ) {
         estimateTagPose = getClosestReefTag(result);
         //estimateTagPose = result.getBestTarget().getBestCameraToTarget();
-        estimatedTagYaw = result.getBestTarget().getYaw();
+       // estimatedTagYaw = result.getBestTarget().getYaw();
         var estimatedResult = poseEstimator.update(result);
         if (estimatedResult.isPresent()) {
           return estimatedResult.get();
@@ -113,13 +113,16 @@ public class AprilTagCamera {
 
   private Transform3d getClosestReefTag(PhotonPipelineResult result) {
     Transform3d closestTag = null;
-    int tagID = 0;
+    int tagID = -1;
+    int targetTagID = -1;
     double minDistance = 100.0;
 
     result.targets.removeIf(tag -> {
-      double maxDistance = 3.0;
-      Transform3d transform = tag.getBestCameraToTarget();
       int tagNum = tag.fiducialId;
+      double maxDistance = 6.0;
+      Transform3d transform = tag.getBestCameraToTarget();
+
+
       return (
         transform.getX() > maxDistance || transform.getY() > maxDistance && ((tagNum >= 17 && tagNum <= 22) || (tagNum >= 6 && tagNum <= 11))
       );
@@ -134,10 +137,11 @@ public class AprilTagCamera {
         if (distance < minDistance) {
           closestTag = transform;
           minDistance = distance;
+          targetTagID = tagID;
         }
       }
     }
-    System.out.println(tagID);
+    System.out.println(targetTagID);
     return closestTag;
   }
 

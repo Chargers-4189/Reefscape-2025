@@ -56,10 +56,10 @@ public class AlignReef extends Command {
           new Pose2d()
             .transformBy(
               new Transform2d(
-                tagPose.getX(),
+                tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
                 tagPose.getY(),
                 new Rotation2d(
-                  tagPose.getRotation().getX() - AlignmentConstants.kDIST_FROM_REEF,
+                  tagPose.getRotation().getX(),
                   tagPose.getRotation().getY()
                 )
               )
@@ -73,10 +73,10 @@ public class AlignReef extends Command {
           new Pose2d()
             .transformBy(
               new Transform2d(
-                tagPose.getX(),
+                tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
                 tagPose.getY(),
                 new Rotation2d(
-                  tagPose.getRotation().getX() - AlignmentConstants.kDIST_FROM_REEF,
+                  tagPose.getRotation().getX(),
                   tagPose.getRotation().getY()
                 )
               )
@@ -92,8 +92,8 @@ public class AlignReef extends Command {
     System.out.println(toTravel);
     if (toTravel != null) {
       swerve.drive(
-        -toTravel.getX() * SwerveConstants.kAlignSpeedX,
-        -toTravel.getY() * SwerveConstants.kAlignSpeedY,
+        Math.min(Math.max(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -.3), .3),
+        Math.min(Math.max(-toTravel.getY() * SwerveConstants.kAlignSpeedY, -.5), .5),
         0.0,
         false
       );
