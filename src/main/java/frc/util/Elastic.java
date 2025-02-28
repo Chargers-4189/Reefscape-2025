@@ -114,6 +114,19 @@ public class Elastic {
         }
     }
 
+    public static final class HumanDriveConstants {
+        static NetworkTable humanDriveTable = networkInstance.getTable("humanDriveConstants");
+
+        public static DoubleEntry kDRIVE_POWER =
+        humanDriveTable.getDoubleTopic("DRIVE_POWER").getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
+        public static DoubleEntry kROTATIONAL_POWER =
+        humanDriveTable.getDoubleTopic("ROTATIONAL_POWER").getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
+        public static DoubleEntry kDRIVE_EXPONENT =
+        humanDriveTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
+        public static DoubleEntry kROTATIONAL_EXPONENT =
+        humanDriveTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+    }
+
     public static void initialize() {
         ElasticElevator.initialize();
         ElasticIntake.initialize();
