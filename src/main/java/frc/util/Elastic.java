@@ -4,10 +4,15 @@
 
 package frc.util;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
+import edu.wpi.first.networktables.GenericPublisher;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.NetworkTableValue;
+import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.Constants;
 
 /** Add your docs here. */
@@ -53,6 +58,23 @@ public class Elastic {
             kHEIGHTS.set(kHEIGHTS.get());
         }
     }
+    public static final class ElasticSwerve {
+        static NetworkTable swerveTable = networkInstance.getTable("swerveTable");
+
+        public static StructPublisher<Pose2d> kROBOT_POSITION =
+            swerveTable
+                .getStructTopic("ROBOT_POSITION", Pose2d.struct).publish();
+        public static StructPublisher<Pose2d> kGOAL_POSITION =
+            swerveTable
+                .getStructTopic("GOAL_POSITION", Pose2d.struct).publish();
+        
+        public static void setrobotPose(Pose2d robotPose) {
+            kROBOT_POSITION.set(robotPose);
+        }
+        public static void setGoalPose(Pose2d goalPose) {
+            kGOAL_POSITION.set(goalPose);
+        }
+    }
 
     public static final class ElasticIntake {
         public static DoubleEntry kPOWER =
@@ -62,8 +84,6 @@ public class Elastic {
             kPOWER.set(kPOWER.get());
         }
     }
-    
-    
 
     public static void initialize() {
         ElasticElevator.initializeElevator();

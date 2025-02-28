@@ -9,6 +9,16 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+import com.pathplanner.lib.util.DriveFeedforwards;
+import com.pathplanner.lib.util.swerve.SwerveSetpoint;
+import com.pathplanner.lib.util.swerve.SwerveSetpointGenerator;
+import com.studica.frc.AHRS;
+import com.studica.frc.AHRS.NavXComType;
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -28,6 +38,14 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
 
+  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
+    AprilTagFields.k2025ReefscapeWelded
+  );
+
+  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  /**
+   * Swerve drive object.
+   */
   File swerveJsonDirectory = new File(
     Filesystem.getDeployDirectory(),
     "swerve"

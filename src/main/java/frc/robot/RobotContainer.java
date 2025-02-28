@@ -74,15 +74,15 @@ public class RobotContainer {
 
     swerve.setDefaultCommand(
       swerve.driveCommand(
-        () -> driveController.getLeftY() * .7,
-        () -> driveController.getLeftX() * .7,
-        () -> driveController.getRightX() * .7,
+        () -> Math.pow(-driveController.getLeftY(), 5) ,
+        () -> Math.pow(-driveController.getLeftX(), 5) ,
+        () -> Math.pow(-driveController.getRightX(), 5) ,
         true
       )
     );
 
-    driveController.leftTrigger(.8).onTrue(new ActuateIntakeDown(intake));
-    driveController.rightTrigger(.8).onTrue(new ActuateIntakeUp(intake));
+    driveController.leftTrigger(.5).onTrue(new ActuateIntakeDown(intake));
+    driveController.rightTrigger(.5).onTrue(new ActuateIntakeUp(intake));
 
     driveController
       .leftBumper()
