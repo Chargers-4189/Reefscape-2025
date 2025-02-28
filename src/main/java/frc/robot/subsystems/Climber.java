@@ -10,6 +10,7 @@ import com.revrobotics.spark.SparkMax;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
 import frc.util.Elastic.ElasticClimber;
+import com.revrobotics.RelativeEncoder;
 
 
 
@@ -18,6 +19,7 @@ public class Climber extends SubsystemBase {
     ClimberConstants.kMOTOR_ID,
     MotorType.kBrushless
   );
+  private final RelativeEncoder encoder = climberMotor.getEncoder();
   
   /** Creates a new Climber. */
   public Climber() {
@@ -31,10 +33,14 @@ public class Climber extends SubsystemBase {
 
     climberMotor.set(power);
   }
+  public double getEncoder() {
+    return encoder.getPosition();
+  }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    System.out.println(getEncoder());
   }
 
 
