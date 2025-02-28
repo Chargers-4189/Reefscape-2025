@@ -4,15 +4,11 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
 import com.revrobotics.AbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
-
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.CoralEffectorConstants;
 
 public class CoralEffector extends SubsystemBase {
@@ -28,12 +24,10 @@ public class CoralEffector extends SubsystemBase {
   //private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
   private final DigitalInput outtakeSensor = new DigitalInput(0);
 
-
   public String state = "empty";
 
   /** Creates a new CoralEffector. */
-  public CoralEffector() {
-  }
+  public CoralEffector() {}
 
   public void setPower(double mainMotorPower) {
     mainMotor.set(-mainMotorPower);
@@ -42,17 +36,16 @@ public class CoralEffector extends SubsystemBase {
   public void stop() {
     mainMotor.set(0);
   }
-  
 
   public boolean getIntakeSensor() {
     return intakeSensor.get();
   }
-  
+
   public boolean getOuttakeSensor() {
     return outtakeSensor.get();
   }
 
-  public double getAbsoluteEncoderValue(){
+  public double getAbsoluteEncoderValue() {
     return encoder.getPosition();
   }
 

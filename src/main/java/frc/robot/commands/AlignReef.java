@@ -8,7 +8,6 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.wpilibj.PWM.PeriodMultiplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.SwerveConstants;
@@ -92,8 +91,14 @@ public class AlignReef extends Command {
     System.out.println(toTravel);
     if (toTravel != null) {
       swerve.drive(
-        Math.min(Math.max(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -.3), .3),
-        Math.min(Math.max(-toTravel.getY() * SwerveConstants.kAlignSpeedY, -.5), .5),
+        Math.min(
+          Math.max(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -.3),
+          .3
+        ),
+        Math.min(
+          Math.max(-toTravel.getY() * SwerveConstants.kAlignSpeedY, -.6),
+          .6
+        ),
         0.0,
         false
       );
@@ -119,11 +124,17 @@ public class AlignReef extends Command {
   public boolean isFinished() {
     if (alignRight) {
       if (vision.getFLTagPose() != null) {
-        return vision.getFLTagPose().getX() <= 0.15 && vision.getFLTagPose().getY() <= 0.05;
+        return (
+          vision.getFLTagPose().getX() <= 0.15 &&
+          vision.getFLTagPose().getY() <= 0.05
+        );
       }
     } else {
       if (vision.getFRTagPose() != null) {
-        return vision.getFRTagPose().getX() <= 0.15 && vision.getFRTagPose().getY() <= 0.05;
+        return (
+          vision.getFRTagPose().getX() <= 0.15 &&
+          vision.getFRTagPose().getY() <= 0.05
+        );
       }
     }
     return toTravel.getX() <= 0.15 && toTravel.getY() <= 0.05;

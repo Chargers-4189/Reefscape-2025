@@ -135,8 +135,11 @@ public class Vision extends SubsystemBase {
     AvgEstimatedRobotPosition();
     photonRobotPosition.set(avgEstimatedRobotPosition);
     try {
-      System.out.println(cameras[0].getEstimatedTagPose().getTranslation() + " --- " + cameras[1].getEstimatedTagPose().getTranslation());
-
+      System.out.println(
+        cameras[0].getEstimatedTagPose().getTranslation() +
+        " --- " +
+        cameras[1].getEstimatedTagPose().getTranslation()
+      );
     } catch (Exception e) {
       // TODO: handle exception
     }
