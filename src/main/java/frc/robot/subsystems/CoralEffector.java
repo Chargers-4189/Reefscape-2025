@@ -5,14 +5,17 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.AnalogInput;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.revrobotics.AbsoluteEncoder;
+import com.revrobotics.spark.SparkBase;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
-import au.grapplerobotics.ConfigurationFailedException;
-import au.grapplerobotics.LaserCan;
+//import au.grapplerobotics.ConfigurationFailedException;
+//import au.grapplerobotics.LaserCan;
 import frc.robot.Constants.CoralEffectorConstants;
 
 public class CoralEffector extends SubsystemBase {
@@ -24,10 +27,10 @@ public class CoralEffector extends SubsystemBase {
 
   private AbsoluteEncoder encoder = mainMotor.getAbsoluteEncoder();
 
-  private final DigitalInput intakeSensor = new DigitalInput(0);
+  private final DigitalInput intakeSensor = new DigitalInput(CoralEffectorConstants.kINTAKE_DIO);
   //private final LaserCan outtakeSensor = new LaserCan(CoralEffectorConstants.kOUTTAKE_SENSOR_ID);
-  private final DigitalInput outtakeSensor = new DigitalInput(0);
-
+  //private final DigitalInput outtakeSensor = new DigitalInput(CoralEffectorConstants.kOUTTAKE_DIO);
+  private final AnalogInput outtakeSensor = new AnalogInput(0);
 
   public String state = "empty";
 
@@ -49,7 +52,7 @@ public class CoralEffector extends SubsystemBase {
   }
   
   public boolean getOuttakeSensor() {
-    return outtakeSensor.get();
+    return outtakeSensor.getVoltage() < 2;
   }
 
   public double getAbsoluteEncoderValue(){
@@ -59,10 +62,7 @@ public class CoralEffector extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    /*
-    System.out.print(state);
-    System.out.print(" ");i
-    System.out.println(getIntakeSensor());
-    */
+    
+    System.out.println(state + " intake: " + getIntakeSensor() + " outtake: " + getOuttakeSensor());
   }
 }

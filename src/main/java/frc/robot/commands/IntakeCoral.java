@@ -47,6 +47,7 @@ public class IntakeCoral extends Command {
       coralEffector.stop();
       coralSecured = true;
     }*/
+    /*
     switch(coralEffector.state) {
       case "empty":
         if (coralEffector.getIntakeSensor()) {
@@ -65,6 +66,9 @@ public class IntakeCoral extends Command {
           stopwatch.start(160);
           coralEffector.state = "back_up_2";
         }
+        if (coralEffector.getOuttakeSensor()) {
+          coralEffector.state = "empty";
+        }
         return;
       case "back_up_2":
         coralEffector.setPower(-0.05);
@@ -80,6 +84,11 @@ public class IntakeCoral extends Command {
         return;
       default:
         System.out.println("ERROR: Invalid Coral Intake State");
+    }*/
+    if (coralEffector.getIntakeSensor()) {
+      coralEffector.setPower(.05);
+    } else {
+      coralEffector.stop();
     }
 
   }
