@@ -111,10 +111,13 @@ public class Elastic {
 
         public static void initialize() {
             kALGAE_POWER.set(kALGAE_POWER.get());
+            kMILISECONDS_EXTRA_PULLBACK.set(kMILISECONDS_EXTRA_PULLBACK.get());
+            kEJECT_ALGAE_MILISECONDS.set(kEJECT_ALGAE_MILISECONDS.get());
+
         }
     }
 
-    public static final class HumanDriveConstants {
+    public static final class ElasticHumanDrive {
         static NetworkTable humanDriveTable = networkInstance.getTable("humanDriveConstants");
 
         public static DoubleEntry kDRIVE_POWER =
@@ -125,6 +128,13 @@ public class Elastic {
         humanDriveTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
         public static DoubleEntry kROTATIONAL_EXPONENT =
         humanDriveTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+
+        public static void initialize() {
+            kDRIVE_POWER.set(kDRIVE_POWER.get());
+            kROTATIONAL_POWER.set(kROTATIONAL_POWER.get());
+            kDRIVE_EXPONENT.set(kDRIVE_EXPONENT.get());
+            kROTATIONAL_EXPONENT.set(kDRIVE_EXPONENT.get());
+        }
     }
 
     public static void initialize() {
@@ -132,5 +142,6 @@ public class Elastic {
         ElasticIntake.initialize();
         ElasticSwerve.initialize();
         ElasticEffector.initialize();
+        ElasticHumanDrive.initialize();
     }
 }

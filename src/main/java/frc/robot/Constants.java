@@ -103,7 +103,7 @@ public final class Constants {
     public static final int kOUTTAKE_SENSOR_ANALOG = 0;
     //Intake
     public static final int kNOISE_COUNT_LIMIT = 3;
-    public static final int kMILISECONDS_EXTRA_PULLBACK = 160;
+    public static final int kMILISECONDS_EXTRA_PULLBACK = 0;
     //Algae
     public static final double kALGAE_POWER = .6;
     public static final int kEJECT_ALGAE_MILISECONDS = 1500;
@@ -129,9 +129,9 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5, 10, 40}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
+    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5, 3, 19.5}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
 
-    public static final double kGRAVITY_VOLTS = 1;
+    public static final double kGRAVITY_VOLTS = .4;
     public static final double kPROPORTIONAL_VOLTS = .8;
     public static final double kMAX_VOLTS = 12;
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
@@ -196,7 +196,7 @@ public final class Constants {
   }
   public static class HumanDriveConstants {
     public static final double kDRIVE_POWER = .6;
-    public static final double kROTATIONAL_POWER = .2;
+    public static final double kROTATIONAL_POWER = 1;
     public static final double kDRIVE_EXPONENT = 3;
     public static final double kROTATIONAL_EXPONENT = 1;
   }

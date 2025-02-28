@@ -128,7 +128,7 @@ public class SwerveSubsystem extends SubsystemBase {
       vision.updatePoseEstimation(swerveDrive);
     }
     ElasticSwerve.setrobotPose(getPose());
-    System.out.println(getPose());
+    //System.out.println(getPose());
     goToReef(true);
   }
 

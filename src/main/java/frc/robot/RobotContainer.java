@@ -17,11 +17,13 @@ import frc.robot.commands.EjectAlgae;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
+import frc.robot.commands.TeleopDrive;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.util.Elastic;
+import frc.util.Elastic.ElasticHumanDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -88,31 +90,27 @@ public class RobotContainer {
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
-    swerve.setDefaultCommand(
-      swerve.driveCommand(
-        () -> Math.pow(-driveController.getLeftY(), Constants.HumanDriveConstants.kDRIVE_EXPONENT)
-        * Constants.HumanDriveConstants.kDRIVE_POWER,
-        () -> Math.pow(-driveController.getLeftX(), Constants.HumanDriveConstants.kDRIVE_EXPONENT)
-        * Constants.HumanDriveConstants.kDRIVE_POWER,
-        () -> Math.pow(-driveController.getRightX(), Constants.HumanDriveConstants.kROTATIONAL_EXPONENT)
-        * Constants.HumanDriveConstants.kROTATIONAL_POWER,
-        true
-      )
-    );
-    
-
     //Driver Controls:
 
+    swerve.setDefaultCommand(
+      new TeleopDrive(swerve, driveController) //Movement including nitro
+    );
+    
+    driveController.start().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 0));
     driveController.x().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 1));
     driveController.y().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 2));
     driveController.b().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator,coralEffector, 3));
     driveController.a().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 4));
+    driveController.povDown().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 6));
+    driveController.povUp().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 5));
+
+    driveController.leftTrigger().whileTrue(new EjectAlgae(coralEffector));
 
     //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-
+    /*
     driveController.start().debounce(1).onTrue(
         Commands.runOnce(
           () -> {
@@ -120,25 +118,28 @@ public class RobotContainer {
           },
           swerve
         )
-      );
-
-    driveController.leftTrigger(.5).and(()  -> !elevatorTrigger.getAsBoolean() && coralEffector.state == "empty").onTrue(
+      );*/
+    /*
+    driveController.leftTrigger(.5).and(() -> coralEffector.state == "empty").onTrue(
       Commands.parallel(new EjectAlgae(coralEffector), new MoveElevator(elevator, 5))
-    ).onFalse(
+    );
+    driveController.leftTrigger(.5).and(() -> coralEffector.state == "empty").onFalse(
       Commands.parallel(
         new IntakeCoral(coralEffector),
         Commands.sequence(new MoveElevator(elevator, 0), new MoveElevatorSlightlyDown(elevator))
       )
     );
 
-    driveController.rightTrigger(.5).and(()  -> !elevatorTrigger.getAsBoolean() && coralEffector.state == "empty").onTrue(
+    driveController.rightTrigger(.5).and(() -> coralEffector.state == "empty").onTrue(
       Commands.parallel(new EjectAlgae(coralEffector), new MoveElevator(elevator, 6))
-    ).onFalse(
+    );
+    driveController.rightTrigger(.5).and(() -> coralEffector.state == "empty").onFalse(
       Commands.parallel(
         new IntakeCoral(coralEffector),
         Commands.sequence(new MoveElevator(elevator, 0), new MoveElevatorSlightlyDown(elevator))
       )
     );
+    */
 
     //Secondary Controls:
 
@@ -151,18 +152,26 @@ public class RobotContainer {
     },elevator));
     
     effectorTrigger.whileTrue(Commands.run(()-> {
-      coralEffector.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
-    },coralEffector));
-
-    chuteTrigger.whileTrue(Commands.run(()->{
-      intake.setPower(secondaryController.getRightY());
+      intake.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
     },intake));
 
+    chuteTrigger.whileTrue(Commands.run(()->{
+      coralEffector.setPower(secondaryController.getRightY());
+    },coralEffector));
+
     secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+
+    driveController.start().onTrue(new MoveElevator( elevator, 0));
+    driveController.x().onTrue(new MoveElevator( elevator, 1));
+    driveController.y().onTrue(new MoveElevator( elevator, 2));
+    driveController.b().onTrue(new MoveElevator( elevator,3));
+    driveController.a().onTrue(new MoveElevator( elevator, 4));
+
 
     //Testing:
 
     driveController.povUp().onTrue(new MoveElevator(elevator, -1));
+
     driveController.povDown().onTrue(Commands.sequence(
       new MoveElevator(elevator, 0),
       new MoveElevatorSlightlyDown(elevator)

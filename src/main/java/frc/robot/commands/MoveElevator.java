@@ -16,6 +16,7 @@ public class MoveElevator extends Command {
   private double goal;
   private double startTime;
   private boolean up;
+  private int level;
 
   /**
    * Creates a new moveElevator command.
@@ -24,11 +25,7 @@ public class MoveElevator extends Command {
    */
   public MoveElevator(Elevator elevator, int level) {
     this.elevator = elevator;
-    if (level == -1) {
-      this.goal = ElasticElevator.kTEST_HEIGHT.get();
-    } else {
-      this.goal = ElasticElevator.kHEIGHTS.get()[level];
-    }
+    this.level = level;
     elevator.setLevel(level);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -38,8 +35,12 @@ public class MoveElevator extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Running!");
     this.startTime = Timer.getFPGATimestamp();
+    if (level == -1) {
+      this.goal = ElasticElevator.kTEST_HEIGHT.get();
+    } else {
+      this.goal = ElasticElevator.kHEIGHTS.get()[level];
+    }
     this.up = elevator.getEncoder() < goal;
   }
 

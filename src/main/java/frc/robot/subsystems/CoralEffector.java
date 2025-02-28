@@ -74,7 +74,7 @@ public class CoralEffector extends SubsystemBase {
     }
 
     //update outtake sensor counters
-    if (outtakeSensor.getVoltage() > 2) {
+    if (outtakeSensor.getVoltage() < 2) {
       outtakeOnCounter++;
       outtakeOffCounter = 0;
     } else {
@@ -100,11 +100,14 @@ public class CoralEffector extends SubsystemBase {
   @Override
   public void periodic() {
     updateSensors();
-    //System.out.print("intakeSensor:" + getIntakeSensor());
-    //System.out.print("   outtakeSensor:" + getOuttakeSensor());
-    //System.out.print("   intakeCounters(On,Off):" + intakeOnCounter + "," + intakeOffCounter);
-    //System.out.print("   outtakeCounters(On,Off):" + outtakeOnCounter + "," + outtakeOffCounter);
-    //System.out.println();
+    /*
+    System.out.print("state: " + state);
+    System.out.print("  intakeSensor:" + getIntakeSensor());
+    System.out.print("   outtakeSensor:" + getOuttakeSensor());
+    System.out.print("   intakeCounters(On,Off):" + intakeOnCounter + "," + intakeOffCounter);
+    System.out.print("   outtakeCounters(On,Off):" + outtakeOnCounter + "," + outtakeOffCounter);
+    System.out.println();
+    */
 
   }
 }
