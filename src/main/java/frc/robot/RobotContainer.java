@@ -19,12 +19,14 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
+import frc.util.Elastic.ElasticClimber;
 import frc.util.Elastic.ElasticHumanDrive;
 
 /**
@@ -44,6 +46,7 @@ public class RobotContainer {
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
   private final Vision vision = new Vision();
+  private final Climber climber = new Climber();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -87,9 +90,7 @@ public class RobotContainer {
       || (Math.abs(secondaryController.getRightTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
     ));
 
-    final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryDeadband));
-
-    //Default Commands:
+    final Trigger effectorTrigger = secondaryController.povUp().or(secondaryController.povDown());
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
@@ -119,6 +120,68 @@ public class RobotContainer {
       .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+
+    //Secondary Controls:
+
+    climber.setDefaultCommand(Commands.run(()-> climber.setPower(secondaryController.getRightY() * ElasticClimber.kMAX_POWER.get()), climber));
+
+    secondaryController.leftBumper().and(() -> !effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeDown(intake));
+    secondaryController.rightBumper().and(() ->!effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeUp(intake));
+
+
+    elevatorTrigger.whileTrue(Commands.run(()->{
+      elevator.setVoltage(-secondaryController.getLeftY() * 4);
+    },elevator));
+
+    elevatorTrigger.onFalse(Commands.run(() -> {
+      elevator.setVoltage(0);
+    }, elevator));
+    
+    chuteTrigger.whileTrue(Commands.run(()-> {
+      intake.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
+    },intake));
+
+    chuteTrigger.onFalse(Commands.run(()-> {
+      intake.setPower(0);
+    },intake));
+    
+    secondaryController.povUp().whileTrue(Commands.run(() -> coralEffector.setPower(-.5), coralEffector));
+    secondaryController.povDown().whileTrue(Commands.run(() -> coralEffector.setPower(.5), coralEffector));
+
+    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+
+    secondaryController.x().onTrue(new MoveElevator( elevator, 1));
+    secondaryController.y().onTrue(new MoveElevator( elevator, 2));
+    secondaryController.b().onTrue(new MoveElevator( elevator, 3));
+    secondaryController.a().onTrue(new MoveElevator( elevator, 4));
+    secondaryController.start().onTrue(Commands.sequence( new MoveElevator(elevator, 0), new MoveElevatorSlightlyDown(elevator)));
+
+
+
+    //Testing:
+
+    /*
+    driveController.povUp().onTrue(new MoveElevator(elevator, -1));
+
+    driveController.povDown().onTrue(Commands.sequence(
+      new MoveElevator(elevator, 0),
+      new MoveElevatorSlightlyDown(elevator)
+    ));*/
+
+
+    //OLD:
+
+    //final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryDeadband));
+    /*
+    effectorTrigger.whileTrue(Commands.run(()->{
+      coralEffector.setPower(secondaryController.getRightY() * -.5);
+    },coralEffector));
+
+    effectorTrigger.onFalse(Commands.run(()->{
+      coralEffector.setPower(0);
+    },coralEffector));*/
+
+
     /*
     driveController.start().debounce(1).onTrue(
         Commands.runOnce(
@@ -149,59 +212,6 @@ public class RobotContainer {
       )
     );
     */
-
-    //Secondary Controls:
-
-    secondaryController.leftBumper().and(() -> !effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeDown(intake));
-    secondaryController.rightBumper().and(() ->!effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeUp(intake));
-
-
-    elevatorTrigger.whileTrue(Commands.run(()->{
-      elevator.setVoltage(-secondaryController.getLeftY() * 4);
-    },elevator));
-
-    elevatorTrigger.onFalse(Commands.run(() -> {
-      elevator.setVoltage(0);
-    }, elevator));
-    
-    chuteTrigger.whileTrue(Commands.run(()-> {
-      intake.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
-    },intake));
-
-    chuteTrigger.onFalse(Commands.run(()-> {
-      intake.setPower(0);
-    },intake));
-
-    effectorTrigger.whileTrue(Commands.run(()->{
-      coralEffector.setPower(secondaryController.getRightY() * -.5);
-    },coralEffector));
-
-    effectorTrigger.onFalse(Commands.run(()->{
-      coralEffector.setPower(0);
-    },coralEffector));
-
-    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
-
-    secondaryController.x().onTrue(new MoveElevator( elevator, 1));
-    secondaryController.y().onTrue(new MoveElevator( elevator, 2));
-    secondaryController.b().onTrue(new MoveElevator( elevator,3));
-    secondaryController.a().onTrue(new MoveElevator( elevator, 4));
-    secondaryController.start().onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
-
-
-
-    //Testing:
-
-    /*
-    driveController.povUp().onTrue(new MoveElevator(elevator, -1));
-
-    driveController.povDown().onTrue(Commands.sequence(
-      new MoveElevator(elevator, 0),
-      new MoveElevatorSlightlyDown(elevator)
-    ));*/
-
-
-    //OLD:
 
     //driveController.leftTrigger(0.5).onTrue(new OuttakeCoral(coralEffector));
     //driveController.rightTrigger(.5).whileTrue(new ActuateIntakeDown(intake));
