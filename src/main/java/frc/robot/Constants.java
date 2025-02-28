@@ -96,11 +96,13 @@ public final class Constants {
 
     public static final double kPLACE_CORAL_ANGLE = -1; // Find the optimal angle for placing coral in absolute encoder
     public static final double kDEFAULT_CORAL_EFFECTER_ANGLE = -1; // Find the optimal default angle in absolute encoder
-    public static final int kACTUATOR_ID = 33;
+    //public static final int kACTUATOR_ID = 33;
     public static final int kLEFT_MOTOR_ID = 31;
-    public static final int kRIGHT_MOTOR_ID = 32;
-    public static final int kINTAKE_SENSOR_ID = 34;
-    public static final int kOUTTAKE_SENSOR_ID = 35;
+    //public static final int kRIGHT_MOTOR_ID = 32;
+    //public static final int kINTAKE_SENSOR_ID = 34;
+    //public static final int kOUTTAKE_SENSOR_ID = 35;
+    public static final int kINTAKE_DIO = 6;
+    public static final int kOUTTAKE_DIO = 7;
     public static final int kMEASURE_THRESHOLD = 100; // milimeters
   }
 

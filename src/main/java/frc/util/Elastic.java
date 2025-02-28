@@ -19,7 +19,6 @@ import frc.robot.Constants;
 public class Elastic {
 
     static NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
-    static NetworkTable intakeTable = networkInstance.getTable("intakeConstants");
     
     public static final class ElasticElevator {
         static NetworkTable elevatorTable = networkInstance.getTable("elevatorConstants");
@@ -71,12 +70,19 @@ public class Elastic {
     }
 
     public static final class ElasticIntake {
+        static NetworkTable intakeTable = networkInstance.getTable("intakeConstants");
+
         public static DoubleEntry kPOWER =
         intakeTable.getDoubleTopic("INTAKE_POWER").getEntry(Constants.IntakeConstants.kPOWER);
         
         public static void initializeIntake() {
             kPOWER.set(kPOWER.get());
         }
+    }
+    public static final class ElasticEffector {
+        static NetworkTable effectorTable = networkInstance.getTable("effectorTable");
+        public static DoubleEntry kPOWER = 
+        effectorTable.getDoubleTopic("POWER").getEntry(.1);
     }
 
     public static void initialize() {
