@@ -5,15 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.CoralEffectorConstants;
 import frc.robot.subsystems.CoralEffector;
 import frc.util.Stopwatch;
+import frc.util.Elastic.ElasticEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ReleaseAlgae extends Command {
+public class EjectAlgae extends Command {
   private CoralEffector coraleffector;
   private Stopwatch stopwatch = new Stopwatch();
   /** Creates a new ReleaseAlgae. */
-  public ReleaseAlgae(CoralEffector coraleffector) {
+  public EjectAlgae(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coraleffector);
@@ -22,13 +24,13 @@ public class ReleaseAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start(2000);
+    stopwatch.start((int) ElasticEffector.kEJECT_ALGAE_MILISECONDS.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coraleffector.setPower(0.1);
+    coraleffector.setPower(ElasticEffector.kALGAE_POWER.get());
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +42,7 @@ public class ReleaseAlgae extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return stopwatch.hasTriggered();
+    //return stopwatch.hasTriggered();
+    return false;
   }
 }

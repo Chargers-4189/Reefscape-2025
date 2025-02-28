@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
+import frc.util.Elastic.ElasticEffector;
 import frc.util.Stopwatch;
 
 
@@ -34,19 +35,7 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    /*
-    if (!coralEffector.getIntakeSensor() && !coralPassed && !coralEntered) {
-      coralEffector.setPower(0.2);
-    } else if (coralEffector.getIntakeSensor() && !coralPassed) {
-      coralEffector.setPower(0.1);
-      coralEntered = true;
-    } else if (!coralEffector.getIntakeSensor()) {
-      coralEffector.setPower(-0.05);
-      coralPassed = true;
-    } else if (coralEffector.getIntakeSensor()) {
-      coralEffector.stop();
-      coralSecured = true;
-    }*/
+
     switch(coralEffector.state) {
       case "empty":
         if (coralEffector.getIntakeSensor()) {
@@ -55,18 +44,24 @@ public class IntakeCoral extends Command {
         return;
       case "pull_in":
         coralEffector.setPower(0.1);
-        if (!coralEffector.getIntakeSensor()) {
+        if (!coralEffector.getIntakeSensor() && coralEffector.getOuttakeSensor()) {
           coralEffector.state = "back_up_1";
         }
         return;
       case "back_up_1": 
         coralEffector.setPower(-0.05);
+        if (!coralEffector.getOuttakeSensor()) {
+          coralEffector.state = "pull_in";
+        }
         if (coralEffector.getIntakeSensor()) {
-          stopwatch.start(160);
+          stopwatch.start((int) ElasticEffector.kMILISECONDS_EXTRA_PULLBACK.get());
           coralEffector.state = "back_up_2";
         }
         return;
       case "back_up_2":
+        if (!coralEffector.getOuttakeSensor()) {
+          coralEffector.state = "pull_in";
+        }
         coralEffector.setPower(-0.05);
         if (stopwatch.hasTriggered()) {
           coralEffector.state = "done";

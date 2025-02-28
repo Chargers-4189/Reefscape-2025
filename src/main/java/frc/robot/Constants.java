@@ -97,15 +97,20 @@ public final class Constants {
   }
 
   public static class CoralEffectorConstants {
+    //Subsystem
+    public static final int kMAIN_MOTOR_ID = 31;
+    public static final int kINTAKE_SENSOR_DIO = 6;
+    public static final int kOUTTAKE_SENSOR_ANALOG = 0;
+    //Intake
+    public static final int kNOISE_COUNT_LIMIT = 3;
+    public static final int kMILISECONDS_EXTRA_PULLBACK = 160;
+    //Algae
+    public static final double kALGAE_POWER = .6;
+    public static final int kEJECT_ALGAE_MILISECONDS = 1500;
+    //Outtake
+    public static final double kCORAL_POWER = .2;
+    public static final int kMILISECONDS_OUTTAKE = 2;
 
-    public static final double kPLACE_CORAL_ANGLE = -1; // Find the optimal angle for placing coral in absolute encoder
-    public static final double kDEFAULT_CORAL_EFFECTER_ANGLE = -1; // Find the optimal default angle in absolute encoder
-    public static final int kACTUATOR_ID = 33;
-    public static final int kLEFT_MOTOR_ID = 31;
-    public static final int kRIGHT_MOTOR_ID = 32;
-    public static final int kINTAKE_SENSOR_ID = 34;
-    public static final int kOUTTAKE_SENSOR_ID = 35;
-    public static final int kMEASURE_THRESHOLD = 100; // milimeters
   }
 
   public static class ElevatorConstants {
@@ -124,7 +129,7 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5 }; // Intake, L1, L2, L3, L4
+    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5, 10, 40}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
 
     public static final double kGRAVITY_VOLTS = 1;
     public static final double kPROPORTIONAL_VOLTS = .8;
@@ -132,6 +137,7 @@ public final class Constants {
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
     public static final double kTOLERANCE = 1;
+    public static final int kDOWN_TIMEOUT = 500;
   }
 
   public static final class IntakeConstants {
@@ -141,9 +147,9 @@ public final class Constants {
     public static final int kDIO_PORT_BOTTOM = 3;
     public static final double kPOWER_SCALE = .1;
 
-    public static final double kGRAVITY_VOLTS = .01;
+    //public static final double kGRAVITY_VOLTS = .01;
 
-    public static final double kUP_ENCODER = 22.5;
+    //public static final double kUP_ENCODER = 22.5;
     public static final double kPOWER = .6;
   }
 
@@ -184,6 +190,14 @@ public final class Constants {
 
     public static final PathConstraints kPATH_CONSTRAINTS = new PathConstraints(
       3.0, 4.0,
-      Units.degreesToRadians(540), Units.degreesToRadians(720));
+      Units.degreesToRadians(540), Units.degreesToRadians(720)
+    );
+
+  }
+  public static class HumanDriveConstants {
+    public static final double kDRIVE_POWER = .6;
+    public static final double kROTATIONAL_POWER = .2;
+    public static final double kDRIVE_EXPONENT = 3;
+    public static final double kROTATIONAL_EXPONENT = 1;
   }
 }

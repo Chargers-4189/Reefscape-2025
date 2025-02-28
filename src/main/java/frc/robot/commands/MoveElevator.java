@@ -20,11 +20,15 @@ public class MoveElevator extends Command {
   /**
    * Creates a new moveElevator command.
    *
-   * @param level The level to move the elevator to. 0 moves to the intake.
+   * @param level The level to move the elevator to. 0 = intake, 1-4 = corresponding level, 5 = algae low, 6 = algae high
    */
   public MoveElevator(Elevator elevator, int level) {
     this.elevator = elevator;
-    this.goal = ElasticElevator.kHEIGHTS.get()[level];
+    if (level == -1) {
+      this.goal = ElasticElevator.kTEST_HEIGHT.get();
+    } else {
+      this.goal = ElasticElevator.kHEIGHTS.get()[level];
+    }
     elevator.setLevel(level);
 
     // Use addRequirements() here to declare subsystem dependencies.
