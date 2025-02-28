@@ -207,4 +207,13 @@ public final class Constants {
     public static final double kDRIVE_EXPONENT = 3;
     public static final double kROTATIONAL_EXPONENT = 1;
   }
+  public static class ClimberConstants {
+    public static final int kMIN_LIMIT_DIO = 4;
+    public static final int kMAX_LIMIT_DIO = 5;
+
+    public static final int kMOTOR_ID = 51;
+
+    public static final double kMAX_UP_POWER = .05;
+    public static final double kMAX_DOWN_POWER = .05;
+  }
 }
