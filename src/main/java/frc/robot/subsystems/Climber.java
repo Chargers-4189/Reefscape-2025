@@ -29,7 +29,7 @@ public class Climber extends SubsystemBase {
   public void setPower(double power){
     power = Math.min(power, 1);
     power = Math.max(power, -1);
-    power *= ElasticClimber.kMAX_POWER.get();
+    //power *= ElasticClimber.kMAX_POWER.get();
 
     climberMotor.set(power);
   }

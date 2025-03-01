@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AlignReef;
@@ -123,7 +124,7 @@ public class RobotContainer {
 
     //Secondary Controls:
 
-    climber.setDefaultCommand(Commands.run(()-> climber.setPower(secondaryController.getRightY() * ElasticClimber.kMAX_POWER.get()), climber));
+    climber.setDefaultCommand(Commands.run(()-> climber.setPower(secondaryController.getRightY() * ClimberConstants.kMAX_POWER), climber));
 
     secondaryController.leftBumper().and(() -> !effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeDown(intake));
     secondaryController.rightBumper().and(() ->!effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeUp(intake));

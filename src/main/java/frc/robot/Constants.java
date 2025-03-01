@@ -213,6 +213,7 @@ public final class Constants {
 
     public static final int kMOTOR_ID = 51;
 
+    public static final double kMAX_POWER = 0.5;
     public static final double kMAX_UP_POWER = .05;
     public static final double kMAX_DOWN_POWER = .05;
   }
