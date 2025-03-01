@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.ClimberConstants;
+import frc.robot.commands.AUTO_LevelFour;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AlignReef;
@@ -119,6 +120,7 @@ public class RobotContainer {
       .onTrue(new AlignReef(swerve, vision, true).withTimeout(2));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+    
     /*
     driveController.start().debounce(1).onTrue(
         Commands.runOnce(
@@ -187,7 +189,12 @@ public class RobotContainer {
     secondaryController.b().onTrue(new MoveElevator( elevator,3));
     secondaryController.a().onTrue(new MoveElevator( elevator, 4));
     secondaryController.start().onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
-
+    secondaryController.povUp().onTrue(Commands.run(()->{
+      climber.setPower(0.5);
+    }));
+    secondaryController.povDown().onTrue(Commands.run(()->{
+      climber.setPower(-0.5);
+    }));
 
 
     //Testing:
@@ -224,6 +231,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return new PathPlannerAuto("test-path");
-    return new ActuateIntakeUp(intake);
+    //return new ActuateIntakeUp(intake);
+    return new AUTO_LevelFour(swerve, vision, elevator, coralEffector, intake, 4/, true);
+
   }
 }

@@ -137,6 +137,10 @@ public class AlignReef extends Command {
         );
       }
     }
-    return toTravel.getX() <= 0.15 && toTravel.getY() <= 0.05;
+    try{
+      return toTravel.getX() <= 0.15 && toTravel.getY() <= 0.05;
+    } catch(Exception e){
+      return true;
+    }
   }
 }
