@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AlignReef;
@@ -19,12 +20,14 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
+import frc.util.Elastic.ElasticClimber;
 import frc.util.Elastic.ElasticHumanDrive;
 
 /**
@@ -44,6 +47,7 @@ public class RobotContainer {
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
   private final Vision vision = new Vision();
+  private final Climber climber = new Climber();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController driveController = new CommandXboxController(
@@ -88,8 +92,6 @@ public class RobotContainer {
     ));
 
     final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryDeadband));
-
-    //Default Commands:
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
@@ -212,12 +214,6 @@ public class RobotContainer {
     }, elevator));*/
 
     //driveController.rightTrigger().onTrue(new AutoAlignIntake(swerve, vision));
-    //driveController.povUp().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povUpRight().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povUpLeft().onTrue(new INPUTCLIMBCOMMANDUP));
-    //driveController.povDown().onTrue(new INPUTCLIMBCOMMANDDon));
-    //driveController.povDownRight().onTrue(new INPUTCLIMBCOMMANDDon));
-    //driveController.povDownLeft().onTrue(new INPUTCLIMBCOMMANDDon));
 
     //driveController.leftTrigger(.3).whileTrue(Commands.run(() -> swerve.driveWithAngleSetPoint(driveController.getLeftY(), driveController.getLeftX(), 30)));
   }
