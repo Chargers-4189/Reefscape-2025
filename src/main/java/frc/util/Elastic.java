@@ -139,6 +139,16 @@ public class Elastic {
             kROTATIONAL_EXPONENT.set(kDRIVE_EXPONENT.get());
         }
     }
+    public static final class ElasticClimber {
+        static NetworkTable climberTable = networkInstance.getTable("climberConstants");
+
+        public static DoubleEntry kMAX_POWER = climberTable.getDoubleTopic("MAX_POWER").getEntry(Constants.ClimberConstants.kMAX_UP_POWER);
+
+        public static void initialize() {
+            kMAX_POWER.set(kMAX_POWER.get());
+
+        }
+    }
 
     public static void initialize() {
         ElasticElevator.initialize();
@@ -146,5 +156,6 @@ public class Elastic {
         ElasticSwerve.initialize();
         ElasticEffector.initialize();
         ElasticHumanDrive.initialize();
+        ElasticClimber.initialize();
     }
 }

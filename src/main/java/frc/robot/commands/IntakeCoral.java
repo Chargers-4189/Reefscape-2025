@@ -6,7 +6,6 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
-import frc.util.Elastic.ElasticEffector;
 import frc.util.Stopwatch;
 
 

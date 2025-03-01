@@ -4,7 +4,6 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.commands.PathPlannerAuto;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -28,7 +27,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
 import frc.util.Elastic.ElasticClimber;
-import frc.util.Elastic.ElasticHumanDrive;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -115,10 +113,10 @@ public class RobotContainer {
 
     driveController
       .leftBumper()
-      .onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(2));
     driveController
       .rightBumper()
-      .onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(2));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
     /*
