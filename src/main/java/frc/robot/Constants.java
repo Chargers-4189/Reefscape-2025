@@ -136,14 +136,14 @@ public final class Constants {
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 52.5, 3, 19.5}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
+    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 53.8, 3, 19.5}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
 
     public static final double kGRAVITY_VOLTS = .4;
     public static final double kPROPORTIONAL_VOLTS = .8;
     public static final double kMAX_VOLTS = 12;
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
-    public static final double kTOLERANCE = 1;
+    public static final double kTOLERANCE = 1.4;
     public static final int kDOWN_TIMEOUT = 500;
   }
 

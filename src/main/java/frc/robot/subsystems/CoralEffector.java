@@ -100,14 +100,14 @@ public class CoralEffector extends SubsystemBase {
   @Override
   public void periodic() {
     updateSensors();
-    
+    /*
     System.out.print("state: " + state);
     System.out.print("  intakeSensor:" + getIntakeSensor());
     System.out.print("   outtakeSensor:" + getOuttakeSensor());
     System.out.print("   intakeCounters(On,Off):" + intakeOnCounter + "," + intakeOffCounter);
     System.out.print("   outtakeCounters(On,Off):" + outtakeOnCounter + "," + outtakeOffCounter);
     System.out.println();
-    
+    */
 
   }
 }

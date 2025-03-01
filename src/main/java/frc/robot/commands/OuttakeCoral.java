@@ -30,7 +30,7 @@ public class OuttakeCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start(1500);
+    stopwatch.start(1000);
   }
 
   // Called every time the scheduler runs while the command is scheduled.

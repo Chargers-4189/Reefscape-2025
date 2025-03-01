@@ -103,8 +103,8 @@ public class RobotContainer {
     driveController.y().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 2));
     driveController.b().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator,coralEffector, 3));
     driveController.a().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 4));
-    driveController.povDown().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 6));
-    driveController.povUp().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 5));
+    driveController.povDown().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 5));
+    driveController.povUp().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 6));
 
     driveController.leftTrigger().whileTrue(new EjectAlgae(coralEffector));
 
