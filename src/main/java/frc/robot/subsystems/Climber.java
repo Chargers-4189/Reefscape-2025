@@ -15,11 +15,13 @@ import com.revrobotics.RelativeEncoder;
 
 
 public class Climber extends SubsystemBase {
+  /* 
   private final SparkMax climberMotor = new SparkMax(
     ClimberConstants.kMOTOR_ID,
     MotorType.kBrushless
   );
-  private final RelativeEncoder encoder = climberMotor.getEncoder();
+  */
+  //private final RelativeEncoder encoder = climberMotor.getEncoder();
   
   /** Creates a new Climber. */
   public Climber() {
@@ -27,14 +29,17 @@ public class Climber extends SubsystemBase {
   }
 
   public void setPower(double power){
+    /* 
     power = Math.min(power, 1);
     power = Math.max(power, -1);
     //power *= ElasticClimber.kMAX_POWER.get();
 
+
     climberMotor.set(power);
+    */
   }
   public double getEncoder() {
-    return encoder.getPosition();
+    return 0;//encoder.getPosition();
   }
 
   @Override

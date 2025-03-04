@@ -184,16 +184,17 @@ public class RobotContainer {
 
     secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
 
+
     secondaryController.x().onTrue(new MoveElevator( elevator, 1));
     secondaryController.y().onTrue(new MoveElevator( elevator, 2));
     secondaryController.b().onTrue(new MoveElevator( elevator,3));
     secondaryController.a().onTrue(new MoveElevator( elevator, 4));
     secondaryController.start().onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
     secondaryController.povUp().onTrue(Commands.run(()->{
-      climber.setPower(0.5);
+      //climber.setPower(0.5);
     }));
     secondaryController.povDown().onTrue(Commands.run(()->{
-      climber.setPower(-0.5);
+      //climber.setPower(-0.5);
     }));
 
 
@@ -232,7 +233,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return new PathPlannerAuto("test-path");
     //return new ActuateIntakeUp(intake);
-    return new AUTO_LevelFour(swerve, vision, elevator, coralEffector, intake, 4/, true);
+    return new AUTO_LevelFour(swerve, vision, elevator, coralEffector, intake, 4, true);
 
   }
 }
