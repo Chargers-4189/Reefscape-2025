@@ -120,6 +120,8 @@ public class RobotContainer {
       .onTrue(new AlignReef(swerve, vision, true).withTimeout(2));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
+
+    driveController.rightTrigger().whileTrue(swerve.xFormation());
     
     /*
     driveController.start().debounce(1).onTrue(
@@ -190,13 +192,13 @@ public class RobotContainer {
     secondaryController.b().onTrue(new MoveElevator( elevator,3));
     secondaryController.a().onTrue(new MoveElevator( elevator, 4));
     secondaryController.start().onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
+
     secondaryController.povUp().onTrue(Commands.run(()->{
       //climber.setPower(0.5);
     }));
     secondaryController.povDown().onTrue(Commands.run(()->{
       //climber.setPower(-0.5);
     }));
-
 
     //Testing:
 

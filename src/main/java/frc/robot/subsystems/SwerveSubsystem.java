@@ -117,6 +117,7 @@ public class SwerveSubsystem extends SubsystemBase {
     gyro.reset();
   }
 
+  /*
   public void driveWithAngleSetPoint(double x, double y, double setpoint) {
     double rotationPower =
       (swerveDrive.getOdometryHeading().getDegrees() - setpoint) *
@@ -126,7 +127,7 @@ public class SwerveSubsystem extends SubsystemBase {
     rotationPower =
       Math.max(rotationPower, -SwerveConstants.kAlignAngleMaxSpeed);
     this.drive(x, y, rotationPower, false);
-  }
+  }*/
 
   /**
    * Command to drive the robot using translative values and heading as a
@@ -192,6 +193,12 @@ public class SwerveSubsystem extends SubsystemBase {
         fieldOriented,
         false
       );
+    });
+  }
+
+  public Command xFormation() {
+    return run(() -> {
+    swerveDrive.lockPose();
     });
   }
 

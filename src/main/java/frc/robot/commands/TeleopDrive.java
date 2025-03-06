@@ -28,7 +28,8 @@ public class TeleopDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (driveController.getRightTriggerAxis() > .5) {
+    if (driveController.leftStick().getAsBoolean() || driveController.rightStick().getAsBoolean()) {
+      //System.out.println("Nitro Active");
       swerve.drive(
         Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
         Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
@@ -36,6 +37,7 @@ public class TeleopDrive extends Command {
         true
       );
     } else {
+      //System.out.println("Nitro Inactive");
       swerve.drive(
         Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
         * ElasticHumanDrive.kDRIVE_POWER.get(),

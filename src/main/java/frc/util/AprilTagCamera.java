@@ -141,7 +141,7 @@ public class AprilTagCamera {
         }
       }
     }
-    System.out.println(targetTagID);
+    //System.out.println(targetTagID);
     return closestTag;
   }
 

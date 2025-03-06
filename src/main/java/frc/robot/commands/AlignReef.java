@@ -10,9 +10,10 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
-import frc.robot.Constants.SwerveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
+import frc.util.Elastic.ElasticAlign;
+import edu.wpi.first.math.MathUtil;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReef extends Command {
@@ -37,13 +38,7 @@ public class AlignReef extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    if (alignRight) {
-      tagPose = vision.getFLTagPose();
-    } else {
-      tagPose = vision.getFRTagPose();
-    }
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -51,55 +46,41 @@ public class AlignReef extends Command {
     if (alignRight) {
       if (vision.getFLTagPose() != null) {
         tagPose = vision.getFLTagPose();
-        tagGoal =
-          new Pose2d()
-            .transformBy(
-              new Transform2d(
-                tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
-                tagPose.getY(),
-                new Rotation2d(
-                  tagPose.getRotation().getX(),
-                  tagPose.getRotation().getY()
-                )
-              )
-            );
-        lastPos = swerve.getPose();
+        
       }
     } else {
       if (vision.getFRTagPose() != null) {
         tagPose = vision.getFRTagPose();
-        tagGoal =
-          new Pose2d()
-            .transformBy(
-              new Transform2d(
-                tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
-                tagPose.getY(),
-                new Rotation2d(
-                  tagPose.getRotation().getX(),
-                  tagPose.getRotation().getY()
-                )
-              )
-            );
-        lastPos = swerve.getPose();
       }
     }
+    
+    tagGoal =
+      new Pose2d()
+        .transformBy(
+          new Transform2d(
+            tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
+            tagPose.getY(),
+            new Rotation2d(
+              tagPose.getRotation().getX(),
+              tagPose.getRotation().getY()
+            )
+          )
+        );
+    lastPos = swerve.getPose();
+
     if (lastPos != null) {
       toTravel = tagGoal.relativeTo(swerve.getPose().relativeTo(lastPos));
     } else {
       toTravel = tagGoal;
     }
+    System.out.print(tagGoal + " ");
+
     System.out.println(toTravel);
     if (toTravel != null) {
       swerve.drive(
-        Math.min(
-          Math.max(-toTravel.getX() * SwerveConstants.kAlignSpeedX, -.3),
-          .3
-        ),
-        Math.min(
-          Math.max(-toTravel.getY() * SwerveConstants.kAlignSpeedY, -.6),
-          .6
-        ),
-        0.0,
+        MathUtil.clamp(-toTravel.getX() * ElasticAlign.kPROPORTIONAL_X.get(), -ElasticAlign.kMAX_SPEED_X.get(), ElasticAlign.kMAX_SPEED_X.get()),
+        MathUtil.clamp(-toTravel.getY() * ElasticAlign.kPROPORTIONAL_Y.get(), -ElasticAlign.kMAX_SPEED_Y.get(), ElasticAlign.kMAX_SPEED_Y.get()),
+        0,
         false
       );
     }

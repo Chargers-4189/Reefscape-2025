@@ -14,7 +14,7 @@ public class Stopwatch {
         return initTime > timeout;
     }
 
-    public void start(int milliseconds) {
+    public void start(double milliseconds) {
         initTime = Timer.getFPGATimestamp();
         timeout = Timer.getFPGATimestamp() + (milliseconds / 1000.0);
     }

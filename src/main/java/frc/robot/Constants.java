@@ -89,18 +89,12 @@ public final class Constants {
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
 
-    public static final double kAlignSpeedX = 0.4;
-    public static final double kAlignSpeedY = 0.5;
-    public static final double kAlignAngle = 0.1;
-
-    public static final double kAlignAngleSpeed = .002;
-    public static final double kAlignAngleMaxSpeed = .1;
-
+    /*
     public static final Pose2d kINITIAL_POSE = new Pose2d(
       2,
       7,
       new Rotation2d()
-    );
+    );*/
   }
 
   public static class CoralEffectorConstants {
@@ -144,7 +138,8 @@ public final class Constants {
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
     public static final double kTOLERANCE = 1.4;
-    public static final int kDOWN_TIMEOUT = 500;
+    public static final int kSLIGHTLY_DOWN_TIMEOUT = 500;
+    public static final int kTIMEOUT = 1000;
   }
 
   public static final class IntakeConstants {
@@ -159,9 +154,9 @@ public final class Constants {
     //public static final double kUP_ENCODER = 22.5;
     public static final double kPOWER = .6;
   }
-
+  /*
   public static final class AutoConstants {
-
+    
     public static final double kMaxSpeedMetersPerSecond = 3;
     public static final double kMaxAccelerationMetersPerSecondSquared = 3;
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
@@ -176,12 +171,14 @@ public final class Constants {
       kMaxAngularSpeedRadiansPerSecond,
       kMaxAngularSpeedRadiansPerSecondSquared
     );
-  }
+  }*/
 
   public static class AlignmentConstants {
 
     public static final double kDIST_FROM_REEF = Units.inchesToMeters(0);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
+
+    /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =
       Math.PI;
@@ -199,14 +196,24 @@ public final class Constants {
       3.0, 4.0,
       Units.degreesToRadians(540), Units.degreesToRadians(720)
     );
+    */
 
+    public static final double kPROPORTIONAL_X = 0.4;
+    public static final double kPROPORTIONAL_Y = 0.5;
+    public static final double kPROPORTIONAL_ANGLE = 0.002;
+
+    public static final double kMAX_SPEED_X = .6;
+    public static final double kMAX_SPEED_Y = .6;
+    public static final double kMAX_SPEED_ANGLE = .1;
   }
+  
   public static class HumanDriveConstants {
     public static final double kDRIVE_POWER = .8;
     public static final double kROTATIONAL_POWER = .8;
     public static final double kDRIVE_EXPONENT = 3;
     public static final double kROTATIONAL_EXPONENT = 1;
   }
+
   public static class ClimberConstants {
     public static final int kMIN_LIMIT_DIO = 4;
     public static final int kMAX_LIMIT_DIO = 5;

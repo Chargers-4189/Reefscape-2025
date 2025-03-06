@@ -5,6 +5,7 @@
 package frc.util;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayEntry;
 import edu.wpi.first.networktables.DoubleEntry;
 import edu.wpi.first.networktables.IntegerEntry;
@@ -49,10 +50,14 @@ public class Elastic {
         elevatorTable
             .getDoubleTopic("TEST_HEIGHT")
             .getEntry(0);
-        public static IntegerEntry kDOWN_TIMEOUT =
+        public static IntegerEntry kSLIGHTLY_DOWN_TIMEOUT =
         elevatorTable
-            .getIntegerTopic("DOWN_TIMEOUT")
-            .getEntry(Constants.ElevatorConstants.kDOWN_TIMEOUT);
+            .getIntegerTopic("SLIGHTLY_DOWN_TIMEOUT")
+            .getEntry(Constants.ElevatorConstants.kSLIGHTLY_DOWN_TIMEOUT);
+        public static IntegerEntry kTIMEOUT =
+        elevatorTable
+            .getIntegerTopic("TIMEOUT")
+            .getEntry(Constants.ElevatorConstants.kTIMEOUT);
 
         public static void initialize() {
             kGRAVITY_VOLTS.set(kGRAVITY_VOLTS.get());
@@ -62,7 +67,8 @@ public class Elastic {
             kTOLERANCE.set(kTOLERANCE.get());
             kHEIGHTS.set(kHEIGHTS.get());
             kTEST_HEIGHT.set(kTEST_HEIGHT.get());
-            kDOWN_TIMEOUT.set(kDOWN_TIMEOUT.get());
+            kSLIGHTLY_DOWN_TIMEOUT.set(kSLIGHTLY_DOWN_TIMEOUT.get());
+            kTIMEOUT.set(kTIMEOUT.get());
         }
     }
     public static final class ElasticSwerve {
@@ -146,7 +152,32 @@ public class Elastic {
 
         public static void initialize() {
             kMAX_POWER.set(kMAX_POWER.get());
+        }
+    }
 
+    public static final class ElasticAlign {
+        static NetworkTable alignTable = networkInstance.getTable("alignConstants");
+
+        public static DoubleEntry kDIST_FROM_REEF = alignTable.getDoubleTopic("DIST_FROM_REEF").getEntry(Constants.AlignmentConstants.kDIST_FROM_REEF);
+        public static DoubleEntry kDIST_OFFSET = alignTable.getDoubleTopic("DIST_OFFSET").getEntry(Constants.AlignmentConstants.kDIST_OFFSET);
+
+        public static DoubleEntry kPROPORTIONAL_X = alignTable.getDoubleTopic("PROPORTIONAL_X").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_X);
+        public static DoubleEntry kPROPORTIONAL_Y = alignTable.getDoubleTopic("POPORTIONAL_Y").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_Y);
+        public static DoubleEntry kPROPORTIONAL_ANGLE = alignTable.getDoubleTopic("POPORTIONAL_ANGLE").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_ANGLE);
+
+        public static DoubleEntry kMAX_SPEED_X = alignTable.getDoubleTopic("MAX_SPEED_X").getEntry(Constants.AlignmentConstants.kMAX_SPEED_X);
+        public static DoubleEntry kMAX_SPEED_Y = alignTable.getDoubleTopic("MAX_SPEED_Y").getEntry(Constants.AlignmentConstants.kMAX_SPEED_Y);
+        public static DoubleEntry kMAX_SPEED_ANGLE = alignTable.getDoubleTopic("MAX_SPEED_ANGLE").getEntry(Constants.AlignmentConstants.kMAX_SPEED_ANGLE);
+
+        public static void initialize() {
+            kDIST_FROM_REEF.set(kDIST_FROM_REEF.get());
+            kDIST_OFFSET.set(kDIST_OFFSET.get());
+            kPROPORTIONAL_X.set(kPROPORTIONAL_X.get());
+            kPROPORTIONAL_Y.set(kPROPORTIONAL_Y.get());
+            kPROPORTIONAL_ANGLE.set(kPROPORTIONAL_ANGLE.get());
+            kMAX_SPEED_X.set(kMAX_SPEED_X.get());
+            kMAX_SPEED_Y.set(kMAX_SPEED_Y.get());
+            kMAX_SPEED_ANGLE.set(kMAX_SPEED_ANGLE.get());
         }
     }
 
@@ -157,5 +188,6 @@ public class Elastic {
         ElasticEffector.initialize();
         ElasticHumanDrive.initialize();
         ElasticClimber.initialize();
+        ElasticAlign.initialize();
     }
 }

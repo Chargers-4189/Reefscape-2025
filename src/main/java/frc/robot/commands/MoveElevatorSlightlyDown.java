@@ -23,7 +23,7 @@ public class MoveElevatorSlightlyDown extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start((int) ElasticElevator.kDOWN_TIMEOUT.get());
+    stopwatch.start(ElasticElevator.kSLIGHTLY_DOWN_TIMEOUT.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
