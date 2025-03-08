@@ -31,21 +31,22 @@ public class TeleopDrive extends Command {
     if (driveController.leftStick().getAsBoolean() || driveController.rightStick().getAsBoolean()) {
       //System.out.println("Nitro Active");
       swerve.drive(
-        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get()),
-        true
+        -Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
+        -Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
+        -Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get()),
+        -Math.pow(driveController.getRightY(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
       );
     } else {
       //System.out.println("Nitro Inactive");
       swerve.drive(
-        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
+        -Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
         * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
+        -Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
         * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
+        -Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
         * ElasticHumanDrive.kROTATIONAL_POWER.get(),
-        true
+        -Math.pow(driveController.getRightY(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
+        * ElasticHumanDrive.kROTATIONAL_POWER.get()
       );
     }
   }

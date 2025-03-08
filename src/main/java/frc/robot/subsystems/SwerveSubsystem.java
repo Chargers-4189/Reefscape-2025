@@ -166,6 +166,33 @@ public class SwerveSubsystem extends SubsystemBase {
       );
     });
   }
+  public void drive(
+    double translationX,
+    double translationY,
+    double headingX,
+    double headingY
+  ) 
+  {
+    Translation2d scaledInputs = SwerveMath.scaleTranslation(
+      new Translation2d(
+        translationX,
+        translationY
+      ),
+      0.8
+    );
+
+    swerveDrive.driveFieldOriented(
+      swerveDrive.swerveController.getTargetSpeeds(
+        scaledInputs.getX(),
+        scaledInputs.getY(),
+        headingX,
+        headingY,
+        swerveDrive.getOdometryHeading().getRadians(),
+        swerveDrive.getMaximumChassisVelocity()
+      )
+    );
+    
+  }
 
   /**
    * Command to drive the robot using translative values and heading as angular
