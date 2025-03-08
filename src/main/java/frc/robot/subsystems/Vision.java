@@ -95,6 +95,9 @@ public class Vision extends SubsystemBase {
   public Transform3d getFRTagPose() {
     return cameras[1].getEstimatedTagPose();
   }
+  public Transform3d getBackTagPose() {
+    return cameras[2].getEstimatedTagPose();
+  }
 
   public int getFLTagId() {
     return cameras[0].getClosestReefId();
@@ -102,6 +105,9 @@ public class Vision extends SubsystemBase {
 
   public int getFRTagId() {
     return cameras[1].getClosestReefId();
+  }
+  public int getBackTagId() {
+    return cameras[2].getClosestReefId();
   }
 
   public Pose2d getEstimatedRobotPosition() {

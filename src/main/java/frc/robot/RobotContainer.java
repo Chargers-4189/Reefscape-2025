@@ -12,6 +12,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.AUTO_LevelFour;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.AlignReefAngle;
 import frc.robot.commands.AlignReefPosition;
 import frc.robot.commands.AutoPlaceCoral;
@@ -115,14 +116,14 @@ public class RobotContainer {
     //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
-    /*
+    
     driveController
       .leftBumper()
-      .onTrue(new AlignReefPosition(swerve, vision, false).withTimeout(2));
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(Constants.AlignmentConstants.kOVERARCHING_TIMEOUT));
     driveController
       .rightBumper()
-      .onTrue(new AlignReefPosition(swerve, vision, true).withTimeout(2));
-    */
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(Constants.AlignmentConstants.kOVERARCHING_TIMEOUT));
+    
     driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));

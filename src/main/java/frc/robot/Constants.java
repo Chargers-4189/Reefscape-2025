@@ -13,6 +13,7 @@ import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.measure.Time;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide
@@ -211,6 +212,7 @@ public final class Constants {
     public static final double kMAX_SPEED_X = .6;
     public static final double kMAX_SPEED_Y = .6;
     public static final double kMAX_SPEED_ANGLE = .1;
+    public static final double kOVERARCHING_TIMEOUT = 2.5; //seconds
   }
   
   public static class HumanDriveConstants {
