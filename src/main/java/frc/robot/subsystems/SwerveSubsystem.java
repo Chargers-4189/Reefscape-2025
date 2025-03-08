@@ -9,6 +9,7 @@ import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathConstraints;
 import com.studica.frc.AHRS;
 import com.studica.frc.AHRS.NavXComType;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -18,6 +19,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -165,6 +167,40 @@ public class SwerveSubsystem extends SubsystemBase {
         )
       );
     });
+  }
+
+    /**
+   * Command to drive the robot using translative values and heading as a
+   * setpoint.
+   *
+   * @param translationX Translation in the X direction.
+   * @param translationY Translation in the Y direction.
+   * @param rotation2d    Rotation setpoint.
+   * @return Drive command.
+   */
+  public void drive(
+    double translationX,
+    double translationY,
+    Rotation2d rotation2d
+  ) {
+    Translation2d scaledInputs = SwerveMath.scaleTranslation(
+      new Translation2d(
+        translationX,
+        translationY
+      ),
+      0.8
+    );
+
+    swerveDrive.driveFieldOriented(
+      swerveDrive.swerveController.getTargetSpeeds(
+        scaledInputs.getX(),
+        scaledInputs.getY(),
+        rotation2d.getSin(),
+        rotation2d.getCos(),
+        swerveDrive.getOdometryHeading().getRadians(),
+        swerveDrive.getMaximumChassisVelocity()
+      )
+    );
   }
 
   /**

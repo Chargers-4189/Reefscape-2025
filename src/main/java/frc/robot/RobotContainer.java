@@ -12,6 +12,7 @@ import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.AUTO_LevelFour;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.AlignReefAngle;
 import frc.robot.commands.AlignReefPosition;
 import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
@@ -28,6 +29,7 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic;
 import frc.util.Elastic.ElasticClimber;
+import frc.util.GetAprilTagRotation;
 
 /**
  * This class is where the bulk of the robot should be declared. Since
@@ -62,6 +64,7 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     Elastic.initialize();
+    GetAprilTagRotation.initialize();
 
     configureBindings();
   }
@@ -112,12 +115,15 @@ public class RobotContainer {
     //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
     //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
+    /*
     driveController
       .leftBumper()
       .onTrue(new AlignReefPosition(swerve, vision, false).withTimeout(2));
     driveController
       .rightBumper()
       .onTrue(new AlignReefPosition(swerve, vision, true).withTimeout(2));
+    */
+    driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
 

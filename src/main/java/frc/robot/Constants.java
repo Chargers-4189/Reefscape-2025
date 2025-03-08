@@ -180,6 +180,10 @@ public final class Constants {
 
     public static final int[] kTagAngles = {30};
 
+    public static final double kROTATION_TIMEOUT = 10000;
+    public static final double kROTATION_TOLERANCE = 5;//Degrees
+
+
     /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
     public static final double kMaxAngularSpeedRadiansPerSecondSquared =

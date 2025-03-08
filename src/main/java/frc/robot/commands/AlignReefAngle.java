@@ -4,16 +4,17 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
-import frc.util.Elastic.ElasticAlign;
+import frc.util.Stopwatch;
+import frc.robot.Constants.AlignmentConstants;
+import frc.util.GetAprilTagRotation;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReefAngle extends Command {
@@ -26,6 +27,9 @@ public class AlignReefAngle extends Command {
   private Pose2d lastPos;
   private Pose2d toTravel;
   private int tagId;
+  private Stopwatch stopwatch = new Stopwatch();
+  private Rotation2d rotationSetpoint;
+  
   
   /** Creates a new AlignReefAngle. */
   public AlignReefAngle(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
@@ -39,7 +43,9 @@ public class AlignReefAngle extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stopwatch.start(AlignmentConstants.kROTATION_TIMEOUT);
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -49,6 +55,14 @@ public class AlignReefAngle extends Command {
     } else {
       tagId = vision.getFLTagId();
     }
+    try {
+      rotationSetpoint = GetAprilTagRotation.getAprilTagRotation(tagId);
+    } catch (Exception e) {
+      System.out.print(e);
+      this.cancel();
+    }
+    System.out.println(rotationSetpoint);
+    swerve.drive(0, 0, rotationSetpoint);
     
   }
 
@@ -59,6 +73,10 @@ public class AlignReefAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (stopwatch.hasTriggered()) {
+      return true;
+    } else {
+      return Math.abs(swerve.getPose().getRotation().getDegrees() - rotationSetpoint.getDegrees()) < AlignmentConstants.kROTATION_TOLERANCE;
+    }
   }
 }
