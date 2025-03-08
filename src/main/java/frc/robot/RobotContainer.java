@@ -113,10 +113,7 @@ public class RobotContainer {
 
     driveController.leftTrigger().whileTrue(new EjectAlgae(coralEffector));
 
-    //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
 
-    
     driveController
       .leftBumper()
       .onTrue(new AlignReef(swerve, vision, false).withTimeout(Constants.AlignmentConstants.kOVERARCHING_TIMEOUT));
@@ -242,7 +239,7 @@ public class RobotContainer {
     // An example command will be run in autonomous
     //return new PathPlannerAuto("test-path");
     //return new ActuateIntakeUp(intake);
-    return new AUTO_LevelFour(swerve, vision, elevator, coralEffector, intake, 4, true);
+    return new AUTO_LevelFour(swerve, vision, elevator, coralEffector, intake, true);
 
   }
 }

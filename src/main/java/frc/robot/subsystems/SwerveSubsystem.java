@@ -23,6 +23,7 @@ import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.SwerveConstants;
 import java.io.File;
@@ -101,6 +102,14 @@ public class SwerveSubsystem extends SubsystemBase {
       },
       this
     );
+  }
+  public Command resetOdometry(Pose2d pose) {
+    return Commands.run(
+      () -> swerveDrive.resetOdometry(pose)
+    );
+  }
+  public Command resetPosition(Translation2d translation) {
+    return resetOdometry(new Pose2d(translation, swerveDrive.getOdometryHeading()));
   }
 
   public Pose2d getPose() {
@@ -280,23 +289,23 @@ public class SwerveSubsystem extends SubsystemBase {
       )
     );
   };
-  public Command driveToAprilTag(int apriltagnumber, Translation2d distanceFromAprilTag){
-    return driveToAprilTag(apriltagnumber, distanceFromAprilTag, 180);
+  public Command driveToAprilTag(int aprilTagId, Translation2d distanceFromAprilTag){
+    return driveToAprilTag(aprilTagId, distanceFromAprilTag, 180);
   };
-  public Command driveToAprilTag(int apriltagnumber){
-    return driveToAprilTag(apriltagnumber,new Translation2d(0,swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters()));
+  public Command driveToAprilTag(int aprilTagId){
+    return driveToAprilTag(aprilTagId,new Translation2d(0,swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters()));
 
   }
-  public Command driveToAprilTag(int apriltagnumber, double rotationOffset){
-    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0), rotationOffset);
+  public Command driveToAprilTag(int aprilTagId, double rotationOffset){
+    return driveToAprilTag(aprilTagId, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0), rotationOffset);
   };
 
 
-  public Command driveToReef(int apriltagnumber, boolean right){
+  public Command driveToReef(int aprilTagId, boolean right){
     if(right){
-      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),.2));
+      return driveToAprilTag(aprilTagId, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),.2));
     }
-    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
+    return driveToAprilTag(aprilTagId, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
   };
 
   @Override

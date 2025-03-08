@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
@@ -16,15 +18,24 @@ import frc.robot.subsystems.Vision;
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class AUTO_LevelFour extends SequentialCommandGroup {
   /** Creates a new AUTO_LevelFour. */
-  public AUTO_LevelFour(SwerveSubsystem swerve, Vision vision, Elevator elevator, CoralEffector effector, Intake intake, int level, boolean alignRight) {
+  public AUTO_LevelFour(SwerveSubsystem swerve, Vision vision, Elevator elevator, CoralEffector effector, Intake intake, boolean alignRight) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-    new ActuateIntakeUp(intake),
-    new MoveElevator(elevator, level),
-    new AlignReefPosition(swerve, vision, alignRight).withTimeout(6),
-    new OuttakeCoral(effector),
-    new MoveElevator(elevator, 0),
-    new MoveElevatorSlightlyDown(elevator));
+      new ActuateIntakeUp(intake),
+      swerve.driveToAprilTag(22, new Translation2d(1, 0)),
+      new AlignReef(swerve, vision, false),
+      new AutoPlaceCoral(elevator, effector, 4),
+      swerve.driveToAprilTag(12, new Translation2d(1, 0)), 
+      Commands.waitSeconds(1),
+      swerve.driveToAprilTag(17, new Translation2d(1, 0)),
+      new AlignReef(swerve, vision, false),
+      new AutoPlaceCoral(elevator, effector, 4),
+      swerve.driveToAprilTag(12, new Translation2d(1, 0)),
+      Commands.waitSeconds(1),
+      swerve.driveToAprilTag(17, new Translation2d(1, 0)),
+      new AlignReef(swerve, vision, true),
+      new AutoPlaceCoral(elevator, effector, 4)
+    );
   }
 }
