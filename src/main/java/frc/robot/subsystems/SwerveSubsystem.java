@@ -16,6 +16,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
@@ -254,6 +255,49 @@ public class SwerveSubsystem extends SubsystemBase {
       false
     );
   }
+  public Command driveToPose(Pose2d pose)
+  {
+    // Create the constraints to use while pathfinding
+    //swerveDrive.getMaximumChassisVelocity(), 4.0
+    PathConstraints constraints = new PathConstraints(
+        1, .5,
+        swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
+
+    // Since AutoBuilder is configured, we can use it to build pathfinding commands
+    return AutoBuilder.pathfindToPose(
+        pose,
+        constraints,
+        edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
+                                     );
+  }
+    public Command driveToAprilTag(int apriltagnumber, Translation2d distanceFromAprilTag, double rotationOffset){
+    Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+    return this.driveToPose(
+      targetAprilTagPose.plus(
+        new Transform2d(distanceFromAprilTag,
+          new Rotation2d(Units.degreesToRadians(-rotationOffset))
+        )
+      )
+    );
+  };
+  public Command driveToAprilTag(int apriltagnumber, Translation2d distanceFromAprilTag){
+    return driveToAprilTag(apriltagnumber, distanceFromAprilTag, 180);
+  };
+  public Command driveToAprilTag(int apriltagnumber){
+    return driveToAprilTag(apriltagnumber,new Translation2d(0,swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters()));
+
+  }
+  public Command driveToAprilTag(int apriltagnumber, double rotationOffset){
+    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0), rotationOffset);
+  };
+
+
+  public Command driveToReef(int apriltagnumber, boolean right){
+    if(right){
+      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),.2));
+    }
+    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
+  };
 
   @Override
   public void periodic() {
