@@ -4,11 +4,16 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
+import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReefAngle extends Command {
@@ -20,6 +25,7 @@ public class AlignReefAngle extends Command {
   private Pose2d tagGoal;
   private Pose2d lastPos;
   private Pose2d toTravel;
+  private int tagId;
   
   /** Creates a new AlignReefAngle. */
   public AlignReefAngle(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
@@ -37,7 +43,14 @@ public class AlignReefAngle extends Command {
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
-  public void execute() {}
+  public void execute() {
+    if (alignRight) {
+      tagId = vision.getFRTagId();
+    } else {
+      tagId = vision.getFLTagId();
+    }
+    
+  }
 
   // Called once the command ends or is interrupted.
   @Override

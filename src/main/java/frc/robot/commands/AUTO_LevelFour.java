@@ -22,7 +22,7 @@ public class AUTO_LevelFour extends SequentialCommandGroup {
     addCommands(
     new ActuateIntakeUp(intake),
     new MoveElevator(elevator, level),
-    new AlignReef(swerve, vision, alignRight).withTimeout(6),
+    new AlignReefPosition(swerve, vision, alignRight).withTimeout(6),
     new OuttakeCoral(effector),
     new MoveElevator(elevator, 0),
     new MoveElevatorSlightlyDown(elevator));
