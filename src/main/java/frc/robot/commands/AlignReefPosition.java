@@ -16,7 +16,7 @@ import frc.util.Elastic.ElasticAlign;
 import edu.wpi.first.math.MathUtil;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlignReef extends Command {
+public class AlignReefPosition extends Command {
 
   private SwerveSubsystem swerve;
   private Vision vision;
@@ -27,7 +27,7 @@ public class AlignReef extends Command {
   private Pose2d toTravel;
 
   /** Creates a new AutoAlignPose. */
-  public AlignReef(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
+  public AlignReefPosition(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
     this.swerve = swerve;
     this.vision = vision;
     this.alignRight = alignRight;
@@ -84,13 +84,6 @@ public class AlignReef extends Command {
         false
       );
     }
-    /*
-    if (vision.getFLTagPose() != null) {
-      tagPose3d = vision.getFLTagPose();
-      tagPose = new Pose2d(tagPose3d.getX(), tagPose3d.getY(), tagPose3d.getRotation().toRotation2d());
-      tagField = swerve.getPose().relativeTo(tagPose.rotateBy(swerve.getPose().getRotation()));
-      lastPos = swerve.getPose();
-    }*/
 
   }
 

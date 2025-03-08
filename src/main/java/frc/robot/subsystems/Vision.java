@@ -96,6 +96,14 @@ public class Vision extends SubsystemBase {
     return cameras[1].getEstimatedTagPose();
   }
 
+  public int getFLTagId() {
+    return cameras[0].getClosestReefId();
+  }
+
+  public int getFRTagId() {
+    return cameras[1].getClosestReefId();
+  }
+
   public Pose2d getEstimatedRobotPosition() {
     if (avgEstimateAvailable) {
       return avgEstimatedRobotPosition;

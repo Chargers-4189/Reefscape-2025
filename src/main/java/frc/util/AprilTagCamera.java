@@ -31,6 +31,8 @@ public class AprilTagCamera {
   protected PhotonCamera camera;
   private PhotonPoseEstimator poseEstimator;
 
+  int targetTagID = -1;
+  
   public AprilTagCamera(String cameraName, Transform3d cameraTranslation) {
     camera = new PhotonCamera(cameraName);
     try {
@@ -114,7 +116,7 @@ public class AprilTagCamera {
   private Transform3d getClosestReefTag(PhotonPipelineResult result) {
     Transform3d closestTag = null;
     int tagID = -1;
-    int targetTagID = -1;
+    targetTagID = -1;
     double minDistance = 100.0;
 
     result.targets.removeIf(tag -> {
@@ -143,6 +145,10 @@ public class AprilTagCamera {
     }
     //System.out.println(targetTagID);
     return closestTag;
+  }
+
+  public int getClosestReefId() {
+    return targetTagID;
   }
 
   public static class AprilTagCameraSim extends AprilTagCamera {
