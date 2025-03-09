@@ -188,7 +188,7 @@ public class SwerveSubsystem extends SubsystemBase {
         translationX,
         translationY
       ),
-      0.8
+      1
     );
 
     swerveDrive.driveFieldOriented(

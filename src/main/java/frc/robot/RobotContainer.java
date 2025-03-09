@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.ClimberConstants;
 import frc.robot.commands.AUTO_LevelFour;
 import frc.robot.commands.ActuateIntakeDown;
@@ -94,7 +95,7 @@ public class RobotContainer {
       || (Math.abs(secondaryController.getRightTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
     ));
 
-    final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryDeadband));
+    final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryEffectorDeadband));
 
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
 
@@ -119,12 +120,12 @@ public class RobotContainer {
     
     driveController
       .leftBumper()
-      .onTrue(new AlignReef(swerve, vision, false).withTimeout(Constants.AlignmentConstants.kOVERARCHING_TIMEOUT));
+      .onTrue(new AlignReef(swerve, vision, false).withTimeout(AlignmentConstants.kOVERARCHING_TIMEOUT));
     driveController
       .rightBumper()
-      .onTrue(new AlignReef(swerve, vision, true).withTimeout(Constants.AlignmentConstants.kOVERARCHING_TIMEOUT));
+      .onTrue(new AlignReef(swerve, vision, true).withTimeout(AlignmentConstants.kOVERARCHING_TIMEOUT));
     
-    driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
+    //driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
 
     driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, swerve));
 
@@ -171,7 +172,7 @@ public class RobotContainer {
       elevator.setVoltage(-secondaryController.getLeftY() * 4);
     },elevator));
 
-    elevatorTrigger.onFalse(Commands.run(() -> {
+    elevatorTrigger.onFalse(Commands.runOnce(() -> {
       elevator.setVoltage(0);
     }, elevator));
     
@@ -179,7 +180,7 @@ public class RobotContainer {
       intake.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
     },intake));
 
-    chuteTrigger.onFalse(Commands.run(()-> {
+    chuteTrigger.onFalse(Commands.runOnce(()-> {
       intake.setPower(0);
     },intake));
 
@@ -187,7 +188,7 @@ public class RobotContainer {
       coralEffector.setPower(secondaryController.getRightY() * -.5);
     },coralEffector));
 
-    effectorTrigger.onFalse(Commands.run(()->{
+    effectorTrigger.onFalse(Commands.runOnce(()->{
       coralEffector.setPower(0);
     },coralEffector));
 

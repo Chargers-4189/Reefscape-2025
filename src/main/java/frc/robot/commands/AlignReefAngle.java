@@ -38,6 +38,7 @@ public class AlignReefAngle extends Command {
   @Override
   public void initialize() {
     stopwatch.start(AlignmentConstants.kROTATION_TIMEOUT);
+    rotationSetpoint = new Rotation2d(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,7 +55,7 @@ public class AlignReefAngle extends Command {
       System.out.print(e);
       this.cancel();
     }
-    System.out.println(rotationSetpoint);
+    //System.out.println(rotationSetpoint);
     swerve.drive(0, 0, rotationSetpoint);
     
   }
@@ -66,9 +67,12 @@ public class AlignReefAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //System.out.println("Finished?");
     if (stopwatch.hasTriggered()) {
+      //System.out.println("ALERT: FINISHED");
       return true;
     } else {
+      //System.out.println("Check Setpoint");
       return Math.abs(swerve.getPose().getRotation().getDegrees() - rotationSetpoint.getDegrees()) < AlignmentConstants.kROTATION_TOLERANCE;
     }
   }
