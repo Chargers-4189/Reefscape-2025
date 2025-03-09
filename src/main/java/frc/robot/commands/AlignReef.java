@@ -19,6 +19,6 @@ public class AlignReef extends SequentialCommandGroup {
   public AlignReef(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands(new AlignReefAngle(swerve, vision, alignRight), new AlignReefPosition(swerve, vision, alignRight));
+    addCommands(new AlignReefAngle(swerve, vision, alignRight).withTimeout(1), new AlignReefPosition(swerve, vision, alignRight).withTimeout(2.5));
   }
 }

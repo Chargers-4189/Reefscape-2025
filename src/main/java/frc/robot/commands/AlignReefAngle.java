@@ -38,23 +38,15 @@ public class AlignReefAngle extends Command {
   @Override
   public void initialize() {
     stopwatch.start(AlignmentConstants.kROTATION_TIMEOUT);
+    rotationSetpoint = new Rotation2d(0);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (alignRight) {
-      tagId = vision.getFRTagId();
-    } else {
-      tagId = vision.getFLTagId();
-    }
-    try {
-      rotationSetpoint = GetAprilTagRotation.getReefTagAngle(tagId);
-    } catch (Exception e) {
-      System.out.print(e);
-      this.cancel();
-    }
-    System.out.println(rotationSetpoint);
+
+    rotationSetpoint = new Rotation2d(Math.round(swerve.getPose().getRotation().getRadians() / Math.PI * 3) * Math.PI / 3);
+    //System.out.println(rotationSetpoint);
     swerve.drive(0, 0, rotationSetpoint);
     
   }
@@ -66,9 +58,12 @@ public class AlignReefAngle extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    //System.out.println("Finished?");
     if (stopwatch.hasTriggered()) {
+      //System.out.println("ALERT: FINISHED");
       return true;
     } else {
+      //System.out.println("Check Setpoint");
       return Math.abs(swerve.getPose().getRotation().getDegrees() - rotationSetpoint.getDegrees()) < AlignmentConstants.kROTATION_TOLERANCE;
     }
   }

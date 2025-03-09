@@ -35,6 +35,7 @@ public final class Constants {
     public static final double kDriveDeadband = 0.05;
     public static final int secondaryController = 1;
     public static final double kSecondaryDeadband = 0.05;
+    public static final double kSecondaryEffectorDeadband = 0.1;
   }
 
   public static class VisionConstants {
@@ -110,8 +111,11 @@ public final class Constants {
     public static final double kALGAE_POWER = .6;
     public static final int kEJECT_ALGAE_MILISECONDS = 1500;
     //Outtake
-    public static final double kCORAL_POWER = .2;
+    public static final double kCORAL_POWER = .1;
     public static final int kMILISECONDS_OUTTAKE = 2;
+
+    public static final double kSECONDARY_OUT_POWER = .05;
+    public static final double kSECONDARY_IN_POWER = .05;
 
   }
 
@@ -181,7 +185,7 @@ public final class Constants {
 
     public static final int[] kTagAngles = {30};
 
-    public static final double kROTATION_TIMEOUT = 10000;
+    public static final double kROTATION_TIMEOUT = 1000;
     public static final double kROTATION_TOLERANCE = 5;//Degrees
 
 
