@@ -44,17 +44,8 @@ public class AlignReefAngle extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if (alignRight) {
-      tagId = vision.getFRTagId();
-    } else {
-      tagId = vision.getFLTagId();
-    }
-    try {
-      rotationSetpoint = GetAprilTagRotation.getReefTagAngle(tagId);
-    } catch (Exception e) {
-      System.out.print(e);
-      this.cancel();
-    }
+
+    rotationSetpoint = new Rotation2d(Math.round(swerve.getPose().getRotation().getRadians() / Math.PI * 3) * Math.PI / 3);
     //System.out.println(rotationSetpoint);
     swerve.drive(0, 0, rotationSetpoint);
     

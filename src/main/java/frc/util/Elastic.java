@@ -115,7 +115,13 @@ public class Elastic {
         effectorTable.getIntegerTopic("EJECT_ALGAE_MILISECONDS").getEntry(Constants.CoralEffectorConstants.kEJECT_ALGAE_MILISECONDS);
 
         public static DoubleEntry kCORAL_POWER = 
-        effectorTable.getDoubleTopic("CORAL_POWER").getEntry(.1);
+        effectorTable.getDoubleTopic("CORAL_POWER").getEntry(Constants.CoralEffectorConstants.kCORAL_POWER);
+
+        public static DoubleEntry kSECONDARY_OUT_POWER = 
+        effectorTable.getDoubleTopic("SECONDARY_OUT_POWER").getEntry(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
+
+        public static DoubleEntry kSECONDARY_IN_POWER = 
+        effectorTable.getDoubleTopic("SECONDARY_IN_POWER").getEntry(Constants.CoralEffectorConstants.kSECONDARY_IN_POWER);
         
 
         public static void initialize() {
@@ -123,6 +129,8 @@ public class Elastic {
             kMILISECONDS_EXTRA_PULLBACK.set(kMILISECONDS_EXTRA_PULLBACK.get());
             kEJECT_ALGAE_MILISECONDS.set(kEJECT_ALGAE_MILISECONDS.get());
             kCORAL_POWER.set(kCORAL_POWER.get());
+            kSECONDARY_IN_POWER.set(kSECONDARY_IN_POWER.get());
+            kSECONDARY_OUT_POWER.set(kSECONDARY_OUT_POWER.get());
         }
     }
 
