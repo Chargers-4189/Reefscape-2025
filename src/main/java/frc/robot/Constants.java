@@ -90,13 +90,12 @@ public final class Constants {
       );
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
-
-    /*
+    
     public static final Pose2d kINITIAL_POSE = new Pose2d(
       2,
       7,
       new Rotation2d()
-    );*/
+    );
   }
 
   public static class CoralEffectorConstants {

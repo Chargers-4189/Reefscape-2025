@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -58,7 +59,7 @@ public class SwerveSubsystem extends SubsystemBase {
         new SwerveParser(swerveJsonDirectory)
           .createSwerveDrive(
             SwerveConstants.kMaxVelocity,
-            new Pose2d(2, 7, new Rotation2d())
+            Constants.SwerveConstants.kINITIAL_POSE
           );
     } catch (Exception e) {
       System.err.println("Swerve no workie :( " + e.getMessage());

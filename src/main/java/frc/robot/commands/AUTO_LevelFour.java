@@ -24,17 +24,17 @@ public class AUTO_LevelFour extends SequentialCommandGroup {
     addCommands(
       new ActuateIntakeUp(intake),
       swerve.driveToAprilTag(22, new Translation2d(1, 0)),
-      new AlignReef(swerve, vision, false),
+      new AlignReefPosition(swerve, vision, false),
       new AutoPlaceCoral(elevator, effector, 4),
       swerve.driveToAprilTag(12, new Translation2d(1, 0)), 
       Commands.waitSeconds(1),
       swerve.driveToAprilTag(17, new Translation2d(1, 0)),
-      new AlignReef(swerve, vision, false),
+      new AlignReefPosition(swerve, vision, false),
       new AutoPlaceCoral(elevator, effector, 4),
       swerve.driveToAprilTag(12, new Translation2d(1, 0)),
       Commands.waitSeconds(1),
       swerve.driveToAprilTag(17, new Translation2d(1, 0)),
-      new AlignReef(swerve, vision, true),
+      new AlignReefPosition(swerve, vision, true),
       new AutoPlaceCoral(elevator, effector, 4)
     );
   }

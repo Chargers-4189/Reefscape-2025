@@ -25,6 +25,7 @@ public class AlignReefPosition extends Command {
   private Pose2d tagGoal;
   private Pose2d lastPos;
   private Pose2d toTravel;
+  private int tagId;
 
   /** Creates a new AutoAlignPose. */
   public AlignReefPosition(SwerveSubsystem swerve, Vision vision, boolean alignRight) {
@@ -48,11 +49,12 @@ public class AlignReefPosition extends Command {
     if (alignRight) {
       if (vision.getFLTagPose() != null) {
         tagPose = vision.getFLTagPose();
-        
+        tagId = vision.getFLTagId();
       }
     } else {
       if (vision.getFRTagPose() != null) {
         tagPose = vision.getFRTagPose();
+        tagId = vision.getFRTagId();
       }
     }
     
@@ -93,6 +95,8 @@ public class AlignReefPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     swerve.drive(0, 0, 0, false);
+
+    swerve.resetPose(new Pose2d(0, 0, new Rotation2d(0)));
   }
 
   // Returns true when the command should end.
