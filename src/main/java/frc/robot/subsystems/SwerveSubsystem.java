@@ -26,8 +26,12 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.Constants.VisionConstants;
+
 import java.io.File;
+import java.util.Arrays;
 import java.util.function.DoubleSupplier;
 import swervelib.SwerveDrive;
 import swervelib.math.SwerveMath;
@@ -36,10 +40,6 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
-
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
-    AprilTagFields.k2025ReefscapeWelded
-  );
 
   private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
   /**
@@ -281,7 +281,7 @@ public class SwerveSubsystem extends SubsystemBase {
                                      );
   }
     public Command driveToAprilTag(int apriltagnumber, Translation2d distanceFromAprilTag, double rotationOffset){
-    Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
+    Pose2d targetAprilTagPose = VisionConstants.aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
     return this.driveToPose(
       targetAprilTagPose.plus(
         new Transform2d(distanceFromAprilTag,
@@ -308,6 +308,24 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     return driveToAprilTag(aprilTagId, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
   };
+
+  public Pose2d goToReef(boolean right, int tagId) {
+    Pose2d targetAprilTagPose = VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!right) {
+      offset *= -1;
+    }
+
+    return new Pose2d().transformBy(
+      targetAprilTagPose.minus(
+        new Pose2d(
+          new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+          new Rotation2d()
+        )
+      )
+    );
+  }
 
   @Override
   public void periodic() {

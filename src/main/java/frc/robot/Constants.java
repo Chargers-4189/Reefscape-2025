@@ -6,6 +6,8 @@ package frc.robot;
 
 import com.pathplanner.lib.path.PathConstraints;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
@@ -65,6 +67,10 @@ public final class Constants {
         Units.inchesToMeters(0)
       ),
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(180.0))
+    );
+
+    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
+    AprilTagFields.k2025ReefscapeWelded
     );
   }
 

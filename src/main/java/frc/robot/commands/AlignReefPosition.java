@@ -8,12 +8,15 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Elastic.ElasticAlign;
 import edu.wpi.first.math.MathUtil;
+import frc.robot.Constants.VisionConstants;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReefPosition extends Command {
@@ -95,8 +98,22 @@ public class AlignReefPosition extends Command {
   @Override
   public void end(boolean interrupted) {
     swerve.drive(0, 0, 0, false);
+        Pose2d targetAprilTagPose = VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
+    
+    double offset = AlignmentConstants.kDIST_OFFSET;
+    if (!alignRight) {
+      offset *= -1;
+    }
 
-    swerve.resetPose(new Pose2d(0, 0, new Rotation2d(0)));
+    Pose2d expectedPose = new Pose2d().transformBy(
+      targetAprilTagPose.minus(
+        new Pose2d(
+          new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
+          new Rotation2d()
+        )
+      )
+    );
+    swerve.resetPose(expectedPose);
   }
 
   // Returns true when the command should end.
