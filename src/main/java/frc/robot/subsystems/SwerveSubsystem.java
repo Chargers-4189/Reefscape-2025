@@ -21,6 +21,8 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.system.plant.DCMotor;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
@@ -52,6 +54,8 @@ public class SwerveSubsystem extends SubsystemBase {
   SwerveDrive swerveDrive;
 
   /** Creates a new SwerveDrive. */
+  private final NetworkTableInstance networktable = NetworkTableInstance.getDefault().getTable("SwerveSubsystem").getInstance();
+  private final StructPublisher<Pose2d> publisher = networktable.getStructTopic("MyPose",Pose2d.struct).publish();
   public SwerveSubsystem() {
     SwerveDriveTelemetry.verbosity = TelemetryVerbosity.HIGH; // CHANGE TO LOW IN COMP
     try {
@@ -309,27 +313,10 @@ public class SwerveSubsystem extends SubsystemBase {
     return driveToAprilTag(aprilTagId, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
   };
 
-  public Pose2d goToReef(boolean right, int tagId) {
-    Pose2d targetAprilTagPose = VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d();
-    
-    double offset = AlignmentConstants.kDIST_OFFSET;
-    if (!right) {
-      offset *= -1;
-    }
-
-    return new Pose2d().transformBy(
-      targetAprilTagPose.minus(
-        new Pose2d(
-          new Translation2d(AlignmentConstants.kDIST_FROM_REEF, offset).rotateBy(targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(-180)))),
-          new Rotation2d()
-        )
-      )
-    );
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     //System.out.println(gyro.getAngle());
+    publisher.set(getPose());
   }
 }

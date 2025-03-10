@@ -44,6 +44,7 @@ public class ActuateIntakeUp extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
+    //return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
+    return true;
   }
 }

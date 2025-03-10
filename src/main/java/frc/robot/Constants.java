@@ -98,9 +98,9 @@ public final class Constants {
     public static final int kSteerAmpLimit = 20;
     
     public static final Pose2d kINITIAL_POSE = new Pose2d(
-      2,
-      7,
-      new Rotation2d()
+      Units.inchesToMeters(299.44 - (37.5 / 2)),
+      Units.feetToMeters(7),
+      new Rotation2d(Units.degreesToRadians(180))
     );
   }
 
