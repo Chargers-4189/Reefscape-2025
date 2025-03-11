@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -23,6 +24,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import java.io.File;
 import java.util.function.DoubleSupplier;
@@ -38,7 +40,8 @@ public class SwerveSubsystem extends SubsystemBase {
     AprilTagFields.k2025ReefscapeWelded
   );
 
-  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  //private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  private final Pigeon2 gyro = new Pigeon2(Constants.SwerveConstants.kGYRO_CAN_ID);
   /**
    * Swerve drive object.
    */
