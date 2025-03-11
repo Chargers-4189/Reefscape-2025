@@ -93,8 +93,6 @@ public class RobotContainer {
     final Trigger chuteTrigger = new Trigger(()->(
       (Math.abs(secondaryController.getLeftTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
       || (Math.abs(secondaryController.getRightTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
-      || (secondaryController.leftBumper().getAsBoolean())
-      || (secondaryController.rightBumper().getAsBoolean())
     ));
 
     final Trigger effectorTrigger = new Trigger(()->(secondaryController.povUp().getAsBoolean() || secondaryController.povDown().getAsBoolean()));
@@ -166,9 +164,9 @@ public class RobotContainer {
 
     //Secondary Controls:
 
-    /* Chute commented out for safety
-    secondaryController.leftBumper().and(() -> !effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeDown(intake));
-    secondaryController.rightBumper().and(() ->!effectorTrigger.getAsBoolean()).onTrue(new ActuateIntakeUp(intake));
+    secondaryController.leftBumper().onTrue(new ActuateIntakeDown(intake));
+    secondaryController.rightBumper().onTrue(new ActuateIntakeUp(intake));
+    
     chuteTrigger.whileTrue(Commands.run(()-> {
       intake.setPower(secondaryController.getRightTriggerAxis() - secondaryController.getLeftTriggerAxis());
     },intake));
@@ -176,7 +174,7 @@ public class RobotContainer {
     chuteTrigger.onFalse(Commands.runOnce(()-> {
       intake.setPower(0);
     },intake));
-    */
+    
 
 
     elevatorTrigger.whileTrue(Commands.run(()->{
@@ -210,6 +208,8 @@ public class RobotContainer {
     secondaryController.povDown().whileTrue(Commands.run(()->{
       coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_IN_POWER);
     }));
+
+    climber.setDefaultCommand(Commands.run(() -> climber.setPower(secondaryController.getRightY()), climber));
 
     //Testing:
 

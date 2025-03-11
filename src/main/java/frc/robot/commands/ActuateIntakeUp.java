@@ -26,24 +26,28 @@ public class ActuateIntakeUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Init");
     stopwatch.start(2500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("Executing");
     intake.setPower(ElasticIntake.kPOWER.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Finished");
     intake.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    System.out.println("switch: " + intake.getTopLimitSwitch() + "  stopwatch: " + stopwatch.hasTriggered());
     return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
   }
 }
