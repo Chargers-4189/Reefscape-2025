@@ -25,13 +25,13 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
 import frc.robot.commands.AprilTagPathPlannerAuto;
-import frc.robot.commands.AutoPlaceCoral;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.EjectAlgae;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
-import frc.robot.commands.ThreeCoralAuto;
+import frc.robot.commands.multiaction.ThreeCoralAuto;
+import frc.robot.commands.multiaction.AutoPlaceCoral;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.swervedrive.Vision;
 
@@ -275,7 +275,10 @@ public class RobotContainer
   {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
-    return new ThreeCoralAuto(drivebase, elevator, coralEffector, intake);
+    return Commands.parallel(
+      new ThreeCoralAuto(drivebase, elevator, coralEffector),
+      new ActuateIntakeUp(intake)
+    );
     //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);
   }
 

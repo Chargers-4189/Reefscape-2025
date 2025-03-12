@@ -334,11 +334,14 @@ public class SwerveSubsystem extends SubsystemBase
 
   public Command driveToReef(int apriltagnumber, boolean right){
     if(right){
-      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),.18));
+      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),Units.inchesToMeters(6.47)));
     }
-    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
+    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),Units.inchesToMeters(-6.47)));
   };
 
+  public Command driveToReef(boolean right) {
+    return driveToAprilTag(1, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),Units.inchesToMeters(-6.47)));
+  }
 
   /**
    * Drive with {@link SwerveSetpointGenerator} from 254, implemented by PathPlanner.

@@ -57,7 +57,7 @@ public class Vision
    * April Tag Field Layout of the year.
    */
   public static final AprilTagFieldLayout fieldLayout                     = AprilTagFieldLayout.loadField(
-      AprilTagFields.k2025ReefscapeAndyMark);
+      AprilTagFields.k2025ReefscapeWelded);
   /**
    * Ambiguity defined as a value between (0,1). Used in {@link Vision#filterPose}.
    */
@@ -349,7 +349,7 @@ public class Vision
     new Translation3d(Units.inchesToMeters(15.508),
                       Units.inchesToMeters(6.25),
                       Units.inchesToMeters(9)),
-    VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1)),
+    VecBuilder.fill(1, 1, 2), VecBuilder.fill(0.5, 0.5, 1)),
     /**
      * Right Camera
      */
@@ -358,7 +358,7 @@ public class Vision
     new Translation3d(Units.inchesToMeters(15.508),
                       Units.inchesToMeters(-6.25),
                       Units.inchesToMeters(9)),
-    VecBuilder.fill(4, 4, 8), VecBuilder.fill(0.5, 0.5, 1));
+    VecBuilder.fill(1, 1, 2), VecBuilder.fill(0.5, 0.5, 1));
 
     
     //BACK_CAM("bkCam2025",
