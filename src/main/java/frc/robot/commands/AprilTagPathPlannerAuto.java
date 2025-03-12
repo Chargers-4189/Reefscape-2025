@@ -6,10 +6,8 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.coralactuator.actuatebase.MoveElevator;
-import frc.robot.commands.coralactuator.actuatebase.MoveElevatorSlightlyDown;
-import frc.robot.subsystems.coralactuator.Elevator;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.Elevator;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

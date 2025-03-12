@@ -2,13 +2,13 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands.coralactuator.actuatebase;
+package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.coralactuator.Elevator;
-import frc.robot.Constants.CoralActuatorConstants.ElevatorConstants;
-import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.Elevator;
+import frc.util.Elastic.ElasticElevator;
+import frc.util.Stopwatch;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevator extends Command {
@@ -18,7 +18,7 @@ public class MoveElevator extends Command {
   private double startTime;
   private boolean up;
   private int level;
-  private Timer stopwatch = new Timer();
+  private Stopwatch stopwatch = new Stopwatch();
 
   /**
    * Creates a new moveElevator command.
@@ -39,12 +39,12 @@ public class MoveElevator extends Command {
   public void initialize() {
     this.startTime = Timer.getFPGATimestamp();
     if (level == -1) {
-      //this.goal = ElevatorConstants.kTEST_HEIGHT;
+      this.goal = ElasticElevator.kTEST_HEIGHT.get();
     } else {
-      this.goal = ElevatorConstants.kHEIGHTS[level];
+      this.goal = ElasticElevator.kHEIGHTS.get()[level];
     }
     this.up = elevator.getEncoder() < goal;
-    stopwatch.start();
+    stopwatch.start(ElasticElevator.kTIMEOUT.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,11 +52,11 @@ public class MoveElevator extends Command {
   public void execute() {
     var proportionalVoltage =
       Math.abs(goal - elevator.getEncoder()) *
-      ElevatorConstants.kPROPORTIONAL_VOLTS;
+      ElasticElevator.kPROPORTIONAL_VOLTS.get();
     var maxVoltage = Math.min(
-      ElevatorConstants.kMAX_VOLTS,
+      ElasticElevator.kMAX_VOLTS.get(),
       (Timer.getFPGATimestamp() - startTime) *
-      ElevatorConstants.kMAX_VOLT_CHANGE_PER_SECOND
+      ElasticElevator.kMAX_VOLT_CHANGE_PER_SECOND.get()
     );
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
@@ -75,13 +75,13 @@ public class MoveElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (stopwatch.hasElapsed(ElevatorConstants.kTIMEOUT)) {
+    if (stopwatch.hasTriggered()) {
       return true;
     }
     if (up) {
-      return elevator.getEncoder() > goal - ElevatorConstants.kTOLERANCE;
+      return elevator.getEncoder() > goal - ElasticElevator.kTOLERANCE.get();
     } else {
-      return elevator.getEncoder() < goal + ElevatorConstants.kTOLERANCE;
+      return elevator.getEncoder() < goal + ElasticElevator.kTOLERANCE.get();
     }
   }
 }
