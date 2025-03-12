@@ -94,12 +94,11 @@ public class SwerveSubsystem extends SubsystemBase
   public SwerveSubsystem(File directory)
   {
     // Configure the Telemetry before creating the SwerveDrive to avoid unnecessary objects being created.
-    Optional<Alliance> ally = DriverStation.getAlliance();
-    Pose2d startingPose = (false) ? new Pose2d(new Translation2d(Meter.of(1),
+    Pose2d startingPose = (this.isRedAlliance()) ? new Pose2d(new Translation2d(Meter.of(10),
                                                                                     Meter.of(4)),
                                                                   Rotation2d.fromDegrees(0)
                                                                   )
-                                                      : new Pose2d(new Translation2d(Meter.of(16),
+                                                      : new Pose2d(new Translation2d(Meter.of(8),
                                                                                       Meter.of(4)
                                                                                       ),
                                                                   Rotation2d.fromDegrees(180));
@@ -130,7 +129,8 @@ public class SwerveSubsystem extends SubsystemBase
       swerveDrive.stopOdometryThread();
     }
     setupPathPlanner();
-    RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
+    //RobotModeTriggers.autonomous().onTrue(Commands.runOnce(this::zeroGyroWithAlliance));
+    this.zeroGyroWithAlliance();
     //swerveDrive.swerveController.addSlewRateLimiters(new SlewRateLimiter(0), new SlewRateLimiter(0), new SlewRateLimiter(0));
     //swerveDrive.swerveController.xLimiter.reset(0);
     //swerveDrive.swerveController.yLimiter.reset(0);
@@ -144,15 +144,6 @@ public class SwerveSubsystem extends SubsystemBase
    * @param driveCfg      SwerveDriveConfiguration for the swerve.
    * @param controllerCfg Swerve Controller.
    */
-  public SwerveSubsystem(SwerveDriveConfiguration driveCfg, SwerveControllerConfiguration controllerCfg)
-  {
-    swerveDrive = new SwerveDrive(driveCfg,
-                                  controllerCfg,
-                                  Constants.MAX_SPEED,
-                                  new Pose2d(new Translation2d(Meter.of(2), Meter.of(0)),
-                                             Rotation2d.fromDegrees(0)));
-  }
-
   /**
    * Setup the photon vision class.
    */
@@ -343,9 +334,9 @@ public class SwerveSubsystem extends SubsystemBase
 
   public Command driveToReef(int apriltagnumber, boolean right){
     if(right){
-      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0.12));
+      return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),.18));
     }
-    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-0.12));
+    return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),-.2));
   };
 
 
@@ -593,6 +584,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void resetOdometry(Pose2d initialHolonomicPose)
   {
+    System.out.println("iuahdiuahdiouahsiudohasoiudhasiduoh");
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -631,6 +623,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void zeroGyro()
   {
+    System.out.println("ahapiohapiofhiasudhfiuasdhiofuashfiouashfiuoh");
     swerveDrive.zeroGyro();
   }
 

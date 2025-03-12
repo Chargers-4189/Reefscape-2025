@@ -276,6 +276,7 @@ public class RobotContainer
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
     return new ThreeCoralAuto(drivebase, elevator, coralEffector, intake);
+    //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);
   }
 
   public void setMotorBrake(boolean brake)

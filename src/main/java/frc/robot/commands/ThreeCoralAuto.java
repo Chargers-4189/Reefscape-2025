@@ -27,22 +27,23 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
     addCommands(
       swerveSubsystem.driveToAprilTag(19, new Translation2d(1.5,0)),
       swerveSubsystem.driveToReef(19, false),
-      //new AutoPlaceCoral(elevator, effector, 4),
+      new AutoPlaceCoral(elevator, effector, 4),
       swerveSubsystem.driveToAprilTag(13,0),
       Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
       swerveSubsystem.driveToAprilTag(19, new Translation2d(1.5,0)),
       swerveSubsystem.driveToReef(19, true),
-      //new AutoPlaceCoral(elevator, effector, 4),
+      new AutoPlaceCoral(elevator, effector, 4),
       swerveSubsystem.driveToAprilTag(13,0),
       Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
       swerveSubsystem.driveToAprilTag(19,new Translation2d(1.5,0)),
       swerveSubsystem.driveToReef(19, false),
-      //new AutoPlaceCoral(elevator, effector, 3),
+      new AutoPlaceCoral(elevator, effector, 3),
       swerveSubsystem.driveToAprilTag(13,0),
       Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
       swerveSubsystem.driveToAprilTag(19,new Translation2d(1.5,0)),
-      swerveSubsystem.driveToReef(19, true)
-      //new AutoPlaceCoral(elevator, effector, 3)
+      swerveSubsystem.driveToReef(19, true),
+      new AutoPlaceCoral(elevator, effector, 3),
+      swerveSubsystem.driveToAprilTag(13,0)
     );
   }
 }
