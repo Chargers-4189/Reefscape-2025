@@ -104,7 +104,7 @@ public class RobotContainer
    */
   private void configureBindings()
   {
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity);
+    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); 
     /*
     Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
     Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
@@ -152,7 +152,7 @@ public class RobotContainer
     driverXbox.povUpLeft().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 20, true, 4));
     driverXbox.povUp().toggleOnTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 21, true, 4));*/
 
-    final Trigger elevatorTrigger = new Trigger(()->(Math.abs(secondaryController.getLeftY()) > Constants.OperatorConstants.kSecondaryDeadband)); 
+    final Trigger elevatorTrigger = new Trigger(()->(Math.abs(secondaryController.getLeftY()) > .1)); 
 
     final Trigger chuteTrigger = new Trigger(()->(
       (Math.abs(secondaryController.getLeftTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
@@ -175,15 +175,15 @@ public class RobotContainer
 
     driveController.leftTrigger().whileTrue(new EjectAlgae(coralEffector));
 
-    //driveController.leftBumper().onTrue(new AlignReef(swerve, vision, false).withTimeout(3));
-    //driveController.rightBumper().onTrue(new AlignReef(swerve, vision, true).withTimeout(3));
+    driveController.leftBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(3).schedule(), drivebase));
+    driveController.rightBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(3).schedule(), drivebase));
 
     
     
     
     //driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
 
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake));
+    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
     
     /*
     driveController.start().debounce(1).onTrue(
@@ -247,7 +247,7 @@ public class RobotContainer
       coralEffector.setPower(0);
     },coralEffector));
 
-    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake));
+    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
 
 
     secondaryController.x().onTrue(new MoveElevator( elevator, 1));

@@ -25,10 +25,9 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
       swerveSubsystem.driveToAprilTag(19, new Translation2d(1.8,0)),
-      swerveSubsystem.driveToReef(19, false),
+      swerveSubsystem.driveToReef(19, true),
       new AutoPlaceCoral(elevator, effector, 4),
 
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, true, 4),
       new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, false, 4),
       new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, true, 3),
       new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, false, 3),

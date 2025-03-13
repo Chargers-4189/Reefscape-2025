@@ -339,8 +339,28 @@ public class SwerveSubsystem extends SubsystemBase
     return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),Units.inchesToMeters(-6.47)));
   };
 
-  public Command driveToReef(boolean right) {
-    return driveToAprilTag(1, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),Units.inchesToMeters(-6.47)));
+
+  public Command driveToReefClosest(boolean right) {
+    double minDist = Double.MAX_VALUE;
+    int[] reefTagIds = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
+    Integer minId = null;
+    //System.out.println("A");
+    for (int id : reefTagIds) {
+      //System.out.println("B");
+      double dist = aprilTagFieldLayout.getTagPose(id).get().toPose2d().getTranslation().getDistance(getPose().getTranslation());
+      //System.out.println(id + " " + dist);
+      if (dist < minDist) {
+        minDist = dist;
+        minId = id;
+      }
+    }
+    try {
+      System.out.print("Working");
+      return driveToReef(minId, right);
+    } catch (Exception e) {
+      System.out.println(e);
+      return Commands.none();
+    }
   }
 
   /**
