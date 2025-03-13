@@ -43,6 +43,8 @@ public class Elevator extends SubsystemBase {
   private static final SparkMaxConfig leftSparkMaxConfig = new SparkMaxConfig();
   private static final SparkMaxConfig rightSparkMaxConfig = new SparkMaxConfig();
 
+  private boolean errorState;
+
   /** Creates a new Elevator. */
   public Elevator() {
     zeroEncoder();
@@ -59,6 +61,7 @@ public class Elevator extends SubsystemBase {
       ResetMode.kResetSafeParameters,
       PersistMode.kPersistParameters
     );
+    errorState = !getMinLimitSwitch();
   }
 
   public int getLevel() {
@@ -123,6 +126,10 @@ public class Elevator extends SubsystemBase {
     // This method will be called once per scheduler run
     if (getMinLimitSwitch()) {
       zeroEncoder();
+      errorState = false;
+    }
+    if (errorState) {
+      setVoltageNoGravity(-.2);
     }
     
     //System.out.print("Bottom: " + getMinLimitSwitch());

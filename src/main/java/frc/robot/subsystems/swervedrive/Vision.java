@@ -349,7 +349,7 @@ public class Vision
     new Translation3d(Units.inchesToMeters(15.508),
                       Units.inchesToMeters(6.25),
                       Units.inchesToMeters(9)),
-    VecBuilder.fill(1, 1, 2), VecBuilder.fill(0.5, 0.5, 1)),
+    VecBuilder.fill(.5, .5, 1), VecBuilder.fill(.25, .25, .5)),
     /**
      * Right Camera
      */
@@ -358,7 +358,7 @@ public class Vision
     new Translation3d(Units.inchesToMeters(15.508),
                       Units.inchesToMeters(-6.25),
                       Units.inchesToMeters(9)),
-    VecBuilder.fill(1, 1, 2), VecBuilder.fill(0.5, 0.5, 1));
+    VecBuilder.fill(.5, .5, 1), VecBuilder.fill(.25, .25, .5));
 
     
     //BACK_CAM("bkCam2025",
