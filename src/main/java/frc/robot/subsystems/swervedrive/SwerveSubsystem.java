@@ -300,7 +300,7 @@ public class SwerveSubsystem extends SubsystemBase
 // Create the constraints to use while pathfinding
     //swerveDrive.getMaximumChassisVelocity(), 4.0
     PathConstraints constraints = new PathConstraints(
-        1.6, .7,
+        1.4, .5,
         swerveDrive.getMaximumChassisAngularVelocity(), Units.degreesToRadians(720));
 
 // Since AutoBuilder is configured, we can use it to build pathfinding commands
@@ -360,6 +360,29 @@ public class SwerveSubsystem extends SubsystemBase
     } catch (Exception e) {
       System.out.println(e);
       return Commands.none();
+    }
+  }
+
+  public Rotation2d getStationRotation() {
+    double minDist = Double.MAX_VALUE;
+    int[] stationTagIds = {1, 2, 12, 13};
+    Integer minId = null;
+    //System.out.println("A");
+    for (int id : stationTagIds) {
+      //System.out.println("B");
+      double dist = aprilTagFieldLayout.getTagPose(id).get().toPose2d().getTranslation().getDistance(getPose().getTranslation());
+      //System.out.println(id + " " + dist);
+      if (dist < minDist) {
+        minDist = dist;
+        minId = id;
+      }
+    }
+    System.out.println(minId + " " + minDist);
+    try {
+      return aprilTagFieldLayout.getTagPose(minId).get().getRotation().toRotation2d();
+    } catch (Exception e) {
+      System.out.println(e);
+      return new Rotation2d();
     }
   }
 

@@ -51,7 +51,7 @@ public class RobotContainer
 {
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController driveController = new CommandXboxController(0);
+  private final CommandXboxController primaryController = new CommandXboxController(0);
   private final CommandXboxController secondaryController = new CommandXboxController(1);
 
   // The robot's subsystems and commands are defined here...
@@ -66,12 +66,20 @@ public class RobotContainer
    * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
    */
   SwerveInputStream driveAngularVelocity = SwerveInputStream.of(drivebase.getSwerveDrive(),
-                                                                () -> driveController.getLeftY() * -1,
-                                                                () -> driveController.getLeftX() * -1)
-                                                            .withControllerRotationAxis(driveController::getRightX)
+                                                                () -> primaryController.getLeftY() * -1,
+                                                                () -> primaryController.getLeftX() * -1)
+                                                            .withControllerRotationAxis(() -> -primaryController.getRightX())
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
+  
+  /**
+   * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
+   */
+  SwerveInputStream driveWithStationAngle = driveAngularVelocity
+    .copy()
+    .withControllerHeadingAxis(() -> drivebase.getStationRotation().getSin(), () -> drivebase.getStationRotation().getCos())
+    .headingWhile(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -105,119 +113,48 @@ public class RobotContainer
   private void configureBindings()
   {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(driveAngularVelocity); 
-    /*
-    Command driveFieldOrientedDirectAngle      = drivebase.driveFieldOriented(driveDirectAngle);
-    Command driveRobotOrientedAngularVelocity  = drivebase.driveFieldOriented(driveRobotOriented);
-    Command driveSetpointGen = drivebase.driveWithSetpointGeneratorFieldRelative(
-        driveDirectAngle);
-    Command driveFieldOrientedDirectAngleKeyboard      = drivebase.driveFieldOriented(driveDirectAngleKeyboard);
-    Command driveFieldOrientedAnglularVelocityKeyboard = drivebase.driveFieldOriented(driveAngularVelocityKeyboard);
-    Command driveSetpointGenKeyboard = drivebase.driveWithSetpointGeneratorFieldRelative(
-        driveDirectAngleKeyboard);*/
+    Command driveFieldOrientedWithStationAngle = drivebase.driveFieldOriented(driveWithStationAngle); 
 
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-
-    /*
-    if (Robot.isSimulation())
-    {
-      driveDirectAngleKeyboard.driveToPose(() -> new Pose2d(new Translation2d(9, 3),
-                                                            Rotation2d.fromDegrees(90)),
-                                           new ProfiledPIDController(5,
-                                                                     0,
-                                                                     0,
-                                                                     new Constraints(5,
-                                                                                     3)),
-                                           new ProfiledPIDController(5,
-                                                                     0,
-                                                                     0,
-                                                                     new Constraints(
-                                                                         Math.toRadians(
-                                                                             360),
-                                                                         Math.toRadians(
-                                                                             90))));
-      driverXbox.start().onTrue(Commands.runOnce(() -> drivebase.resetOdometry(new Pose2d(3, 3, new Rotation2d()))));
-      driverXbox.button(1).whileTrue(drivebase.sysIdDriveMotorCommand());
-      driverXbox.button(2).whileTrue(Commands.runEnd(() -> driveDirectAngleKeyboard.driveToPoseEnabled(true),
-                                                     () -> driveDirectAngleKeyboard.driveToPoseEnabled(false)));
-    }*/
-
-    //driverXbox.a().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-
-    driveController.rightTrigger(.5).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
-    /*
-    driverXbox.povDown().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 18, true, 4));
-    driverXbox.povDownLeft().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 19, true, 4));
-    driverXbox.povDownRight().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 17, true, 4));
-    driverXbox.povUpRight().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 22, true, 4));
-    driverXbox.povUpLeft().onTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 20, true, 4));
-    driverXbox.povUp().toggleOnTrue(new AprilTagPathPlannerAuto(drivebase, elevator, 21, true, 4));*/
-
-    final Trigger elevatorTrigger = new Trigger(()->(Math.abs(secondaryController.getLeftY()) > .1)); 
+//Secondary Triggers
+    final Trigger elevatorTrigger = new Trigger(()->(Math.abs(secondaryController.getLeftY()) > Constants.OperatorConstants.kSecondaryDeadband)); 
 
     final Trigger chuteTrigger = new Trigger(()->(
-      (Math.abs(secondaryController.getLeftTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
-      || (Math.abs(secondaryController.getRightTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
+      (Math.abs(secondaryController.getLeftTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband) ||
+      (Math.abs(secondaryController.getRightTriggerAxis()) > Constants.OperatorConstants.kSecondaryDeadband)
     ));
 
-    final Trigger effectorTrigger = new Trigger(()->(secondaryController.povUp().getAsBoolean() || secondaryController.povDown().getAsBoolean()));
+    final Trigger effectorTrigger = new Trigger(()->(Math.abs(secondaryController.getRightY()) > Constants.OperatorConstants.kSecondaryDeadband));
 
+//Defaults
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
-
-    //Driver Controls:
-
-    driveController.start().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
-    driveController.x().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 1));
-    driveController.y().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 2));
-    driveController.b().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator,coralEffector, 3));
-    driveController.a().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 4));
-    driveController.povDown().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 5));
-    driveController.povUp().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new MoveElevator( elevator, 6));
-
-    driveController.leftTrigger().whileTrue(new EjectAlgae(coralEffector));
-
-    driveController.leftBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(3).schedule(), drivebase));
-    driveController.rightBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(3).schedule(), drivebase));
-
     
+//Primary
+
+    //Driving
+    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
+    primaryController.leftTrigger(.5).whileTrue(driveFieldOrientedWithStationAngle);
+    primaryController.rightTrigger(.5).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
+
+    //Elevator + Effector
+    primaryController.povDown().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
+    primaryController.x().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 1));
+    primaryController.y().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 2));
+    primaryController.b().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator,coralEffector, 3));
+    primaryController.a().and(() -> !elevatorTrigger.getAsBoolean()).onTrue(new AutoPlaceCoral( elevator, coralEffector, 4));
+
+    primaryController.leftBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(3).schedule(), drivebase));
+    primaryController.rightBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(3).schedule(), drivebase));
+
+    //Cancel All
+    primaryController.start().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
     
-    
-    //driveController.leftBumper().onTrue(new AlignReefAngle(swerve, vision, true));
+//Secondary
 
-    driveController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
-    
-    /*
-    driveController.start().debounce(1).onTrue(
-        Commands.runOnce(
-          () -> {
-            swerve.zeroGyro();
-          },
-          swerve
-        )
-      );*/
-    /*
-    driveController.leftTrigger(.5).and(() -> coralEffector.state == "empty").onTrue(
-      Commands.parallel(new EjectAlgae(coralEffector), new MoveElevator(elevator, 5))
-    );
-    driveController.leftTrigger(.5).and(() -> coralEffector.state == "empty").onFalse(
-      Commands.parallel(
-        new IntakeCoral(coralEffector),
-        Commands.sequence(new MoveElevator(elevator, 0), new MoveElevatorSlightlyDown(elevator))
-      )
-    );
+    //Cancel All
+    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
 
-    driveController.rightTrigger(.5).and(() -> coralEffector.state == "empty").onTrue(
-      Commands.parallel(new EjectAlgae(coralEffector), new MoveElevator(elevator, 6))
-    );
-    driveController.rightTrigger(.5).and(() -> coralEffector.state == "empty").onFalse(
-      Commands.parallel(
-        new IntakeCoral(coralEffector),
-        Commands.sequence(new MoveElevator(elevator, 0), new MoveElevatorSlightlyDown(elevator))
-      )
-    );
-    */
-
-    //Secondary Controls:
-
+    //Intake
     secondaryController.leftBumper().onTrue(new ActuateIntakeDown(intake));
     secondaryController.rightBumper().onTrue(new ActuateIntakeUp(intake));
     
@@ -228,42 +165,39 @@ public class RobotContainer
     chuteTrigger.onFalse(Commands.runOnce(()-> {
       intake.setPower(0);
     },intake));
-    
 
-
-    elevatorTrigger.whileTrue(Commands.run(()->{
-      elevator.setVoltage(-secondaryController.getLeftY() * 4);
-    },elevator));
-
-    elevatorTrigger.onFalse(Commands.runOnce(() -> {
-      elevator.setVoltage(0);
-    }, elevator));
-
+    //Effector
     effectorTrigger.whileTrue(Commands.run(()->{
       coralEffector.setPower(secondaryController.getRightY() * -.5);
-    },coralEffector));
+    }, coralEffector));
 
     effectorTrigger.onFalse(Commands.runOnce(()->{
       coralEffector.setPower(0);
-    },coralEffector));
+    }, coralEffector));
 
-    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
-
-
+    //Elevator
     secondaryController.x().onTrue(new MoveElevator( elevator, 1));
     secondaryController.y().onTrue(new MoveElevator( elevator, 2));
     secondaryController.b().onTrue(new MoveElevator( elevator,3));
     secondaryController.a().onTrue(new MoveElevator( elevator, 4));
     secondaryController.start().onTrue(Commands.sequence(new MoveElevator( elevator, 0), new MoveElevatorSlightlyDown(elevator)));
+    
+    elevatorTrigger.whileTrue(Commands.run(()->{
+      elevator.setVoltage(-secondaryController.getLeftY() * 4);
+    }, elevator));
 
-    secondaryController.povUp().whileTrue(Commands.run(()->{
-      coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
-    }));
-    secondaryController.povDown().whileTrue(Commands.run(()->{
-      coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_IN_POWER);
-    }));
+    elevatorTrigger.onFalse(Commands.runOnce(() -> {
+      elevator.setVoltage(0);
+    }, elevator));
 
-    climber.setDefaultCommand(Commands.run(() -> climber.setPower(secondaryController.getRightY()), climber));
+    // secondaryController.povUp().whileTrue(Commands.run(()->{
+    //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
+    // }));
+    // secondaryController.povDown().whileTrue(Commands.run(()->{
+    //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_IN_POWER);
+    // }));
+
+    //climber.setDefaultCommand(Commands.run(() -> climber.setPower(secondaryController.getRightY()), climber));
   }
 
   /**
