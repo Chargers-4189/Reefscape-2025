@@ -89,7 +89,9 @@ public class SwerveSubsystem extends SubsystemBase
   private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(AprilTagFields.k2025ReefscapeWelded);
   private final NetworkTableInstance networkTable = NetworkTableInstance.getDefault().getTable("SwerveSubsystem").getInstance();
   private final StructPublisher<Pose2d> publisher = networkTable
-  .getStructTopic("MyPose", Pose2d.struct).publish();
+  .getStructTopic("RobotPose", Pose2d.struct).publish();
+  private final StructPublisher<Pose2d> publisher2 = networkTable
+  .getStructTopic("TargetPose", Pose2d.struct).publish();
 
   public SwerveSubsystem(File directory)
   {
@@ -297,6 +299,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public Command driveToPose(Pose2d pose)
   {
+    publisher2.set(pose);
 // Create the constraints to use while pathfinding
     //swerveDrive.getMaximumChassisVelocity(), 4.0
     PathConstraints constraints = new PathConstraints(
@@ -324,7 +327,7 @@ public class SwerveSubsystem extends SubsystemBase
     return driveToAprilTag(apriltagnumber, distanceFromAprilTag, 180);
   };
   public Command driveToAprilTag(int apriltagnumber){
-    return driveToAprilTag(apriltagnumber,new Translation2d(0,swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters()));
+    return driveToAprilTag(apriltagnumber,new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0));
 
   }
   public Command driveToAprilTag(int apriltagnumber, double rotationOffset){
