@@ -190,6 +190,13 @@ public class RobotContainer
       elevator.setVoltage(0);
     }, elevator));
 
+    secondaryController.povUp().whileTrue(
+      Commands.parallel(
+      new ThreeCoralAuto(drivebase, elevator, coralEffector, false, true),
+      new ActuateIntakeUp(intake)
+    )
+    );
+
     // secondaryController.povUp().whileTrue(Commands.run(()->{
     //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
     // }));
@@ -210,7 +217,7 @@ public class RobotContainer
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
     return Commands.parallel(
-      new ThreeCoralAuto(drivebase, elevator, coralEffector),
+      new ThreeCoralAuto(drivebase, elevator, coralEffector, false, true),
       new ActuateIntakeUp(intake)
     );
     //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);

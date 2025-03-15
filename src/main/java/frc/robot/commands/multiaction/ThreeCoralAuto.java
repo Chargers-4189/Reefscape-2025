@@ -26,15 +26,48 @@ import edu.wpi.first.math.geometry.Rotation2d;
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class ThreeCoralAuto extends SequentialCommandGroup {
+  private int reefId1 = 20;
+  private int reefId2 = 19;
+  private int stationId = 13;
   /** Creates a new ThreeCoralAuto. */
-  public ThreeCoralAuto(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector) {
-    // Add your commands in the addCommands() call, e.g.
-    // addCommands(new FooCommand(), new BarCommand());
+  public ThreeCoralAuto(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector, boolean rightStart, boolean red) {
+
+
+    if (red) {
+      if (rightStart) {
+        //red-right
+        reefId1 = 8;
+        reefId2 = 9;
+        stationId = 2;
+      } else {
+        //red-left
+        reefId1 = 11;
+        reefId2 = 6;
+        stationId = 1;
+      }
+    } else {
+      if (rightStart) {
+        //blue-right
+        reefId1 = 20;
+        reefId2 = 17;
+        stationId = 22;
+      } else {
+        //blue-left
+        reefId1 = 20;
+        reefId2 = 19;
+        stationId = 13;
+      }
+    }
+    
+    
+
+    
+    // Add your commands in the addCommands() call.
     addCommands(
       //Go to Reef
       //swerveSubsystem.driveToAprilTag(20, new Translation2d(1,0)),
       //Place Coral
-      swerveSubsystem.driveToReef(20, true),
+      swerveSubsystem.driveToReef(reefId1, true),
 
       new MoveElevator(elevator, 4),
       new OuttakeCoral(effector),
@@ -42,14 +75,14 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
       //Go to Station
       Commands.parallel(
         new MoveElevatorSlightlyDown(elevator),
-        swerveSubsystem.driveToAprilTag(13, 0)
+        swerveSubsystem.driveToAprilTag(stationId, 0)
       ),
       //Wait, then go to Reef
       Commands.race(
         new IntakeCoral(effector),
         Commands.sequence(
-          Commands.waitTime(Time.ofBaseUnits(.6, Seconds)),
-          swerveSubsystem.driveToReef(19, false)
+          Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
+          swerveSubsystem.driveToReef(reefId2, false)
         )
       ),
       //Place Coral
@@ -59,13 +92,15 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
       //Go to Station
       Commands.parallel(
         new MoveElevatorSlightlyDown(elevator),
-        swerveSubsystem.driveToAprilTag(13, 0)
-      ),
+        swerveSubsystem.driveToAprilTag(stationId, 0)
+      )
+
+      /*
       //Wait, then go to Reef
       Commands.race(
         new IntakeCoral(effector),
         Commands.sequence(
-          Commands.waitTime(Time.ofBaseUnits(.6, Seconds)),
+          Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
           swerveSubsystem.driveToReef(19, true)
         )
       ),
@@ -73,7 +108,7 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
       new MoveElevator(elevator, 4),
       new OuttakeCoral(effector),
       new MoveElevator(elevator, 0)
-      
+      */
       /*
        * //Place Coral
       Commands.parallel(
