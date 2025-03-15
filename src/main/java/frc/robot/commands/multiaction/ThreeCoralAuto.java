@@ -36,8 +36,8 @@ public class ThreeCoralAuto extends SequentialCommandGroup {
     if (red) {
       if (rightStart) {
         //red-right
-        reefId1 = 8;
-        reefId2 = 9;
+        reefId1 = 9;
+        reefId2 = 8;
         stationId = 2;
       } else {
         //red-left

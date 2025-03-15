@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.swervedrive;
 
+import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 
 import java.io.File;
@@ -44,13 +45,12 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
@@ -58,7 +58,6 @@ import swervelib.SwerveController;
 import swervelib.SwerveDrive;
 import swervelib.SwerveDriveTest;
 import swervelib.math.SwerveMath;
-import swervelib.parser.SwerveControllerConfiguration;
 import swervelib.parser.SwerveDriveConfiguration;
 import swervelib.parser.SwerveParser;
 import swervelib.telemetry.SwerveDriveTelemetry;
@@ -313,6 +312,7 @@ public class SwerveSubsystem extends SubsystemBase
         edu.wpi.first.units.Units.MetersPerSecond.of(0) // Goal end velocity in meters/sec
                                      );
   }
+
   public Command driveToAprilTag(int apriltagnumber, Translation2d distanceFromAprilTag, double rotationOffset){
     Pose2d targetAprilTagPose = aprilTagFieldLayout.getTagPose(apriltagnumber).get().toPose2d();
     return this.driveToPose(
@@ -334,6 +334,13 @@ public class SwerveSubsystem extends SubsystemBase
     return driveToAprilTag(apriltagnumber, new Translation2d(swerveDrive.swerveDriveConfiguration.getDriveBaseRadiusMeters(),0), rotationOffset);
   };
 
+  /*
+  public Command driveForwardRobotRelative(double power) {
+    return Commands.run(() -> {
+      drive(new Translation2d(power, 0), 0, false);
+    });
+  }*/
+
 
   public Command driveToReef(int apriltagnumber, boolean right){
     if(right){
@@ -344,6 +351,7 @@ public class SwerveSubsystem extends SubsystemBase
 
 
   public Command driveToReefClosest(boolean right) {
+    System.out.println("Drive to reef");
     double minDist = Double.MAX_VALUE;
     int[] reefTagIds = {6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22};
     Integer minId = null;
@@ -382,7 +390,7 @@ public class SwerveSubsystem extends SubsystemBase
     }
     System.out.println(minId + " " + minDist);
     try {
-      return aprilTagFieldLayout.getTagPose(minId).get().getRotation().toRotation2d();
+      return aprilTagFieldLayout.getTagPose(minId).get().getRotation().toRotation2d().plus(new Rotation2d(Angle.ofBaseUnits(180, Degrees)));
     } catch (Exception e) {
       System.out.println(e);
       return new Rotation2d();
@@ -598,6 +606,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity)
   {
+    System.out.println("Drive field oriented");
     return run(() -> {
       swerveDrive.driveFieldOriented(velocity.get());
     });
@@ -672,7 +681,7 @@ public class SwerveSubsystem extends SubsystemBase
    */
   public void zeroGyro()
   {
-    System.out.println("ahapiohapiofhiasudhfiuasdhiofuashfiouashfiuoh");
+    System.out.println("Zero Gyro Function");
     swerveDrive.zeroGyro();
   }
 
@@ -681,7 +690,7 @@ public class SwerveSubsystem extends SubsystemBase
    *
    * @return true if the red alliance, false if blue. Defaults to false if none is available.
    */
-  private boolean isRedAlliance()
+  public boolean isRedAlliance()
   {
     var alliance = DriverStation.getAlliance();
     return alliance.isPresent() ? alliance.get() == DriverStation.Alliance.Red : false;

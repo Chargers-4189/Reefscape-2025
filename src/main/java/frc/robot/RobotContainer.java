@@ -11,6 +11,8 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile.Constraints;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.RobotBase;
@@ -72,13 +74,12 @@ public class RobotContainer
                                                             .deadband(OperatorConstants.DEADBAND)
                                                             .scaleTranslation(0.8)
                                                             .allianceRelativeControl(true);
-  
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
    */
   SwerveInputStream driveWithStationAngle = driveAngularVelocity
     .copy()
-    .withControllerHeadingAxis(() -> drivebase.getStationRotation().getSin(), () -> drivebase.getStationRotation().getCos())
+    .withControllerHeadingAxis(() -> drivebase.getStationRotation().getCos(), () -> drivebase.getStationRotation().getSin())
     .headingWhile(true);
 
   /**
@@ -146,13 +147,25 @@ public class RobotContainer
     primaryController.leftBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(3).schedule(), drivebase));
     primaryController.rightBumper().onTrue(Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(3).schedule(), drivebase));
 
+    /*
+    primaryController.leftBumper().onTrue(Commands.sequence(
+      Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(2.5).schedule(), drivebase),
+      drivebase.driveForwardRobotRelative(.05).withTimeout(.5)
+    ));
+    primaryController.rightBumper().onTrue(Commands.sequence(
+      Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(2.5).schedule(), drivebase),
+      drivebase.driveForwardRobotRelative(.05).withTimeout(.5)
+    ));
+    */
+
+
     //Cancel All
-    primaryController.start().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
+    primaryController.start().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase).withTimeout(.5));
     
 //Secondary
 
     //Cancel All
-    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase));
+    secondaryController.back().onTrue(new CancelAll(coralEffector, elevator, intake, drivebase).withTimeout(.5));
 
     //Intake
     secondaryController.leftBumper().onTrue(new ActuateIntakeDown(intake));
@@ -190,12 +203,12 @@ public class RobotContainer
       elevator.setVoltage(0);
     }, elevator));
 
-    secondaryController.povUp().whileTrue(
-      Commands.parallel(
-      new ThreeCoralAuto(drivebase, elevator, coralEffector, false, true),
-      new ActuateIntakeUp(intake)
-    )
-    );
+    //secondaryController.povUp().whileTrue(
+    //  Commands.parallel(
+    //  new ThreeCoralAuto(drivebase, elevator, coralEffector, false, true),
+    //  new ActuateIntakeUp(intake)
+    //)
+    //);
 
     // secondaryController.povUp().whileTrue(Commands.run(()->{
     //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
@@ -217,7 +230,7 @@ public class RobotContainer
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
     return Commands.parallel(
-      new ThreeCoralAuto(drivebase, elevator, coralEffector, false, true),
+      new ThreeCoralAuto(drivebase, elevator, coralEffector, false, drivebase.isRedAlliance()),
       new ActuateIntakeUp(intake)
     );
     //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);
