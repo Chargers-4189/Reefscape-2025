@@ -323,7 +323,7 @@ public class Vision {
   /**
    * Camera Enum to select each camera
    */
-  enum Cameras {
+  public enum Cameras {
     /**
      * Left Camera
      */
@@ -683,9 +683,8 @@ public class Vision {
         double maxDistance = 6.0;
         Transform3d transform = tag.getBestCameraToTarget();
         return (
-          transform.getX() > maxDistance ||
-          transform.getY() > maxDistance &&
-          ((tagNum >= 17 && tagNum <= 22) || (tagNum >= 6 && tagNum <= 11))
+          (transform.getX() > maxDistance || transform.getY() > maxDistance) ||
+          !((tagNum >= 17 && tagNum <= 22) || (tagNum >= 6 && tagNum <= 11))
         );
       });
       for (var tag : result.getTargets()) {

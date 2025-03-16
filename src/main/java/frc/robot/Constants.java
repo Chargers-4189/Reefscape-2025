@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
@@ -18,37 +20,72 @@ import swervelib.math.Matter;
  * <p>It is advised to statically import this class (or one of its inner classes) wherever the
  * constants are needed, to reduce verbosity.
  */
-public final class Constants
-{
+public final class Constants {
 
-  public static final double ROBOT_MASS = Units.lbsToKilograms(119);//(148 - 20.3) * 0.453592; // 32lbs * kg per pound
-  public static final Matter CHASSIS    = new Matter(new Translation3d(0, 0, Units.inchesToMeters(8)), ROBOT_MASS);
-  public static final double LOOP_TIME  = 0.13; //s, 20ms + 110ms sprk max velocity lag
-  public static final double MAX_SPEED  = Units.feetToMeters(14.5);
+  public static final double ROBOT_MASS = Units.lbsToKilograms(119); //(148 - 20.3) * 0.453592; // 32lbs * kg per pound
+  public static final Matter CHASSIS = new Matter(
+    new Translation3d(0, 0, Units.inchesToMeters(8)),
+    ROBOT_MASS
+  );
+  public static final double LOOP_TIME = 0.13; //s, 20ms + 110ms sprk max velocity lag
+  public static final double MAX_SPEED = Units.feetToMeters(14.5);
+
   // Maximum speed of the robot in meters per second, used to limit acceleration.
 
-//  public static final class AutonConstants
-//  {
-//
-//    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
-//    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
-//  }
+  //  public static final class AutonConstants
+  //  {
+  //
+  //    public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+  //    public static final PIDConstants ANGLE_PID       = new PIDConstants(0.4, 0, 0.01);
+  //  }
 
-  public static final class DrivebaseConstants
-  {
+  public static class VisionConstants {
+
+    public static final Transform3d flCamPose = new Transform3d(
+      new Translation3d(
+        Units.inchesToMeters(15.25),
+        Units.inchesToMeters(6.25),
+        Units.inchesToMeters(9)
+      ),
+      new Rotation3d(0, Math.toRadians(0), 0)
+    );
+
+    public static final Transform3d frCamPose = new Transform3d(
+      new Translation3d(
+        Units.inchesToMeters(15.25),
+        Units.inchesToMeters(-6.25),
+        Units.inchesToMeters(9)
+      ),
+      new Rotation3d(0, Math.toRadians(0), 0)
+    );
+
+    public static final Transform3d bkCamPose = new Transform3d(
+      new Translation3d(
+        Units.inchesToMeters(0),
+        Units.inchesToMeters(0),
+        Units.inchesToMeters(0)
+      ),
+      new Rotation3d(0, Math.toRadians(0), Math.toRadians(180.0))
+    );
+
+    public static final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
+      AprilTagFields.k2025ReefscapeWelded
+    );
+  }
+
+  public static final class DrivebaseConstants {
 
     // Hold time on motor brakes when disabled
     public static final double WHEEL_LOCK_TIME = 10; // seconds
   }
 
-  public static class OperatorConstants
-  {
+  public static class OperatorConstants {
 
     // Joystick Deadband
-    public static final double DEADBAND        = 0.1;
+    public static final double DEADBAND = 0.1;
     public static final double LEFT_Y_DEADBAND = 0.1;
     public static final double RIGHT_X_DEADBAND = 0.1;
-    public static final double TURN_CONSTANT    = 6;
+    public static final double TURN_CONSTANT = 6;
     public static final int kDriverControllerPort = 0;
     public static final double kDriveDeadband = 0.05;
     public static final int secondaryController = 1;
@@ -56,6 +93,7 @@ public final class Constants
   }
 
   public static class CoralEffectorConstants {
+
     //Subsystem
     public static final int kMAIN_MOTOR_ID = 31;
     public static final int kINTAKE_SENSOR_DIO = 6;
@@ -72,7 +110,6 @@ public final class Constants
 
     public static final double kSECONDARY_OUT_POWER = .05;
     public static final double kSECONDARY_IN_POWER = .05;
-
   }
 
   public static class ElevatorConstants {
@@ -91,7 +128,15 @@ public final class Constants
     // public static final double[] HEIGHTS_METERS = { .720, .700, .776, 1.179,
     // 1.829}; //Intake, L1, L2, L3, L4
 
-    public static final double[] kHEIGHTS = { .01, .01, 7.9, 26.1, 53.8, 3, 19.5}; // Intake, L1, L2, L3, L4, Algae Low, Algae High
+    public static final double[] kHEIGHTS = {
+      .01,
+      .01,
+      7.9,
+      26.1,
+      53.8,
+      3,
+      19.5,
+    }; // Intake, L1, L2, L3, L4, Algae Low, Algae High
 
     public static final double kGRAVITY_VOLTS = .4;
     public static final double kPROPORTIONAL_VOLTS = .8;
@@ -115,6 +160,7 @@ public final class Constants
     //public static final double kUP_ENCODER = 22.5;
     public static final double kPOWER = .6;
   }
+
   /*
   public static final class AutoConstants {
     
@@ -139,11 +185,10 @@ public final class Constants
     public static final double kDIST_FROM_REEF = Units.inchesToMeters(0);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
 
-    public static final int[] kTagAngles = {30};
+    public static final int[] kTagAngles = { 30 };
 
     public static final double kROTATION_TIMEOUT = 1000;
-    public static final double kROTATION_TOLERANCE = 5;//Degrees
-
+    public static final double kROTATION_TOLERANCE = 5; //Degrees
 
     /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
@@ -174,8 +219,9 @@ public final class Constants
     public static final double kMAX_SPEED_ANGLE = .1;
     public static final double kOVERARCHING_TIMEOUT = 2.5; //seconds
   }
-  
+
   public static class HumanDriveConstants {
+
     public static final double kDRIVE_POWER = .4; //Decreased for safety: prevent tipping
     public static final double kROTATIONAL_POWER = .8;
     public static final double kDRIVE_EXPONENT = 3;
@@ -183,6 +229,7 @@ public final class Constants
   }
 
   public static class ClimberConstants {
+
     public static final int kMIN_LIMIT_DIO = 4;
     public static final int kMAX_LIMIT_DIO = 5;
 

@@ -158,7 +158,6 @@ public class SwerveSubsystem extends SubsystemBase {
       vision.updatePoseEstimation(swerveDrive);
     }
     publisher.set(getPose());
-    System.out.println(Cameras.LEFT_CAM.getEstimateTagPose());
   }
 
   @Override
