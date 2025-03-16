@@ -68,7 +68,7 @@ public class RobotContainer {
     )
     .withControllerRotationAxis(() -> -primaryController.getRightX())
     .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.8)
+    .scaleTranslation(0.2)
     .allianceRelativeControl(true);
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -80,6 +80,17 @@ public class RobotContainer {
       () -> drivebase.getStationRotation().getSin()
     )
     .headingWhile(true);
+
+  SwerveInputStream driveWithNitro = SwerveInputStream
+    .of(
+      drivebase.getSwerveDrive(),
+      () -> -primaryController.getLeftY(),
+      () -> -primaryController.getLeftX()
+    )
+    .withControllerRotationAxis(() -> -primaryController.getRightX())
+    .deadband(OperatorConstants.DEADBAND)
+    .scaleTranslation(1)
+    .allianceRelativeControl(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -112,8 +123,8 @@ public class RobotContainer {
     Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
       driveAngularVelocity
     );
-    Command driveFieldOrientedWithStationAngle = drivebase.driveFieldOriented(
-      driveWithStationAngle
+    Command driveFieldOrientedWithNitro = drivebase.driveFieldOriented(
+      driveWithNitro
     );
 
     //Secondary Triggers
@@ -153,7 +164,7 @@ public class RobotContainer {
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
     primaryController
       .leftTrigger(.5)
-      .whileTrue(driveFieldOrientedWithStationAngle);
+      .whileTrue(driveFieldOrientedWithNitro);
     primaryController
       .rightTrigger(.5)
       .whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
