@@ -332,7 +332,7 @@ public class Vision {
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
       new Translation3d(
         Units.inchesToMeters(15.508),
-        Units.inchesToMeters(6.25),
+        Units.inchesToMeters(-6.25),
         Units.inchesToMeters(9.75)
       ),
       VecBuilder.fill(.5, .5, 1),
@@ -346,7 +346,7 @@ public class Vision {
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
       new Translation3d(
         Units.inchesToMeters(15.508),
-        Units.inchesToMeters(-6.25),
+        Units.inchesToMeters(6.25),
         Units.inchesToMeters(9.75)
       ),
       VecBuilder.fill(.5, .5, 1),

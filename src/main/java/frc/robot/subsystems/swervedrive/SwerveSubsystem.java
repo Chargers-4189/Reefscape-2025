@@ -24,6 +24,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -374,6 +375,32 @@ public class SwerveSubsystem extends SubsystemBase {
     );
   }
 
+  public int getClosestReefId() {
+    double minDist = Double.MAX_VALUE;
+    int[] reefTagIds = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
+    Integer minId = null;
+    //System.out.println("A");
+    for (int id : reefTagIds) {
+      //System.out.println("B");
+      double dist = aprilTagFieldLayout
+        .getTagPose(id)
+        .get()
+        .toPose2d()
+        .getTranslation()
+        .getDistance(getPose().getTranslation());
+      //System.out.println(id + " " + dist);
+      if (dist < minDist) {
+        minDist = dist;
+        minId = id;
+      }
+    }
+    return minId;
+  }
+  public Pose2d getClosestReefTagPose() {
+    return aprilTagFieldLayout.getTagPose(getClosestReefId()).get().toPose2d();
+  }
+
+
   public Command driveToReefClosest(boolean right) {
     System.out.println("Drive to reef");
     double minDist = Double.MAX_VALUE;
@@ -683,6 +710,43 @@ public class SwerveSubsystem extends SubsystemBase {
         )
       );
     });
+  }
+
+    /**
+   * Command to drive the robot using translative values and heading as a setpoint.
+   *
+   * @param translationX Translation in the X direction. Cubed for smoother controls.
+   * @param translationY Translation in the Y direction. Cubed for smoother controls.
+   * @param headingX     Heading X to calculate angle of the joystick.
+   * @param headingY     Heading Y to calculate angle of the joystick.
+   * @return Drive command.
+   */
+  public void driveRotationSetpoint(
+    double translationX,
+    double translationY,
+    double headingX,
+    double headingY
+  ) {
+    // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
+      Translation2d scaledInputs = SwerveMath.scaleTranslation(
+        new Translation2d(
+          translationX,
+          translationY
+        ),
+        0.8
+      );
+
+      // Make the robot move
+      driveFieldOriented(
+        swerveDrive.swerveController.getTargetSpeeds(
+          scaledInputs.getX(),
+          scaledInputs.getY(),
+          headingX,
+          headingY,
+          swerveDrive.getOdometryHeading().getRadians(),
+          swerveDrive.getMaximumChassisVelocity()
+        )
+      );
   }
 
   /**

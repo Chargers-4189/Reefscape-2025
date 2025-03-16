@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
+import frc.robot.commands.AlignReefAngle;
 import frc.robot.commands.AlignReefPosition;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
@@ -188,13 +189,13 @@ public class RobotContainer {
     primaryController
       .leftBumper()
       .onTrue(Commands.sequence(
-        Commands.run(() -> drivebase.rotateToReefClosest(), drivebase).withTimeout(.5),
+        new AlignReefAngle(drivebase),
         new AlignReefPosition(drivebase, false).withTimeout(2.5))
       );
       primaryController
       .rightBumper()
       .onTrue(Commands.sequence(
-        Commands.run(() -> drivebase.rotateToReefClosest().schedule(), drivebase).withTimeout(.5),
+        new AlignReefAngle(drivebase),
         new AlignReefPosition(drivebase, true).withTimeout(2.5))
       );
 
