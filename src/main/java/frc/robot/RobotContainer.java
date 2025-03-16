@@ -187,16 +187,20 @@ public class RobotContainer {
 
     primaryController
       .leftBumper()
-      .onTrue(new AlignReefPosition(drivebase, false).withTimeout(2.5));
-    primaryController
+      .onTrue(Commands.sequence(
+        Commands.run(() -> drivebase.rotateToReefClosest(), drivebase).withTimeout(.5),
+        new AlignReefPosition(drivebase, false).withTimeout(2.5))
+      );
+      primaryController
       .rightBumper()
-      .onTrue(new AlignReefPosition(drivebase, true).withTimeout(2.5));
+      .onTrue(Commands.sequence(
+        Commands.run(() -> drivebase.rotateToReefClosest().schedule(), drivebase).withTimeout(.5),
+        new AlignReefPosition(drivebase, true).withTimeout(2.5))
+      );
 
+    
+    primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
     /*
-    primaryController.leftBumper().onTrue(Commands.sequence(
-      Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(2.5).schedule(), drivebase),
-      drivebase.driveForwardRobotRelative(.05).withTimeout(.5)
-    ));
     primaryController.rightBumper().onTrue(Commands.sequence(
       Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(2.5).schedule(), drivebase),
       drivebase.driveForwardRobotRelative(.05).withTimeout(.5)

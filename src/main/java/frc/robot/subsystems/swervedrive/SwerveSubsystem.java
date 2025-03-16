@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems.swervedrive;
 
+import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 
@@ -400,6 +401,39 @@ public class SwerveSubsystem extends SubsystemBase {
       System.out.println(e);
       return Commands.none();
     }
+  }
+  public Command rotateToReefClosest() {
+    System.out.println("Drive to reef");
+    double minDist = Double.MAX_VALUE;
+    int[] reefTagIds = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
+    Integer minId = null;
+    //System.out.println("A");
+    for (int id : reefTagIds) {
+      //System.out.println("B");
+      double dist = aprilTagFieldLayout
+        .getTagPose(id)
+        .get()
+        .toPose2d()
+        .getTranslation()
+        .getDistance(getPose().getTranslation());
+      //System.out.println(id + " " + dist);
+      if (dist < minDist) {
+        minDist = dist;
+        minId = id;
+      }
+    }
+    Pose2d targetAprilTagPose;
+    try {
+      System.out.print("Working");
+      targetAprilTagPose = aprilTagFieldLayout
+      .getTagPose(minId)
+      .get()
+      .toPose2d();
+    } catch (Exception e) {
+      System.out.println(e);
+      targetAprilTagPose = new Pose2d();
+    }
+    return this.driveToPose(new Pose2d(getPose().getTranslation(), targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(180))))).withTimeout(.5);
   }
 
   public Rotation2d getStationRotation() {
