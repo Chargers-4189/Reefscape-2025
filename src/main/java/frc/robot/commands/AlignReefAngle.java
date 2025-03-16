@@ -49,18 +49,26 @@ public class AlignReefAngle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rotationSetpoint = swerve.getClosestReefTagPose().getRotation().getDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    rotationSetpoint = swerve.getClosestReefTagPose().getRotation().getDegrees();
     publisher.set(swerve.getClosestReefTagPose());
     currentDegrees = swerve.getPose().getRotation().getDegrees();
     if (currentDegrees > 0) {
       currentDegrees -= 180;
     } else {
       currentDegrees += 180;
+    }
+    if (rotationSetpoint - currentDegrees > 180) {
+      currentDegrees += 180;
+      rotationSetpoint -= 180;
+    }
+    if (-rotationSetpoint + currentDegrees > 180) {
+      currentDegrees -= 180;
+      rotationSetpoint += 180;
     }
 
     //System.out.println(rotationSetpoint);
