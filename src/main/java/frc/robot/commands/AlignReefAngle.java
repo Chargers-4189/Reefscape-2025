@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.Degrees;
+import static edu.wpi.first.units.Units.Rotations;
+
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -11,20 +14,20 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.util.Stopwatch;
-import frc.robot.Constants.AlignmentConstants;
-import frc.robot.Constants.VisionConstants;
+import frc.util.Elastic.ElasticAlign;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReefAngle extends Command {
 
   private SwerveSubsystem swerve;
-  private Rotation2d rotationSetpoint;
+  private double rotationSetpoint;
   private DoubleSupplier tagId;
+  private double currentDegrees;
   
   private final NetworkTableInstance networkTable = NetworkTableInstance
     .getDefault()
@@ -46,21 +49,30 @@ public class AlignReefAngle extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    rotationSetpoint = swerve.getClosestReefTagPose().getRotation();
+    rotationSetpoint = swerve.getClosestReefTagPose().getRotation().getDegrees();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     publisher.set(swerve.getClosestReefTagPose());
+    currentDegrees = swerve.getPose().getRotation().getDegrees();
+    if (currentDegrees > 0) {
+      currentDegrees -= 180;
+    } else {
+      currentDegrees += 180;
+    }
+
     //System.out.println(rotationSetpoint);
-    swerve.driveRotationSetpoint(0, 0, rotationSetpoint.getCos(), rotationSetpoint.getSin());
+    swerve.drive(new Translation2d(), ElasticAlign.kPROPORTIONAL_ANGLE.get() * (rotationSetpoint - currentDegrees), false);
     
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    swerve.drive(new Translation2d(), 0, false);
+  }
 
   // Returns true when the command should end.
   @Override
@@ -70,7 +82,7 @@ public class AlignReefAngle extends Command {
     return false;
     
       //System.out.println("Check Setpoint");
-    //return Math.abs(swerve.getPose().getRotation().getDegrees() - rotationSetpoint.getDegrees()) < AlignmentConstants.kROTATION_TOLERANCE;
+    //return Math.abs(rotationSetpoint - currentDegrees) < AlignmentConstants.kROTATION_TOLERANCE;
     
   }
 }

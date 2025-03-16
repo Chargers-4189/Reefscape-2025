@@ -185,10 +185,9 @@ public final class Constants {
     public static final double kDIST_FROM_REEF = Units.inchesToMeters(0);
     public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
 
-    public static final int[] kTagAngles = { 30 };
-
-    public static final double kROTATION_TIMEOUT = 1000;
-    public static final double kROTATION_TOLERANCE = 5; //Degrees
+    public static final double kROTATION_TIMEOUT = .5; //Seconds
+    public static final double kPOSITION_TIMEOUT = 2.5; //Seconds
+    public static final double kROTATION_TOLERANCE = 4; //Degrees
 
     /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
@@ -210,9 +209,9 @@ public final class Constants {
     );
     */
 
-    public static final double kPROPORTIONAL_X = 0.4;
-    public static final double kPROPORTIONAL_Y = 0.5;
-    public static final double kPROPORTIONAL_ANGLE = 0.002;
+    public static final double kPROPORTIONAL_X = 1;
+    public static final double kPROPORTIONAL_Y = 1;
+    public static final double kPROPORTIONAL_ANGLE = .3;
 
     public static final double kMAX_SPEED_X = .6;
     public static final double kMAX_SPEED_Y = .6;

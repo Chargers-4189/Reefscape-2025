@@ -189,13 +189,13 @@ public class RobotContainer {
     primaryController
       .leftBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase),
+        new AlignReefAngle(drivebase).withTimeout(.4),
         new AlignReefPosition(drivebase, false).withTimeout(2.5))
       );
       primaryController
       .rightBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase),
+        new AlignReefAngle(drivebase).withTimeout(.4),
         new AlignReefPosition(drivebase, true).withTimeout(2.5))
       );
 
