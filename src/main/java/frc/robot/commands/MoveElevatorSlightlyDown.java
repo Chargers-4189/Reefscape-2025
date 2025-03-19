@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
 import frc.util.Stopwatch;
-import frc.util.Elastic.ElasticElevator;
+import frc.util.Networker.NetworkElevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class MoveElevatorSlightlyDown extends Command {
@@ -23,7 +23,7 @@ public class MoveElevatorSlightlyDown extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start(ElasticElevator.kSLIGHTLY_DOWN_TIMEOUT.get());
+    stopwatch.start(NetworkElevator.kSLIGHTLY_DOWN_TIMEOUT.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.

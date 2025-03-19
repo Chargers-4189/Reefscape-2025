@@ -29,8 +29,8 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
-import frc.util.Elastic;
-import frc.util.Elastic.ElasticClimber;
+import frc.util.Networker;
+import frc.util.Networker.NetworkClimber;
 import frc.util.GetAprilTagRotation;
 
 /**
@@ -65,7 +65,7 @@ public class RobotContainer {
    */
   public RobotContainer() {
     // Configure the trigger bindings
-    Elastic.initialize();
+    Networker.initialize();
     GetAprilTagRotation.initialize();
 
     configureBindings();
