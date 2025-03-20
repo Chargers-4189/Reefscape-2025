@@ -15,11 +15,11 @@ import edu.wpi.first.networktables.StructPublisher;
 import frc.robot.Constants;
 
 /** Add your docs here. */
-public class Elastic {
+public class Networker {
 
     static NetworkTableInstance networkInstance = NetworkTableInstance.getDefault();
     
-    public static final class ElasticElevator {
+    public static final class NetworkElevator {
         static NetworkTable elevatorTable = networkInstance.getTable("elevatorConstants");
 
         public static DoubleEntry kGRAVITY_VOLTS =
@@ -71,7 +71,7 @@ public class Elastic {
             kTIMEOUT.set(kTIMEOUT.get());
         }
     }
-    public static final class ElasticSwerve {
+    public static final class NetworkSwerve {
         static NetworkTable swerveTable = networkInstance.getTable("swerveTable");
 
         public static StructPublisher<Pose2d> kROBOT_POSITION =
@@ -91,7 +91,7 @@ public class Elastic {
         public static void initialize() {}
     }
 
-    public static final class ElasticIntake {
+    public static final class NetworkIntake {
         static NetworkTable intakeTable = networkInstance.getTable("intakeConstants");
 
         public static DoubleEntry kPOWER =
@@ -102,7 +102,7 @@ public class Elastic {
         }
     }
 
-    public static final class ElasticEffector {
+    public static final class NetworkEffector {
         static NetworkTable effectorTable = networkInstance.getTable("effectorConstants");
 
         public static DoubleEntry kALGAE_POWER =
@@ -134,17 +134,17 @@ public class Elastic {
         }
     }
 
-    public static final class ElasticHumanDrive {
-        static NetworkTable humanDriveTable = networkInstance.getTable("humanDriveConstants");
+    public static final class NetworkTeleop {
+        static NetworkTable teleopTable = networkInstance.getTable("humanDriveConstants");
 
         public static DoubleEntry kDRIVE_POWER =
-        humanDriveTable.getDoubleTopic("DRIVE_POWER").getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
+        teleopTable.getDoubleTopic("DRIVE_POWER").getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
         public static DoubleEntry kROTATIONAL_POWER =
-        humanDriveTable.getDoubleTopic("ROTATIONAL_POWER").getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
+        teleopTable.getDoubleTopic("ROTATIONAL_POWER").getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
         public static DoubleEntry kDRIVE_EXPONENT =
-        humanDriveTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
+        teleopTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
         public static DoubleEntry kROTATIONAL_EXPONENT =
-        humanDriveTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+        teleopTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
 
         public static void initialize() {
             kDRIVE_POWER.set(kDRIVE_POWER.get());
@@ -153,7 +153,7 @@ public class Elastic {
             kROTATIONAL_EXPONENT.set(kDRIVE_EXPONENT.get());
         }
     }
-    public static final class ElasticClimber {
+    public static final class NetworkClimber {
         static NetworkTable climberTable = networkInstance.getTable("climberConstants");
 
         public static DoubleEntry kMAX_POWER = climberTable.getDoubleTopic("MAX_POWER").getEntry(Constants.ClimberConstants.kMAX_UP_POWER);
@@ -163,7 +163,7 @@ public class Elastic {
         }
     }
 
-    public static final class ElasticAlign {
+    public static final class NetworkAlign {
         static NetworkTable alignTable = networkInstance.getTable("alignConstants");
 
         public static DoubleEntry kDIST_FROM_REEF = alignTable.getDoubleTopic("DIST_FROM_REEF").getEntry(Constants.AlignmentConstants.kDIST_FROM_REEF);
@@ -190,12 +190,12 @@ public class Elastic {
     }
 
     public static void initialize() {
-        ElasticElevator.initialize();
-        ElasticIntake.initialize();
-        ElasticSwerve.initialize();
-        ElasticEffector.initialize();
-        ElasticHumanDrive.initialize();
-        ElasticClimber.initialize();
-        ElasticAlign.initialize();
+        NetworkAlign.initialize();
+        NetworkClimber.initialize();
+        NetworkEffector.initialize();
+        NetworkElevator.initialize();
+        NetworkIntake.initialize();
+        NetworkSwerve.initialize();
+        NetworkTeleop.initialize();
     }
 }

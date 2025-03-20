@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.Pigeon2;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.ModuleConfig;
 import com.pathplanner.lib.config.PIDConstants;
@@ -30,8 +31,6 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.SwerveConstants;
-import frc.robot.Constants.VisionConstants;
-
 import java.io.File;
 import java.util.Arrays;
 import java.util.function.DoubleSupplier;
@@ -43,7 +42,8 @@ import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 
 public class SwerveSubsystem extends SubsystemBase {
 
-  private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  //private final AHRS gyro = new AHRS(NavXComType.kMXP_SPI);
+  private final Pigeon2 gyro = new Pigeon2(Constants.SwerveConstants.kGYRO_CAN_ID);
   /**
    * Swerve drive object.
    */

@@ -96,6 +96,8 @@ public final class Constants {
       );
     public static final int kDriveAmpLimit = 40;
     public static final int kSteerAmpLimit = 20;
+
+    public static final int kGYRO_CAN_ID = 35;
     
     public static final Pose2d kINITIAL_POSE = new Pose2d(
       Units.inchesToMeters(299.44 - (37.5 / 2)),

@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Elevator;
-import frc.util.Elastic.ElasticElevator;
+import frc.util.Networker.NetworkElevator;
 import frc.util.Stopwatch;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -39,12 +39,12 @@ public class MoveElevator extends Command {
   public void initialize() {
     this.startTime = Timer.getFPGATimestamp();
     if (level == -1) {
-      this.goal = ElasticElevator.kTEST_HEIGHT.get();
+      this.goal = NetworkElevator.kTEST_HEIGHT.get();
     } else {
-      this.goal = ElasticElevator.kHEIGHTS.get()[level];
+      this.goal = NetworkElevator.kHEIGHTS.get()[level];
     }
     this.up = elevator.getEncoder() < goal;
-    stopwatch.start(ElasticElevator.kTIMEOUT.get());
+    stopwatch.start(NetworkElevator.kTIMEOUT.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -52,11 +52,11 @@ public class MoveElevator extends Command {
   public void execute() {
     var proportionalVoltage =
       Math.abs(goal - elevator.getEncoder()) *
-      ElasticElevator.kPROPORTIONAL_VOLTS.get();
+      NetworkElevator.kPROPORTIONAL_VOLTS.get();
     var maxVoltage = Math.min(
-      ElasticElevator.kMAX_VOLTS.get(),
+      NetworkElevator.kMAX_VOLTS.get(),
       (Timer.getFPGATimestamp() - startTime) *
-      ElasticElevator.kMAX_VOLT_CHANGE_PER_SECOND.get()
+      NetworkElevator.kMAX_VOLT_CHANGE_PER_SECOND.get()
     );
     if (up) {
       elevator.setVoltage(Math.min(proportionalVoltage, maxVoltage));
@@ -79,9 +79,9 @@ public class MoveElevator extends Command {
       return true;
     }
     if (up) {
-      return elevator.getEncoder() > goal - ElasticElevator.kTOLERANCE.get();
+      return elevator.getEncoder() > goal - NetworkElevator.kTOLERANCE.get();
     } else {
-      return elevator.getEncoder() < goal + ElasticElevator.kTOLERANCE.get();
+      return elevator.getEncoder() < goal + NetworkElevator.kTOLERANCE.get();
     }
   }
 }

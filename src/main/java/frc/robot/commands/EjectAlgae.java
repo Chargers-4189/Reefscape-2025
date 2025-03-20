@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.CoralEffector;
 import frc.util.Stopwatch;
-import frc.util.Elastic.ElasticEffector;
+import frc.util.Networker.NetworkEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class EjectAlgae extends Command {
@@ -23,13 +23,13 @@ public class EjectAlgae extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start((int) ElasticEffector.kEJECT_ALGAE_MILISECONDS.get());
+    stopwatch.start((int) NetworkEffector.kEJECT_ALGAE_MILISECONDS.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    coraleffector.setPower(ElasticEffector.kALGAE_POWER.get());
+    coraleffector.setPower(NetworkEffector.kALGAE_POWER.get());
   }
 
   // Called once the command ends or is interrupted.

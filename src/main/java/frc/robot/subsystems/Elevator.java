@@ -12,7 +12,7 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
-import frc.util.Elastic.ElasticElevator;
+import frc.util.Networker.NetworkElevator;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -101,7 +101,7 @@ public class Elevator extends SubsystemBase {
         voltage = .2;
       }
     }
-    rightMotor.setVoltage(-voltage - ElasticElevator.kGRAVITY_VOLTS.get());
+    rightMotor.setVoltage(-voltage - NetworkElevator.kGRAVITY_VOLTS.get());
   }
 
   public void setVoltageNoGravity(double voltage) {

@@ -6,7 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
-import frc.util.Elastic.ElasticIntake;
+import frc.util.Networker.NetworkIntake;
 import frc.util.Stopwatch;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -26,25 +26,29 @@ public class ActuateIntakeUp extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    System.out.println("Init");
     stopwatch.start(2500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    intake.setPower(ElasticIntake.kPOWER.get());
+    System.out.println("Executing");
+    intake.setPower(NetworkIntake.kPOWER.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    System.out.println("Finished");
     intake.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    //return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
-    return true;
+    //System.out.println("switch: " + intake.getTopLimitSwitch() + "  stopwatch: " + stopwatch.hasTriggered());
+    return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
+    //return true;
   }
 }

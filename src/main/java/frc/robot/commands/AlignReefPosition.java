@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
-import frc.util.Elastic.ElasticAlign;
+import frc.util.Networker.NetworkAlign;
 import edu.wpi.first.math.MathUtil;
 import frc.robot.Constants.VisionConstants;
 
@@ -85,8 +85,8 @@ public class AlignReefPosition extends Command {
     System.out.println(toTravel);
     if (toTravel != null) {
       swerve.drive(
-        MathUtil.clamp(-toTravel.getX() * ElasticAlign.kPROPORTIONAL_X.get(), -ElasticAlign.kMAX_SPEED_X.get(), ElasticAlign.kMAX_SPEED_X.get()),
-        MathUtil.clamp(-toTravel.getY() * ElasticAlign.kPROPORTIONAL_Y.get(), -ElasticAlign.kMAX_SPEED_Y.get(), ElasticAlign.kMAX_SPEED_Y.get()),
+        MathUtil.clamp(-toTravel.getX() * NetworkAlign.kPROPORTIONAL_X.get(), -NetworkAlign.kMAX_SPEED_X.get(), NetworkAlign.kMAX_SPEED_X.get()),
+        MathUtil.clamp(-toTravel.getY() * NetworkAlign.kPROPORTIONAL_Y.get(), -NetworkAlign.kMAX_SPEED_Y.get(), NetworkAlign.kMAX_SPEED_Y.get()),
         0,
         false
       );

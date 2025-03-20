@@ -9,37 +9,36 @@ import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ClimberConstants;
-import frc.util.Elastic.ElasticClimber;
+import frc.util.Networker.NetworkClimber;
 import com.revrobotics.RelativeEncoder;
 
 
 
 public class Climber extends SubsystemBase {
-  /* 
+  
   private final SparkMax climberMotor = new SparkMax(
     ClimberConstants.kMOTOR_ID,
     MotorType.kBrushless
   );
-  */
-  //private final RelativeEncoder encoder = climberMotor.getEncoder();
+  
+  private final RelativeEncoder encoder = climberMotor.getEncoder();
   
   /** Creates a new Climber. */
   public Climber() {
-    
   }
 
   public void setPower(double power){
-    /* 
-    power = Math.min(power, 1);
+    
+    power = Math.min(power, .1);
     power = Math.max(power, -1);
-    //power *= ElasticClimber.kMAX_POWER.get();
+    power *= NetworkClimber.kMAX_POWER.get();
 
 
     climberMotor.set(power);
-    */
+    
   }
   public double getEncoder() {
-    return 0;//encoder.getPosition();
+    return encoder.getPosition();
   }
 
   @Override

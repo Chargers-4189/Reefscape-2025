@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -27,6 +28,9 @@ public class Intake extends SubsystemBase {
   private final DigitalInput bottomLimitSwitch = new DigitalInput(
     IntakeConstants.kDIO_PORT_BOTTOM
   );
+
+  private RelativeEncoder encoder = actuatorMotor.getEncoder();
+
   public Intake() {}
     public void setPower(double power) {
       if (getBottomLimitSwitch()) {
@@ -51,6 +55,10 @@ public class Intake extends SubsystemBase {
     }
     public boolean getBottomLimitSwitch() {
       return !bottomLimitSwitch.get();
+    }
+
+    public double getEncoder() {
+      return encoder.getPosition();
     }
   
 

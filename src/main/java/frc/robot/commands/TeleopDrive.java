@@ -7,7 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.util.Elastic.ElasticHumanDrive;
+import frc.util.Networker.NetworkTeleop;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class TeleopDrive extends Command {
@@ -31,20 +31,20 @@ public class TeleopDrive extends Command {
     if (driveController.leftStick().getAsBoolean() || driveController.rightStick().getAsBoolean()) {
       //System.out.println("Nitro Active");
       swerve.drive(
-        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get()),
-        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get()),
+        Math.pow(driveController.getLeftY(), NetworkTeleop.kDRIVE_EXPONENT.get()),
+        Math.pow(driveController.getLeftX(), NetworkTeleop.kDRIVE_EXPONENT.get()),
+        Math.pow(driveController.getRightX(), NetworkTeleop.kROTATIONAL_EXPONENT.get()),
         true
       );
     } else {
       //System.out.println("Nitro Inactive");
       swerve.drive(
-        Math.pow(driveController.getLeftY(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
-        * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(driveController.getLeftX(), ElasticHumanDrive.kDRIVE_EXPONENT.get())
-        * ElasticHumanDrive.kDRIVE_POWER.get(),
-        Math.pow(driveController.getRightX(), ElasticHumanDrive.kROTATIONAL_EXPONENT.get())
-        * ElasticHumanDrive.kROTATIONAL_POWER.get(),
+        Math.pow(driveController.getLeftY(), NetworkTeleop.kDRIVE_EXPONENT.get())
+        * NetworkTeleop.kDRIVE_POWER.get(),
+        Math.pow(driveController.getLeftX(), NetworkTeleop.kDRIVE_EXPONENT.get())
+        * NetworkTeleop.kDRIVE_POWER.get(),
+        Math.pow(driveController.getRightX(), NetworkTeleop.kROTATIONAL_EXPONENT.get())
+        * NetworkTeleop.kROTATIONAL_POWER.get(),
         true
       );
     }
