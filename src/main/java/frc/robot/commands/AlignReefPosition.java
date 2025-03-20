@@ -104,6 +104,7 @@ public class AlignReefPosition extends Command {
   // Returns true when the command should end.P
   @Override
   public boolean isFinished() {
+    /*
     if (alignRight) {
       if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
         return (
@@ -124,5 +125,7 @@ public class AlignReefPosition extends Command {
     } catch (Exception e) {
       return true;
     }
+      */
+    return false;
   }
 }

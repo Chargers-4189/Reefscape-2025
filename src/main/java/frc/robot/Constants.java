@@ -211,12 +211,13 @@ public final class Constants {
 
     public static final double kPROPORTIONAL_X = 1;
     public static final double kPROPORTIONAL_Y = 1;
-    public static final double kPROPORTIONAL_ANGLE = .3;
+    public static final double kPROPORTIONAL_ANGLE = .1
+    ;
 
     public static final double kMAX_SPEED_X = .6;
     public static final double kMAX_SPEED_Y = .6;
     public static final double kMAX_SPEED_ANGLE = .1;
-    public static final double kOVERARCHING_TIMEOUT = 2.5; //seconds
+    public static final double kOVERARCHING_TIMEOUT = 3; //seconds
   }
 
   public static class HumanDriveConstants {

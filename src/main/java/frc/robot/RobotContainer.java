@@ -68,7 +68,7 @@ public class RobotContainer {
     )
     .withControllerRotationAxis(() -> -primaryController.getRightX())
     .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.2)
+    .scaleTranslation(0.8)
     .allianceRelativeControl(true);
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -200,18 +200,18 @@ public class RobotContainer {
     primaryController
       .leftBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.4),
+        new AlignReefAngle(drivebase).withTimeout(.5),
         new AlignReefPosition(drivebase, false).withTimeout(2.5))
       );
       primaryController
       .rightBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.4),
+        new AlignReefAngle(drivebase).withTimeout(.5),
         new AlignReefPosition(drivebase, true).withTimeout(2.5))
       );
 
     
-    primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
+    //primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
     /*
     primaryController.rightBumper().onTrue(Commands.sequence(
       Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(2.5).schedule(), drivebase),
