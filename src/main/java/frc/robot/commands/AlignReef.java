@@ -6,11 +6,15 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.VisionConstants;
@@ -19,17 +23,20 @@ import frc.robot.subsystems.swervedrive.Vision.Cameras;
 import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class AlignReefPosition extends Command {
+public class AlignReef extends Command {
 
   private SwerveSubsystem swerve;
   private boolean alignRight;
   private Transform3d tagPose;
-  private Pose2d tagGoal;
-  private Pose2d lastPos;
+  //private Pose2d tagGoal;
+  //private Pose2d lastPos;
+  private double x;
+  private double y;
+  private double angle;
   private Pose2d toTravel;
 
   /** Creates a new AutoAlignPose. */
-  public AlignReefPosition(SwerveSubsystem swerve, boolean alignRight) {
+  public AlignReef(SwerveSubsystem swerve, boolean alignRight) {
     this.swerve = swerve;
     this.alignRight = alignRight;
 
@@ -49,50 +56,41 @@ public class AlignReefPosition extends Command {
     if (alignRight) {
       if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
         tagPose = Cameras.LEFT_CAM.getEstimateTagPose();
+      } else {
+        System.out.println("null");
       }
     } else {
       if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
         tagPose = Cameras.RIGHT_CAM.getEstimateTagPose();
+      } else {
+        System.out.println("null");
       }
     }
 
-    tagGoal =
-      new Pose2d()
-        .transformBy(
-          new Transform2d(
-            -tagPose.getX() - AlignmentConstants.kDIST_FROM_REEF,
-            -tagPose.getY(),
-            new Rotation2d()
-          )
-        );
-    lastPos = swerve.getPose();
-
-    if (lastPos != null) {
-      toTravel = tagGoal.relativeTo(swerve.getPose().relativeTo(lastPos));
-    } else {
-      toTravel = tagGoal;
-    }
-    System.out.print(tagGoal + " ");
-
-    System.out.println(toTravel);
-    if (toTravel != null) {
-      swerve.drive(
-        new Translation2d(
-          MathUtil.clamp(
-            -toTravel.getX() * ElasticAlign.kPROPORTIONAL_X.get(),
-            -ElasticAlign.kMAX_SPEED_X.get(),
-            ElasticAlign.kMAX_SPEED_X.get()
-          ),
-          MathUtil.clamp(
-            -toTravel.getY() * ElasticAlign.kPROPORTIONAL_Y.get(),
-            -ElasticAlign.kMAX_SPEED_Y.get(),
-            ElasticAlign.kMAX_SPEED_Y.get()
-          )
+    x = tagPose.getX() - .18;
+    y = tagPose.getY();
+    angle = tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
+    System.out.println("X: " + x + " Y: " + y + "Angle: " + angle);
+    swerve.drive(
+      new Translation2d(
+        MathUtil.clamp(
+          x * ElasticAlign.kPROPORTIONAL_X.get() + ElasticAlign.kCONST_X.get(),
+          -ElasticAlign.kMAX_SPEED_X.get(),
+          ElasticAlign.kMAX_SPEED_X.get()
         ),
-        0,
-        false
-      );
-    }
+        MathUtil.clamp(
+          y * ElasticAlign.kPROPORTIONAL_Y.get() + ElasticAlign.kCONST_Y.get(),
+          -ElasticAlign.kMAX_SPEED_Y.get(),
+          ElasticAlign.kMAX_SPEED_Y.get()
+        )
+      ),
+      MathUtil.clamp(
+        angle * ElasticAlign.kPROPORTIONAL_ANGLE.get() + ElasticAlign.kCONST_ANGLE.get(),
+        -ElasticAlign.kMAX_SPEED_ANGLE.get(),
+        ElasticAlign.kMAX_SPEED_ANGLE.get()
+      ),
+      false
+    );
   }
 
   // Called once the command ends or is interrupted.

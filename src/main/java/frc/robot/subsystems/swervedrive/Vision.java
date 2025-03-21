@@ -21,9 +21,11 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.NetworkTablesJNI;
+import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj.Alert;
 import edu.wpi.first.wpilibj.Alert.AlertType;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Robot;
 import java.awt.Desktop;
 import java.util.ArrayList;
@@ -48,6 +50,18 @@ import swervelib.telemetry.SwerveDriveTelemetry;
  * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
  */
 public class Vision {
+
+
+    private final NetworkTableInstance networkTable = NetworkTableInstance
+    .getDefault()
+    .getTable("SwerveSubsystem")
+    .getInstance();
+  private final StructPublisher<Transform3d> publisher = networkTable
+    .getStructTopic("AprilTagPose3D", Transform3d.struct)
+    .publish();
+    private final StructPublisher<Pose3d> publisher2 = networkTable
+    .getStructTopic("GoalPose", Pose3d.struct)
+    .publish();
 
   /**
    * April Tag Field Layout of the year.
@@ -125,7 +139,9 @@ public class Vision {
    *
    * @param swerveDrive {@link SwerveDrive} instance.
    */
-  public void updatePoseEstimation(SwerveDrive swerveDrive) {
+  public void 
+  
+  updatePoseEstimation(SwerveDrive swerveDrive) {
     if (
       SwerveDriveTelemetry.isSimulation &&
       swerveDrive.getSimulationDriveTrainPose().isPresent()
@@ -703,6 +719,9 @@ public class Vision {
       }
       //System.out.println(targetTagID);
       estimateTagPose = closestTag;
+    }
+    public Pose3d getRobotToCamPose() {
+      return new Pose3d().transformBy(robotToCamTransform);
     }
   }
 }

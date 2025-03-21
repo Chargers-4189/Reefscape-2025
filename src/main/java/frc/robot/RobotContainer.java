@@ -17,15 +17,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
-import frc.robot.commands.AlignReefAngle;
-import frc.robot.commands.AlignReefPosition;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
 import frc.robot.commands.multiaction.AutoPlaceCoral;
 import frc.robot.commands.multiaction.ThreeCoralAuto;
-import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -52,7 +51,7 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
-  private final Climber climber = new Climber();
+  //private final Climber climber = new Climber();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "swerve")
   );
@@ -200,15 +199,13 @@ public class RobotContainer {
     primaryController
       .leftBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.5),
-        new AlignReefPosition(drivebase, false).withTimeout(2.5))
-      );
+        new AlignReef(drivebase, false)
+      ));
       primaryController
       .rightBumper()
       .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.5),
-        new AlignReefPosition(drivebase, true).withTimeout(2.5))
-      );
+        new AlignReef(drivebase, true)
+      ));
 
     
     //primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
