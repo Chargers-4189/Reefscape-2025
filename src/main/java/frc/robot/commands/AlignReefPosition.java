@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.swervedrive.Vision.Cameras;
+import frc.robot.subsystems.swervedrive.Vision.cameras;
 import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -47,12 +47,12 @@ public class AlignReefPosition extends Command {
   @Override
   public void execute() {
     if (alignRight) {
-      if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
-        tagPose = Cameras.LEFT_CAM.getEstimateTagPose();
+      if (cameras[0].getEstimateTagPose() != null) {
+        tagPose = cameras.LEFT_CAM.getEstimateTagPose();
       }
     } else {
-      if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
-        tagPose = Cameras.RIGHT_CAM.getEstimateTagPose();
+      if (cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+        tagPose = cameras.RIGHT_CAM.getEstimateTagPose();
       }
     }
 
@@ -105,17 +105,17 @@ public class AlignReefPosition extends Command {
   @Override
   public boolean isFinished() {
     if (alignRight) {
-      if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
+      if (cameras.LEFT_CAM.getEstimateTagPose() != null) {
         return (
-          Cameras.LEFT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.LEFT_CAM.getEstimateTagPose().getY() <= 0.05
+          cameras.LEFT_CAM.getEstimateTagPose().getX() <= 0.15 &&
+          cameras.LEFT_CAM.getEstimateTagPose().getY() <= 0.05
         );
       }
     } else {
-      if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+      if (cameras.RIGHT_CAM.getEstimateTagPose() != null) {
         return (
-          Cameras.RIGHT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.RIGHT_CAM.getEstimateTagPose().getY() <= 0.05
+          cameras.RIGHT_CAM.getEstimateTagPose().getX() <= 0.15 &&
+          cameras.RIGHT_CAM.getEstimateTagPose().getY() <= 0.05
         );
       }
     }
