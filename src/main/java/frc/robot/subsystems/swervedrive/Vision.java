@@ -38,6 +38,7 @@ public class Vision extends SubsystemBase {
   public VisionSystemSim visionSim;
   private Supplier<Pose2d> currentPose;
   private Field2d field2d;
+  private SwerveDrive swerve;
 
   public static Camera[] cameras;
 
@@ -47,9 +48,10 @@ public class Vision extends SubsystemBase {
    * @param currentPose Current pose supplier, should reference {@link SwerveDrive#getPose()}
    * @param field       Current field, should be {@link SwerveDrive#field}
    */
-  public Vision(Supplier<Pose2d> currentPose, Field2d field) {
+  public Vision(Supplier<Pose2d> currentPose, SwerveDrive swerve) {
     this.currentPose = currentPose;
-    this.field2d = field;
+    this.swerve = swerve;
+    this.field2d = swerve.field;
 
     Camera leftCamera = new Camera(
       "flCam2025",
@@ -267,5 +269,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    swerve.updateOdometry();
+    updatePoseEstimation(swerve);
   }
 }
