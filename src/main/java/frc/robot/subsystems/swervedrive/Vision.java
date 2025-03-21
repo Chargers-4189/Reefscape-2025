@@ -1,3 +1,7 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
 package frc.robot.subsystems.swervedrive;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
@@ -10,6 +14,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.util.Camera;
 import java.awt.Desktop;
@@ -25,11 +30,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 import swervelib.SwerveDrive;
 import swervelib.telemetry.SwerveDriveTelemetry;
 
-/**
- * Example PhotonVision class to aid in the pursuit of accurate odometry. Taken from
- * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
- */
-public class Vision {
+public class Vision extends SubsystemBase {
 
   public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
     AprilTagFields.k2025ReefscapeWelded
@@ -261,5 +262,10 @@ public class Vision {
     }
 
     field2d.getObject("tracked targets").setPoses(poses);
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
   }
 }
