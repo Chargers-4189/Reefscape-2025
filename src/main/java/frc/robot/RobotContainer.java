@@ -25,7 +25,6 @@ import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
 import frc.robot.commands.multiaction.AutoPlaceCoral;
 import frc.robot.commands.multiaction.ThreeCoralAuto;
-import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -52,7 +51,6 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
-  private final Climber climber = new Climber();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "swerve")
   );
@@ -162,9 +160,7 @@ public class RobotContainer {
 
     //Driving
     drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    primaryController
-      .leftTrigger(.5)
-      .whileTrue(driveFieldOrientedWithNitro);
+    primaryController.leftTrigger(.5).whileTrue(driveFieldOrientedWithNitro);
     primaryController
       .rightTrigger(.5)
       .whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
@@ -199,19 +195,29 @@ public class RobotContainer {
 
     primaryController
       .leftBumper()
-      .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.4),
-        new AlignReefPosition(drivebase, false).withTimeout(2.5))
+      .onTrue(
+        Commands.sequence(
+          new AlignReefAngle(drivebase).withTimeout(.4),
+          new AlignReefPosition(drivebase, false).withTimeout(2.5)
+        )
       );
-      primaryController
+    primaryController
       .rightBumper()
-      .onTrue(Commands.sequence(
-        new AlignReefAngle(drivebase).withTimeout(.4),
-        new AlignReefPosition(drivebase, true).withTimeout(2.5))
+      .onTrue(
+        Commands.sequence(
+          new AlignReefAngle(drivebase).withTimeout(.4),
+          new AlignReefPosition(drivebase, true).withTimeout(2.5)
+        )
       );
 
-    
-    primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
+    primaryController
+      .povUp()
+      .onTrue(
+        Commands.run(
+          () -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(),
+          drivebase
+        )
+      );
     /*
     primaryController.rightBumper().onTrue(Commands.sequence(
       Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(2.5).schedule(), drivebase),

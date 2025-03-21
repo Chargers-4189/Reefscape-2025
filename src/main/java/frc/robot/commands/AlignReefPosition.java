@@ -10,12 +10,10 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.swervedrive.Vision.cameras;
+import frc.robot.subsystems.swervedrive.Vision;
 import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -47,12 +45,12 @@ public class AlignReefPosition extends Command {
   @Override
   public void execute() {
     if (alignRight) {
-      if (cameras[0].getEstimateTagPose() != null) {
-        tagPose = cameras.LEFT_CAM.getEstimateTagPose();
+      if (Vision.cameras[0].getEstimateTagPose() != null) {
+        tagPose = Vision.cameras[0].getEstimateTagPose();
       }
     } else {
-      if (cameras.RIGHT_CAM.getEstimateTagPose() != null) {
-        tagPose = cameras.RIGHT_CAM.getEstimateTagPose();
+      if (Vision.cameras[1].getEstimateTagPose() != null) {
+        tagPose = Vision.cameras[1].getEstimateTagPose();
       }
     }
 
@@ -105,17 +103,17 @@ public class AlignReefPosition extends Command {
   @Override
   public boolean isFinished() {
     if (alignRight) {
-      if (cameras.LEFT_CAM.getEstimateTagPose() != null) {
+      if (Vision.cameras[0].getEstimateTagPose() != null) {
         return (
-          cameras.LEFT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          cameras.LEFT_CAM.getEstimateTagPose().getY() <= 0.05
+          Vision.cameras[0].getEstimateTagPose().getX() <= 0.15 &&
+          Vision.cameras[0].getEstimateTagPose().getY() <= 0.05
         );
       }
     } else {
-      if (cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+      if (Vision.cameras[1].getEstimateTagPose() != null) {
         return (
-          cameras.RIGHT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          cameras.RIGHT_CAM.getEstimateTagPose().getY() <= 0.05
+          Vision.cameras[1].getEstimateTagPose().getX() <= 0.15 &&
+          Vision.cameras[1].getEstimateTagPose().getY() <= 0.05
         );
       }
     }

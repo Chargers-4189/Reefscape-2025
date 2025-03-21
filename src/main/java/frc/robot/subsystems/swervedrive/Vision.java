@@ -38,7 +38,7 @@ public class Vision {
   private Supplier<Pose2d> currentPose;
   private Field2d field2d;
 
-  public Camera[] cameras;
+  public static Camera[] cameras;
 
   /**
    * Constructor for the Vision class.
