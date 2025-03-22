@@ -182,12 +182,12 @@ public final class Constants {
 
   public static class AlignmentConstants {
 
-    public static final double kDIST_FROM_REEF = .19;
-    public static final double kDIST_OFFSET = Units.inchesToMeters(11.338);
+    public static final double kDIST_FROM_REEF = .5;
+    public static final double kDIST_OFFSET = .1775;
 
     public static final double kROTATION_TIMEOUT = .5; //Seconds
     public static final double kPOSITION_TIMEOUT = 2.5; //Seconds
-    
+
     public static final double kROTATION_TOLERANCE = 4; //Degrees
 
     public static final double kMAX_SPEED_X = .6;
@@ -195,9 +195,9 @@ public final class Constants {
     public static final double kMAX_SPEED_ANGLE = 1;
     public static final double kOVERARCHING_TIMEOUT = 3; //seconds
 
-    public static final double kP_X = 0;
-    public static final double kP_Y = 0;
-    public static final double kP_ANGLE = 0;
+    public static final double kP_X = -6;
+    public static final double kP_Y = -6;
+    public static final double kP_ANGLE = -3;
 
     public static final double kI_X = 0;
     public static final double kI_Y = 0;
