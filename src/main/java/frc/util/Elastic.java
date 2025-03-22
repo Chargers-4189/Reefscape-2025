@@ -142,7 +142,7 @@ public class Elastic {
     }
   }
 
-  public static final class ElasticHumanDrive {
+  public static final class ElasticTeleopDrive {
 
     static NetworkTable humanDriveTable = networkInstance.getTable(
       "humanDriveConstants"
@@ -260,7 +260,7 @@ public class Elastic {
     ElasticIntake.initialize();
     ElasticSwerve.initialize();
     ElasticEffector.initialize();
-    ElasticHumanDrive.initialize();
+    ElasticTeleopDrive.initialize();
     ElasticClimber.initialize();
     ElasticAlign.initialize();
   }

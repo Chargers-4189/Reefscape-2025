@@ -5,11 +5,11 @@
 package frc.robot.commands.multiaction;
 
 import edu.wpi.first.wpilibj2.command.ParallelRaceGroup;
-import frc.robot.commands.IntakeCoral;
-import frc.robot.commands.MoveElevatorSlightlyDown;
+import frc.robot.commands.effector.IntakeCoral;
+import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:

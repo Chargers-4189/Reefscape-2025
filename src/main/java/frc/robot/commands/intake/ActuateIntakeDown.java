@@ -2,43 +2,48 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Intake;
+
+import frc.util.Elastic.ElasticIntake;
 import frc.util.Stopwatch;
-import frc.util.Elastic.ElasticElevator;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class MoveElevatorSlightlyDown extends Command {
-  private Elevator elevator;
-  private Stopwatch stopwatch = new Stopwatch();
-  /** Creates a new MoveElevatorSlightlyDown. */
-  public MoveElevatorSlightlyDown(Elevator elevator) {
-    this.elevator = elevator;
+public class ActuateIntakeDown extends Command {
+
+  private final Intake intake;
+  private final Stopwatch stopwatch = new Stopwatch();
+
+  /** Creates a new ActuateIntakeDown. */
+  public ActuateIntakeDown(Intake intake) {
+    this.intake = intake;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(elevator);
+    addRequirements(intake);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stopwatch.start(ElasticElevator.kSLIGHTLY_DOWN_TIMEOUT.get());
+    stopwatch.start(2500);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    elevator.setVoltageNoGravity(-.1);
+    intake.setPower(-ElasticIntake.kPOWER.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    intake.stop();
+  }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return stopwatch.hasTriggered();
+    return (intake.getBottomLimitSwitch()) || stopwatch.hasTriggered();
   }
 }
