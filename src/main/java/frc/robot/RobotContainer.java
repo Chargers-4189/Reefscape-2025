@@ -18,15 +18,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.ActuateIntakeDown;
 import frc.robot.commands.ActuateIntakeUp;
-import frc.robot.commands.AlignReefAngle;
-import frc.robot.commands.AlignReefPosition;
+import frc.robot.commands.AlignReef;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.MoveElevatorSlightlyDown;
 import frc.robot.commands.multiaction.AutoPlaceCoral;
 import frc.robot.commands.multiaction.TwoCoralAuto;
-import frc.robot.subsystems.Climber;
+//import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
@@ -54,6 +53,7 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
+  //private final Climber climber = new Climber();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "swerve")
   );
@@ -73,7 +73,7 @@ public class RobotContainer {
     )
     .withControllerRotationAxis(() -> -primaryController.getRightX())
     .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.2)
+    .scaleTranslation(0.8)
     .allianceRelativeControl(true);
   /**
    * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
@@ -81,8 +81,8 @@ public class RobotContainer {
   SwerveInputStream driveWithStationAngle = driveAngularVelocity
     .copy()
     .withControllerHeadingAxis(
-      () -> drivebase.getStationRotation().getCos(),
-      () -> drivebase.getStationRotation().getSin()
+      () -> Math.sin(drivebase.getStationRotation()),
+      () -> Math.cos(drivebase.getStationRotation())
     )
     .headingWhile(true);
 
@@ -96,6 +96,14 @@ public class RobotContainer {
     .deadband(OperatorConstants.DEADBAND)
     .scaleTranslation(1)
     .allianceRelativeControl(true);
+
+    SwerveInputStream driveWithNitroAndStationAngle = driveWithNitro
+    .copy()
+    .withControllerHeadingAxis(
+      () -> Math.sin(drivebase.getStationRotation()),
+      () -> Math.cos(drivebase.getStationRotation())
+    )
+    .headingWhile(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -192,12 +200,29 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
+    Command angularVelocityDrive = drivebase.driveFieldOriented(
       driveAngularVelocity
     );
-    Command driveFieldOrientedWithNitro = drivebase.driveFieldOriented(
+    Command nitroDrive = drivebase.driveFieldOriented(
       driveWithNitro
     );
+    Command stationAngleDrive = drivebase.driveFieldOriented(
+      driveWithStationAngle
+    );
+    Command nitroStationAngleDrive = drivebase.driveFieldOriented(
+      driveWithNitroAndStationAngle
+    );
+
+    //Driving Triggers
+    final Trigger nitroTrigger = new Trigger(() -> (
+      primaryController.leftStick().getAsBoolean() || primaryController.rightStick().getAsBoolean()
+    ));
+    final Trigger stationAlign = new Trigger(() -> (
+      primaryController.leftTrigger(.5).getAsBoolean()
+    ));
+    final Trigger xFormation = new Trigger(() -> (
+      primaryController.rightTrigger(.5).getAsBoolean()
+    ));
 
     //Secondary Triggers
     final Trigger elevatorTrigger = new Trigger(() ->
@@ -233,11 +258,12 @@ public class RobotContainer {
     //Primary
 
     //Driving
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    primaryController.leftTrigger(.5).whileTrue(driveFieldOrientedWithNitro);
-    primaryController
-      .rightTrigger(.5)
-      .whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    drivebase.setDefaultCommand(angularVelocityDrive);
+    nitroTrigger.and(stationAlign.negate()).and(xFormation.negate()).whileTrue(nitroDrive);
+    stationAlign.and(nitroTrigger.negate()).and(xFormation.negate()).whileTrue(stationAngleDrive);
+    stationAlign.and(nitroTrigger).and(xFormation.negate()).whileTrue(nitroStationAngleDrive);
+    xFormation.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    
     primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     //Elevator + Effector
@@ -269,29 +295,17 @@ public class RobotContainer {
 
     primaryController
       .leftBumper()
-      .onTrue(
-        Commands.sequence(
-          new AlignReefAngle(drivebase).withTimeout(.4),
-          new AlignReefPosition(vision, drivebase, false).withTimeout(2.5)
-        )
-      );
-    primaryController
+      .onTrue(Commands.sequence(
+        new AlignReef(drivebase, false)
+      ));
+      primaryController
       .rightBumper()
-      .onTrue(
-        Commands.sequence(
-          new AlignReefAngle(drivebase).withTimeout(.4),
-          new AlignReefPosition(vision, drivebase, true).withTimeout(2.5)
-        )
-      );
+      .onTrue(Commands.sequence(
+        new AlignReef(drivebase, true)
+      ));
 
-    primaryController
-      .povUp()
-      .onTrue(
-        Commands.run(
-          () -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(),
-          drivebase
-        )
-      );
+    
+    //primaryController.povUp().onTrue(Commands.run(() -> drivebase.driveToReefClosest(false).withTimeout(.5).schedule(), drivebase));
     /*
     primaryController.rightBumper().onTrue(Commands.sequence(
       Commands.run(() -> drivebase.driveToReefClosest(true).withTimeout(2.5).schedule(), drivebase),

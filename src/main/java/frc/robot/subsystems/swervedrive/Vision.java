@@ -33,6 +33,27 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 
 public class Vision extends SubsystemBase {
 
+/**
+ * Example PhotonVision class to aid in the pursuit of accurate odometry. Taken from
+ * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
+ */
+public class Vision {
+
+
+    private final NetworkTableInstance networkTable = NetworkTableInstance
+    .getDefault()
+    .getTable("SwerveSubsystem")
+    .getInstance();
+  private final StructPublisher<Transform3d> publisher = networkTable
+    .getStructTopic("AprilTagPose3D", Transform3d.struct)
+    .publish();
+    private final StructPublisher<Pose3d> publisher2 = networkTable
+    .getStructTopic("GoalPose", Pose3d.struct)
+    .publish();
+
+  /**
+   * April Tag Field Layout of the year.
+   */
   public static final AprilTagFieldLayout fieldLayout = AprilTagFieldLayout.loadField(
     AprilTagFields.k2025ReefscapeWelded
   );
@@ -118,7 +139,9 @@ public class Vision extends SubsystemBase {
    *
    * @param swerveDrive {@link SwerveDrive} instance.
    */
-  public void updatePoseEstimation(SwerveDrive swerveDrive) {
+  public void 
+  
+  updatePoseEstimation(SwerveDrive swerveDrive) {
     if (
       SwerveDriveTelemetry.isSimulation &&
       swerveDrive.getSimulationDriveTrainPose().isPresent()

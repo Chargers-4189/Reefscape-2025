@@ -78,7 +78,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param directory Directory of swerve drive config files.
    */
 
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
+  public final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
     AprilTagFields.k2025ReefscapeWelded
   );
   private final NetworkTableInstance networkTable = NetworkTableInstance
@@ -144,6 +144,14 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
     publisher.set(getPose());
+    /*
+    if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
+      System.out.println(Cameras.LEFT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
+    }
+    if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+      System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
+    }*/
+    System.out.println(getStationRotation() * 180 / Math.PI);
   }
 
   @Override
@@ -454,7 +462,7 @@ public class SwerveSubsystem extends SubsystemBase {
       .withTimeout(.5);
   }
 
-  public Rotation2d getStationRotation() {
+  public double getStationRotation() {
     double minDist = Double.MAX_VALUE;
     int[] stationTagIds = { 1, 2, 12, 13 };
     Integer minId = null;
@@ -479,11 +487,10 @@ public class SwerveSubsystem extends SubsystemBase {
         .getTagPose(minId)
         .get()
         .getRotation()
-        .toRotation2d()
-        .plus(new Rotation2d(Angle.ofBaseUnits(180, Degrees)));
+        .getZ();
     } catch (Exception e) {
       System.out.println(e);
-      return new Rotation2d();
+      return 0;
     }
   }
 
