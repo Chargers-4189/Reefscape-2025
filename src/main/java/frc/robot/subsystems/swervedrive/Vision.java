@@ -14,6 +14,8 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
@@ -37,8 +39,6 @@ public class Vision extends SubsystemBase {
  * Example PhotonVision class to aid in the pursuit of accurate odometry. Taken from
  * https://gitlab.com/ironclad_code/ironclad-2024/-/blob/master/src/main/java/frc/robot/vision/Vision.java?ref_type=heads
  */
-public class Vision {
-
 
     private final NetworkTableInstance networkTable = NetworkTableInstance
     .getDefault()
@@ -80,7 +80,7 @@ public class Vision {
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
       new Translation3d(
         Units.inchesToMeters(12.25),
-        Units.inchesToMeters(-6.25),
+        Units.inchesToMeters(6.25),
         Units.inchesToMeters(11.375)
       ),
       VecBuilder.fill(.5, .5, 1),
