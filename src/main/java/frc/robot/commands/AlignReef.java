@@ -34,6 +34,7 @@ public class AlignReef extends Command {
   private double xPower;
   private double yPower;
   private double anglePower;
+  private double angleInitPower;
 
   private double x;
   private double y;
@@ -42,6 +43,7 @@ public class AlignReef extends Command {
   private PIDController xPid = new PIDController(0, 0, 0);
   private PIDController yPid = new PIDController(0, 0, 0);
   private PIDController anglePid = new PIDController(0, 0, 0);
+  private PIDController angleInitPid = new PIDController(0, 0, 0);
 
   private double yOffset;
 
@@ -53,6 +55,7 @@ public class AlignReef extends Command {
     this.swerve = swerve;
     this.alignRight = alignRight;
     anglePid.enableContinuousInput(-Math.PI, Math.PI);
+    angleInitPid.enableContinuousInput(-Math.PI, Math.PI);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
@@ -61,11 +64,12 @@ public class AlignReef extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Align Reef Pose");
+    //System.out.println("Align Reef Pose");
 
     xPid.setPID(ElasticAlign.kP_X.get(), ElasticAlign.kI_X.get(), ElasticAlign.kD_X.get());
     yPid.setPID(ElasticAlign.kP_Y.get(), ElasticAlign.kI_Y.get(), ElasticAlign.kD_Y.get());
     anglePid.setPID(ElasticAlign.kP_ANGLE.get(), ElasticAlign.kI_ANGLE.get(), ElasticAlign.kD_ANGLE.get());
+    angleInitPid.setPID(ElasticAlign.kP_ANGLE_INITIAL.get(), ElasticAlign.kI_ANGLE_INITIAL.get(), ElasticAlign.kD_ANGLE_INITIAL.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -106,30 +110,42 @@ public class AlignReef extends Command {
     xPower = xPid.calculate(x, ElasticAlign.kDIST_FROM_REEF.get());
     yPower = yPid.calculate(y, 0);
     anglePower = anglePid.calculate(angle, Math.PI);
-
+    angleInitPower = angleInitPid.calculate(angle, Math.PI);
     
-    System.out.println("X: " + x + " Y: " + y + " Angle: " + angle +
-    " PowerX: " + xPower + " PowerY: " + yPower + " PowerAngle: " + anglePower);
-    swerve.drive(
-      new Translation2d(
-        MathUtil.clamp(
-          xPower,
-          -ElasticAlign.kMAX_SPEED_X.get(),
-          ElasticAlign.kMAX_SPEED_X.get()
+    //System.out.println("X: " + x + " Y: " + y + " Angle: " + angle +
+    //" PowerX: " + xPower + " PowerY: " + yPower + " PowerAngle: " + anglePower);
+    if (Math.abs(angle) > Math.PI - ElasticAlign.kANGLE_ONLY_CUTOFF.get()) {
+      swerve.drive(
+        new Translation2d(
+          MathUtil.clamp(
+            xPower,
+            -ElasticAlign.kMAX_SPEED_X.get(),
+            ElasticAlign.kMAX_SPEED_X.get()
+          ),
+          MathUtil.clamp(
+            yPower,
+            -ElasticAlign.kMAX_SPEED_Y.get(),
+            ElasticAlign.kMAX_SPEED_Y.get()
+          )
         ),
         MathUtil.clamp(
-          yPower,
-          -ElasticAlign.kMAX_SPEED_Y.get(),
-          ElasticAlign.kMAX_SPEED_Y.get()
-        )
-      ),
-      MathUtil.clamp(
-        anglePower,
-        -ElasticAlign.kMAX_SPEED_ANGLE.get(),
-        ElasticAlign.kMAX_SPEED_ANGLE.get()
-      ),
-      false
-    );
+          anglePower,
+          -ElasticAlign.kMAX_SPEED_ANGLE.get(),
+          ElasticAlign.kMAX_SPEED_ANGLE.get()
+        ),
+        false
+      );
+    } else {
+      swerve.drive(
+        new Translation2d(0, 0),
+        MathUtil.clamp(
+          angleInitPower,
+          -ElasticAlign.kMAX_SPEED_ANGLE_INITIAL.get(),
+          ElasticAlign.kMAX_SPEED_ANGLE_INITIAL.get()
+        ),
+        false
+      );
+    }
   }
 
   // Called once the command ends or is interrupted.
@@ -143,12 +159,12 @@ public class AlignReef extends Command {
   @Override
   public boolean isFinished() {
     if (stopwatch.hasStarted()) {
-      System.out.println("started");
+      //System.out.println("started");
       return stopwatch.hasTriggered();
     } else if (
-      (Math.abs(x - ElasticAlign.kDIST_FROM_REEF.get()) < ElasticAlign.kX_TOLERANCE.get()) && 
-      (Math.abs(y - 0) < ElasticAlign.kY_TOLERANCE.get()) && 
-      (Math.abs(angle - Math.PI) < ElasticAlign.kANGLE_TOLERANCE.get())
+      (Math.abs(x - ElasticAlign.kDIST_FROM_REEF.get()) <= ElasticAlign.kX_TOLERANCE.get()) && 
+      (Math.abs(y) <= ElasticAlign.kY_TOLERANCE.get()) && 
+      (Math.abs(angle - Math.PI) <= ElasticAlign.kANGLE_TOLERANCE.get() || Math.abs(angle + Math.PI) <= ElasticAlign.kANGLE_TOLERANCE.get())
     ) {
       stopwatch.start(ElasticAlign.kEXTRA_ALIGNMENT_TIME.get());
     }

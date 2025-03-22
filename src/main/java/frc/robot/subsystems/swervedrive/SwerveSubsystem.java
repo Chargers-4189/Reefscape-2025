@@ -151,7 +151,7 @@ public class SwerveSubsystem extends SubsystemBase {
     if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
       System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }*/
-    System.out.println(getStationRotation() * 180 / Math.PI);
+    //System.out.println(getStationRotation() * 180 / Math.PI);
   }
 
   @Override
@@ -394,7 +394,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Command driveToReefClosest(boolean right) {
-    System.out.println("Drive to reef");
+    //System.out.println("Drive to reef");
     double minDist = Double.MAX_VALUE;
     int[] reefTagIds = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
     Integer minId = null;
@@ -414,7 +414,7 @@ public class SwerveSubsystem extends SubsystemBase {
       }
     }
     try {
-      System.out.print("Working");
+      //System.out.print("Working");
       return driveToReef(minId, right);
     } catch (Exception e) {
       System.out.println(e);
@@ -423,7 +423,7 @@ public class SwerveSubsystem extends SubsystemBase {
   }
 
   public Command rotateToReefClosest() {
-    System.out.println("Drive to reef");
+    //System.out.println("Drive to reef");
     double minDist = Double.MAX_VALUE;
     int[] reefTagIds = { 6, 7, 8, 9, 10, 11, 17, 18, 19, 20, 21, 22 };
     Integer minId = null;
@@ -444,7 +444,7 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     Pose2d targetAprilTagPose;
     try {
-      System.out.print("Working");
+      //System.out.print("Working");
       targetAprilTagPose =
         aprilTagFieldLayout.getTagPose(minId).get().toPose2d();
     } catch (Exception e) {
@@ -481,7 +481,7 @@ public class SwerveSubsystem extends SubsystemBase {
         minId = id;
       }
     }
-    System.out.println(minId + " " + minDist);
+    //System.out.println(minId + " " + minDist);
     try {
       return aprilTagFieldLayout
         .getTagPose(minId)
@@ -781,7 +781,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param velocity Velocity according to the field.
    */
   public Command driveFieldOriented(Supplier<ChassisSpeeds> velocity) {
-    System.out.println("Drive field oriented");
+    //System.out.println("Drive field oriented");
     return run(() -> {
       swerveDrive.driveFieldOriented(velocity.get());
     });
@@ -813,7 +813,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param initialHolonomicPose The pose to set the odometry to
    */
   public void resetOdometry(Pose2d initialHolonomicPose) {
-    System.out.println("iuahdiuahdiouahsiudohasoiudhasiduoh");
+    //System.out.println("iuahdiuahdiouahsiudohasoiudhasiduoh");
     swerveDrive.resetOdometry(initialHolonomicPose);
   }
 
@@ -848,7 +848,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * Resets the gyro angle to zero and resets odometry to the same position, but facing toward 0.
    */
   public void zeroGyro() {
-    System.out.println("Zero Gyro Function");
+    //System.out.println("Zero Gyro Function");
     swerveDrive.zeroGyro();
   }
 

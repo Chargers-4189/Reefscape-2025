@@ -195,24 +195,30 @@ public class Elastic {
         public static DoubleEntry kP_X = alignTable.getDoubleTopic("P_X").getEntry(Constants.AlignmentConstants.kP_X);
         public static DoubleEntry kP_Y = alignTable.getDoubleTopic("P_Y").getEntry(Constants.AlignmentConstants.kP_Y);
         public static DoubleEntry kP_ANGLE = alignTable.getDoubleTopic("P_ANGLE").getEntry(Constants.AlignmentConstants.kP_ANGLE);
+        public static DoubleEntry kP_ANGLE_INITIAL = alignTable.getDoubleTopic("P_ANGLE_INITIAL").getEntry(Constants.AlignmentConstants.kP_ANGLE_INITIAL);
 
         public static DoubleEntry kI_X = alignTable.getDoubleTopic("I_X").getEntry(Constants.AlignmentConstants.kI_X);
         public static DoubleEntry kI_Y = alignTable.getDoubleTopic("I_Y").getEntry(Constants.AlignmentConstants.kI_Y);
         public static DoubleEntry kI_ANGLE = alignTable.getDoubleTopic("I_ANGLE").getEntry(Constants.AlignmentConstants.kI_ANGLE);
+        public static DoubleEntry kI_ANGLE_INITIAL = alignTable.getDoubleTopic("I_ANGLE_INITIAL").getEntry(Constants.AlignmentConstants.kI_ANGLE_INITIAL);
 
         public static DoubleEntry kD_X = alignTable.getDoubleTopic("D_X").getEntry(Constants.AlignmentConstants.kD_X);
         public static DoubleEntry kD_Y = alignTable.getDoubleTopic("D_Y").getEntry(Constants.AlignmentConstants.kD_Y);
         public static DoubleEntry kD_ANGLE = alignTable.getDoubleTopic("D_ANGLE").getEntry(Constants.AlignmentConstants.kD_ANGLE);
+        public static DoubleEntry kD_ANGLE_INITIAL = alignTable.getDoubleTopic("D_ANGLE_INITIAL").getEntry(Constants.AlignmentConstants.kD_ANGLE_INITIAL);
 
         public static DoubleEntry kMAX_SPEED_X = alignTable.getDoubleTopic("MAX_SPEED_X").getEntry(Constants.AlignmentConstants.kMAX_SPEED_X);
         public static DoubleEntry kMAX_SPEED_Y = alignTable.getDoubleTopic("MAX_SPEED_Y").getEntry(Constants.AlignmentConstants.kMAX_SPEED_Y);
         public static DoubleEntry kMAX_SPEED_ANGLE = alignTable.getDoubleTopic("MAX_SPEED_ANGLE").getEntry(Constants.AlignmentConstants.kMAX_SPEED_ANGLE);
-        
+        public static DoubleEntry kMAX_SPEED_ANGLE_INITIAL = alignTable.getDoubleTopic("MAX_SPEED_ANGLE_INITIAL").getEntry(Constants.AlignmentConstants.kMAX_SPEED_ANGLE_INITIAL);
+
         public static DoubleEntry kEXTRA_ALIGNMENT_TIME = alignTable.getDoubleTopic("EXTRA_ALIGNMENT_TIME").getEntry(Constants.AlignmentConstants.kEXTRA_ALIGNMENT_TIME);
 
         public static DoubleEntry kX_TOLERANCE = alignTable.getDoubleTopic("X_TOLERANCE").getEntry(Constants.AlignmentConstants.kX_TOLERANCE);
         public static DoubleEntry kY_TOLERANCE = alignTable.getDoubleTopic("Y_TOLERANCE").getEntry(Constants.AlignmentConstants.kY_TOLERANCE);
         public static DoubleEntry kANGLE_TOLERANCE = alignTable.getDoubleTopic("ANGLE_TOLERANCE").getEntry(Constants.AlignmentConstants.kANGLE_TOLERANCE);
+
+        public static DoubleEntry kANGLE_ONLY_CUTOFF = alignTable.getDoubleTopic("ANGLE_ONLY_CUTOFF").getEntry(Constants.AlignmentConstants.kANGLE_ONLY_CUTOFF);
 
         public static void initialize() {
             kDIST_FROM_REEF.set(kDIST_FROM_REEF.get());
@@ -222,24 +228,30 @@ public class Elastic {
             kP_X.set(kP_X.get());
             kP_Y.set(kP_Y.get());
             kP_ANGLE.set(kP_ANGLE.get());
+            kP_ANGLE_INITIAL.set(kP_ANGLE_INITIAL.get());
 
             kI_X.set(kI_X.get());
             kI_Y.set(kI_Y.get());
             kI_ANGLE.set(kI_ANGLE.get());
+            kI_ANGLE_INITIAL.set(kI_ANGLE_INITIAL.get());
 
             kD_X.set(kD_X.get());
             kD_Y.set(kD_Y.get());
             kD_ANGLE.set(kD_ANGLE.get());
+            kD_ANGLE_INITIAL.set(kD_ANGLE_INITIAL.get());
 
             kMAX_SPEED_X.set(kMAX_SPEED_X.get());
             kMAX_SPEED_Y.set(kMAX_SPEED_Y.get());
             kMAX_SPEED_ANGLE.set(kMAX_SPEED_ANGLE.get());
+            kMAX_SPEED_ANGLE_INITIAL.set(kMAX_SPEED_ANGLE_INITIAL.get());
 
             kEXTRA_ALIGNMENT_TIME.set(kEXTRA_ALIGNMENT_TIME.get());
 
             kX_TOLERANCE.set(kX_TOLERANCE.get());
             kY_TOLERANCE.set(kY_TOLERANCE.get());
             kANGLE_TOLERANCE.set(kANGLE_TOLERANCE.get());
+
+            kANGLE_ONLY_CUTOFF.set(kANGLE_ONLY_CUTOFF.get());
         }
     }
 

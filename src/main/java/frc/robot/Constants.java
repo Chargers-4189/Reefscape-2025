@@ -195,18 +195,25 @@ public final class Constants {
     public static final double kMAX_SPEED_X = 1.5;
     public static final double kMAX_SPEED_Y = 1.5;
     public static final double kMAX_SPEED_ANGLE = 1;
+    public static final double kMAX_SPEED_ANGLE_INITIAL = 1;
 
     public static final double kP_X = -6;
     public static final double kP_Y = -6;
     public static final double kP_ANGLE = -3;
+    public static final double kP_ANGLE_INITIAL = -3;
 
     public static final double kI_X = 0;
     public static final double kI_Y = 0;
     public static final double kI_ANGLE = 0;
+    public static final double kI_ANGLE_INITIAL = 0;
 
     public static final double kD_X = 0;
     public static final double kD_Y = 0;
     public static final double kD_ANGLE = 0;
+    public static final double kD_ANGLE_INITIAL = 0;
+
+
+    public static final double kANGLE_ONLY_CUTOFF = 0.8;
 
     /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;

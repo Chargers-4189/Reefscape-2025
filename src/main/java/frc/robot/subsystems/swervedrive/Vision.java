@@ -62,7 +62,30 @@ public class Vision extends SubsystemBase {
   private Field2d field2d;
   private SwerveDrive swerve;
 
-  private static Camera[] cameras;
+  private Camera[] cameras = {
+    new Camera(
+      "flCam2025",
+      new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
+      new Translation3d(
+        Units.inchesToMeters(12.25),
+        Units.inchesToMeters(6.25),
+        Units.inchesToMeters(11.375)
+      ),
+      VecBuilder.fill(.5, .5, 1),
+      VecBuilder.fill(.25, .25, .5)
+    ),
+    new Camera(
+      "frCam2025",
+      new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
+      new Translation3d(
+        Units.inchesToMeters(12.375),
+        Units.inchesToMeters(-6.375),
+        Units.inchesToMeters(11)
+      ),
+      VecBuilder.fill(.5, .5, 1),
+      VecBuilder.fill(.25, .25, .5)
+    )
+  };
 
   /**
    * Constructor for the Vision class.
@@ -74,31 +97,6 @@ public class Vision extends SubsystemBase {
     this.currentPose = currentPose;
     this.swerve = swerve;
     this.field2d = swerve.field;
-
-    Camera leftCamera = new Camera(
-      "flCam2025",
-      new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
-      new Translation3d(
-        Units.inchesToMeters(12.25),
-        Units.inchesToMeters(6.25),
-        Units.inchesToMeters(11.375)
-      ),
-      VecBuilder.fill(.5, .5, 1),
-      VecBuilder.fill(.25, .25, .5)
-    );
-    Camera rightCamera = new Camera(
-      "frCam2025",
-      new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
-      new Translation3d(
-        Units.inchesToMeters(12.375),
-        Units.inchesToMeters(-6.375),
-        Units.inchesToMeters(11)
-      ),
-      VecBuilder.fill(.5, .5, 1),
-      VecBuilder.fill(.25, .25, .5)
-    );
-    cameras[0] = leftCamera;
-    cameras[1] = rightCamera;
 
     if (Robot.isSimulation()) {
       visionSim = new VisionSystemSim("Vision");
