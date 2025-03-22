@@ -10,17 +10,16 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AlignmentConstants;
-import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
-import frc.robot.subsystems.swervedrive.Vision.Cameras;
+import frc.robot.subsystems.swervedrive.Vision;
 import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AlignReefPosition extends Command {
 
+  private Vision vision;
   private SwerveSubsystem swerve;
   private boolean alignRight;
   private Transform3d tagPose;
@@ -29,7 +28,12 @@ public class AlignReefPosition extends Command {
   private Pose2d toTravel;
 
   /** Creates a new AutoAlignPose. */
-  public AlignReefPosition(SwerveSubsystem swerve, boolean alignRight) {
+  public AlignReefPosition(
+    Vision vision,
+    SwerveSubsystem swerve,
+    boolean alignRight
+  ) {
+    this.vision = vision;
     this.swerve = swerve;
     this.alignRight = alignRight;
 
@@ -47,12 +51,12 @@ public class AlignReefPosition extends Command {
   @Override
   public void execute() {
     if (alignRight) {
-      if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
-        tagPose = Cameras.LEFT_CAM.getEstimateTagPose();
+      if (vision.getLeftTagPose() != null) {
+        tagPose = vision.getLeftTagPose();
       }
     } else {
-      if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
-        tagPose = Cameras.RIGHT_CAM.getEstimateTagPose();
+      if (vision.getRightTagPose() != null) {
+        tagPose = vision.getRightTagPose();
       }
     }
 
@@ -105,17 +109,17 @@ public class AlignReefPosition extends Command {
   @Override
   public boolean isFinished() {
     if (alignRight) {
-      if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
+      if (vision.getLeftTagPose() != null) {
         return (
-          Cameras.LEFT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.LEFT_CAM.getEstimateTagPose().getY() <= 0.05
+          vision.getLeftTagPose().getX() <= 0.15 &&
+          vision.getLeftTagPose().getY() <= 0.05
         );
       }
     } else {
-      if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+      if (vision.getRightTagPose() != null) {
         return (
-          Cameras.RIGHT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.RIGHT_CAM.getEstimateTagPose().getY() <= 0.05
+          vision.getRightTagPose().getX() <= 0.15 &&
+          vision.getRightTagPose().getY() <= 0.05
         );
       }
     }

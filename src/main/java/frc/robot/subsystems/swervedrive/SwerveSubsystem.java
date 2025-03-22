@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems.swervedrive;
 
-import static edu.wpi.first.units.Units.Degree;
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 
@@ -24,7 +23,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,12 +36,13 @@ import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Config;
 import frc.robot.Constants;
-import frc.robot.subsystems.swervedrive.Vision.Cameras;
+import frc.util.Camera;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -72,10 +71,6 @@ public class SwerveSubsystem extends SubsystemBase {
    * Enable vision odometry updates while driving.
    */
   private final boolean visionDriveTest = true;
-  /**
-   * PhotonVision class to keep an accurate odometry.
-   */
-  private Vision vision;
 
   /**
    * Initialize {@link SwerveDrive} with the directory provided.
@@ -125,7 +120,6 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive.setModuleEncoderAutoSynchronize(false, 1); // Enable if you want to resynchronize your absolute encoders and motor encoders periodically when they are not moving.
     //    swerveDrive.pushOffsetsToEncoders(); // Set the absolute encoder to be used over the internal encoder and push the offsets onto it. Throws warning if not possible
     if (visionDriveTest) {
-      setupPhotonVision();
       // Stop the odometry thread if we are using vision that way we can synchronize updates better.
       swerveDrive.stopOdometryThread();
     }
@@ -145,20 +139,10 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param driveCfg      SwerveDriveConfiguration for the swerve.
    * @param controllerCfg Swerve Controller.
    */
-  /**
-   * Setup the photon vision class.
-   */
-  public void setupPhotonVision() {
-    vision = new Vision(swerveDrive::getPose, swerveDrive.field);
-  }
 
   @Override
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
-    if (visionDriveTest) {
-      swerveDrive.updateOdometry();
-      vision.updatePoseEstimation(swerveDrive);
-    }
     publisher.set(getPose());
   }
 
@@ -248,7 +232,7 @@ public class SwerveSubsystem extends SubsystemBase {
    *
    * @return A {@link Command} which will run the alignment.
    */
-  public Command aimAtTarget(Cameras camera) {
+  public Command aimAtTarget(Camera camera) {
     return run(() -> {
       Optional<PhotonPipelineResult> resultO = camera.getBestResult();
       if (resultO.isPresent()) {
@@ -396,10 +380,10 @@ public class SwerveSubsystem extends SubsystemBase {
     }
     return minId;
   }
+
   public Pose2d getClosestReefTagPose() {
     return aprilTagFieldLayout.getTagPose(getClosestReefId()).get().toPose2d();
   }
-
 
   public Command driveToReefClosest(boolean right) {
     System.out.println("Drive to reef");
@@ -429,6 +413,7 @@ public class SwerveSubsystem extends SubsystemBase {
       return Commands.none();
     }
   }
+
   public Command rotateToReefClosest() {
     System.out.println("Drive to reef");
     double minDist = Double.MAX_VALUE;
@@ -452,15 +437,21 @@ public class SwerveSubsystem extends SubsystemBase {
     Pose2d targetAprilTagPose;
     try {
       System.out.print("Working");
-      targetAprilTagPose = aprilTagFieldLayout
-      .getTagPose(minId)
-      .get()
-      .toPose2d();
+      targetAprilTagPose =
+        aprilTagFieldLayout.getTagPose(minId).get().toPose2d();
     } catch (Exception e) {
       System.out.println(e);
       targetAprilTagPose = new Pose2d();
     }
-    return this.driveToPose(new Pose2d(getPose().getTranslation(), targetAprilTagPose.getRotation().plus(new Rotation2d(Units.degreesToRadians(180))))).withTimeout(.5);
+    return this.driveToPose(
+        new Pose2d(
+          getPose().getTranslation(),
+          targetAprilTagPose
+            .getRotation()
+            .plus(new Rotation2d(Units.degreesToRadians(180)))
+        )
+      )
+      .withTimeout(.5);
   }
 
   public Rotation2d getStationRotation() {
@@ -712,7 +703,7 @@ public class SwerveSubsystem extends SubsystemBase {
     });
   }
 
-    /**
+  /**
    * Command to drive the robot using translative values and heading as a setpoint.
    *
    * @param translationX Translation in the X direction. Cubed for smoother controls.
@@ -728,25 +719,22 @@ public class SwerveSubsystem extends SubsystemBase {
     double headingY
   ) {
     // swerveDrive.setHeadingCorrection(true); // Normally you would want heading correction for this kind of control.
-      Translation2d scaledInputs = SwerveMath.scaleTranslation(
-        new Translation2d(
-          translationX,
-          translationY
-        ),
-        0.8
-      );
+    Translation2d scaledInputs = SwerveMath.scaleTranslation(
+      new Translation2d(translationX, translationY),
+      0.8
+    );
 
-      // Make the robot move
-      driveFieldOriented(
-        swerveDrive.swerveController.getTargetSpeeds(
-          scaledInputs.getX(),
-          scaledInputs.getY(),
-          headingX,
-          headingY,
-          swerveDrive.getOdometryHeading().getRadians(),
-          swerveDrive.getMaximumChassisVelocity()
-        )
-      );
+    // Make the robot move
+    driveFieldOriented(
+      swerveDrive.swerveController.getTargetSpeeds(
+        scaledInputs.getX(),
+        scaledInputs.getY(),
+        headingX,
+        headingY,
+        swerveDrive.getOdometryHeading().getRadians(),
+        swerveDrive.getMaximumChassisVelocity()
+      )
+    );
   }
 
   /**
