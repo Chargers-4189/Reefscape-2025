@@ -11,6 +11,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
@@ -40,7 +41,7 @@ public class Vision extends SubsystemBase {
   private Field2d field2d;
   private SwerveDrive swerve;
 
-  public static Camera[] cameras;
+  private static Camera[] cameras;
 
   /**
    * Constructor for the Vision class.
@@ -264,6 +265,14 @@ public class Vision extends SubsystemBase {
     }
 
     field2d.getObject("tracked targets").setPoses(poses);
+  }
+
+  public Transform3d getLeftTagPose() {
+    return cameras[0].getEstimateTagPose();
+  }
+
+  public Transform3d getRightTagPose() {
+    return cameras[1].getEstimateTagPose();
   }
 
   @Override

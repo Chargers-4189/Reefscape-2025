@@ -204,7 +204,7 @@ public class RobotContainer {
       .onTrue(
         Commands.sequence(
           new AlignReefAngle(drivebase).withTimeout(.4),
-          new AlignReefPosition(drivebase, false).withTimeout(2.5)
+          new AlignReefPosition(vision, drivebase, false).withTimeout(2.5)
         )
       );
     primaryController
@@ -212,7 +212,7 @@ public class RobotContainer {
       .onTrue(
         Commands.sequence(
           new AlignReefAngle(drivebase).withTimeout(.4),
-          new AlignReefPosition(drivebase, true).withTimeout(2.5)
+          new AlignReefPosition(vision, drivebase, true).withTimeout(2.5)
         )
       );
 
