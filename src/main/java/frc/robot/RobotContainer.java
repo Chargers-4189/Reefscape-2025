@@ -75,8 +75,8 @@ public class RobotContainer {
   SwerveInputStream driveWithStationAngle = driveAngularVelocity
     .copy()
     .withControllerHeadingAxis(
-      () -> drivebase.getStationRotation().getCos(),
-      () -> drivebase.getStationRotation().getSin()
+      () -> Math.sin(drivebase.getStationRotation()),
+      () -> Math.cos(drivebase.getStationRotation())
     )
     .headingWhile(true);
 
@@ -90,6 +90,14 @@ public class RobotContainer {
     .deadband(OperatorConstants.DEADBAND)
     .scaleTranslation(1)
     .allianceRelativeControl(true);
+
+    SwerveInputStream driveWithNitroAndStationAngle = driveWithNitro
+    .copy()
+    .withControllerHeadingAxis(
+      () -> Math.sin(drivebase.getStationRotation()),
+      () -> Math.cos(drivebase.getStationRotation())
+    )
+    .headingWhile(true);
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -119,12 +127,29 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    Command driveFieldOrientedAnglularVelocity = drivebase.driveFieldOriented(
+    Command angularVelocityDrive = drivebase.driveFieldOriented(
       driveAngularVelocity
     );
-    Command driveFieldOrientedWithNitro = drivebase.driveFieldOriented(
+    Command nitroDrive = drivebase.driveFieldOriented(
       driveWithNitro
     );
+    Command stationAngleDrive = drivebase.driveFieldOriented(
+      driveWithStationAngle
+    );
+    Command nitroStationAngleDrive = drivebase.driveFieldOriented(
+      driveWithNitroAndStationAngle
+    );
+
+    //Driving Triggers
+    final Trigger nitroTrigger = new Trigger(() -> (
+      primaryController.leftStick().getAsBoolean() || primaryController.rightStick().getAsBoolean()
+    ));
+    final Trigger stationAlign = new Trigger(() -> (
+      primaryController.leftTrigger(.5).getAsBoolean()
+    ));
+    final Trigger xFormation = new Trigger(() -> (
+      primaryController.rightTrigger(.5).getAsBoolean()
+    ));
 
     //Secondary Triggers
     final Trigger elevatorTrigger = new Trigger(() ->
@@ -160,13 +185,12 @@ public class RobotContainer {
     //Primary
 
     //Driving
-    drivebase.setDefaultCommand(driveFieldOrientedAnglularVelocity);
-    primaryController
-      .leftTrigger(.5)
-      .whileTrue(driveFieldOrientedWithNitro);
-    primaryController
-      .rightTrigger(.5)
-      .whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    drivebase.setDefaultCommand(angularVelocityDrive);
+    nitroTrigger.and(stationAlign.negate()).and(xFormation.negate()).whileTrue(nitroDrive);
+    stationAlign.and(nitroTrigger.negate()).and(xFormation.negate()).whileTrue(stationAngleDrive);
+    stationAlign.and(nitroTrigger).and(xFormation.negate()).whileTrue(nitroStationAngleDrive);
+    xFormation.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    
     primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     //Elevator + Effector

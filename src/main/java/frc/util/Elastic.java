@@ -167,7 +167,8 @@ public class Elastic {
         static NetworkTable alignTable = networkInstance.getTable("alignConstants");
 
         public static DoubleEntry kDIST_FROM_REEF = alignTable.getDoubleTopic("DIST_FROM_REEF").getEntry(Constants.AlignmentConstants.kDIST_FROM_REEF);
-        public static DoubleEntry kDIST_OFFSET = alignTable.getDoubleTopic("DIST_OFFSET").getEntry(Constants.AlignmentConstants.kDIST_OFFSET);
+        public static DoubleEntry kDIST_OFFSET_LEFT = alignTable.getDoubleTopic("DIST_OFFSET_LEFT").getEntry(Constants.AlignmentConstants.kDIST_OFFSET_LEFT);
+        public static DoubleEntry kDIST_OFFSET_RIGHT = alignTable.getDoubleTopic("DIST_OFFSET_RIGHT").getEntry(Constants.AlignmentConstants.kDIST_OFFSET_RIGHT);
 
         public static DoubleEntry kP_X = alignTable.getDoubleTopic("P_X").getEntry(Constants.AlignmentConstants.kP_X);
         public static DoubleEntry kP_Y = alignTable.getDoubleTopic("P_Y").getEntry(Constants.AlignmentConstants.kP_Y);
@@ -185,12 +186,16 @@ public class Elastic {
         public static DoubleEntry kMAX_SPEED_Y = alignTable.getDoubleTopic("MAX_SPEED_Y").getEntry(Constants.AlignmentConstants.kMAX_SPEED_Y);
         public static DoubleEntry kMAX_SPEED_ANGLE = alignTable.getDoubleTopic("MAX_SPEED_ANGLE").getEntry(Constants.AlignmentConstants.kMAX_SPEED_ANGLE);
         
-        public static DoubleEntry kROTATION_TIMEOUT = alignTable.getDoubleTopic("ROTATION_TIMEOUT").getEntry(Constants.AlignmentConstants.kROTATION_TIMEOUT);
-        public static DoubleEntry kPOSITION_TIMEOUT = alignTable.getDoubleTopic("POSITION_TIMEOUT").getEntry(Constants.AlignmentConstants.kPOSITION_TIMEOUT);
+        public static DoubleEntry kEXTRA_ALIGNMENT_TIME = alignTable.getDoubleTopic("EXTRA_ALIGNMENT_TIME").getEntry(Constants.AlignmentConstants.kEXTRA_ALIGNMENT_TIME);
+
+        public static DoubleEntry kX_TOLERANCE = alignTable.getDoubleTopic("X_TOLERANCE").getEntry(Constants.AlignmentConstants.kX_TOLERANCE);
+        public static DoubleEntry kY_TOLERANCE = alignTable.getDoubleTopic("Y_TOLERANCE").getEntry(Constants.AlignmentConstants.kY_TOLERANCE);
+        public static DoubleEntry kANGLE_TOLERANCE = alignTable.getDoubleTopic("ANGLE_TOLERANCE").getEntry(Constants.AlignmentConstants.kANGLE_TOLERANCE);
 
         public static void initialize() {
             kDIST_FROM_REEF.set(kDIST_FROM_REEF.get());
-            kDIST_OFFSET.set(kDIST_OFFSET.get());
+            kDIST_OFFSET_LEFT.set(kDIST_OFFSET_LEFT.get());
+            kDIST_OFFSET_RIGHT.set(kDIST_OFFSET_RIGHT.get());
 
             kP_X.set(kP_X.get());
             kP_Y.set(kP_Y.get());
@@ -208,8 +213,11 @@ public class Elastic {
             kMAX_SPEED_Y.set(kMAX_SPEED_Y.get());
             kMAX_SPEED_ANGLE.set(kMAX_SPEED_ANGLE.get());
 
-            kROTATION_TIMEOUT.set(kROTATION_TIMEOUT.get());
-            kPOSITION_TIMEOUT.set(kPOSITION_TIMEOUT.get());
+            kEXTRA_ALIGNMENT_TIME.set(kEXTRA_ALIGNMENT_TIME.get());
+
+            kX_TOLERANCE.set(kX_TOLERANCE.get());
+            kY_TOLERANCE.set(kY_TOLERANCE.get());
+            kANGLE_TOLERANCE.set(kANGLE_TOLERANCE.get());
         }
     }
 

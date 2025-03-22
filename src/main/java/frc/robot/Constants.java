@@ -183,17 +183,18 @@ public final class Constants {
   public static class AlignmentConstants {
 
     public static final double kDIST_FROM_REEF = .5;
-    public static final double kDIST_OFFSET = .1775;
+    public static final double kDIST_OFFSET_LEFT = .18;
+    public static final double kDIST_OFFSET_RIGHT = -.15;
 
-    public static final double kROTATION_TIMEOUT = .5; //Seconds
-    public static final double kPOSITION_TIMEOUT = 2.5; //Seconds
+    public static final double kEXTRA_ALIGNMENT_TIME = 1000;
 
-    public static final double kROTATION_TOLERANCE = 4; //Degrees
+    public static final double kX_TOLERANCE = 0.05;
+    public static final double kY_TOLERANCE = 0.05;
+    public static final double kANGLE_TOLERANCE = 0.15;
 
-    public static final double kMAX_SPEED_X = .6;
-    public static final double kMAX_SPEED_Y = .6;
+    public static final double kMAX_SPEED_X = 1.5;
+    public static final double kMAX_SPEED_Y = 1.5;
     public static final double kMAX_SPEED_ANGLE = 1;
-    public static final double kOVERARCHING_TIMEOUT = 3; //seconds
 
     public static final double kP_X = -6;
     public static final double kP_Y = -6;

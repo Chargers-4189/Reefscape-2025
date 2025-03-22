@@ -21,6 +21,7 @@ import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.swervedrive.SwerveSubsystem;
 import frc.robot.subsystems.swervedrive.Vision.Cameras;
+import frc.util.Stopwatch;
 import frc.util.Elastic.ElasticAlign;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -28,7 +29,6 @@ public class AlignReef extends Command {
 
   private SwerveSubsystem swerve;
   private boolean alignRight;
-  private Transform3d tagPose;
   private Pose2d tagPosition;
   //private Pose2d tagGoal;
   //private Pose2d lastPos;
@@ -44,12 +44,15 @@ public class AlignReef extends Command {
   private PIDController yPid = new PIDController(0, 0, 0);
   private PIDController anglePid = new PIDController(0, 0, 0);
 
+  private double yOffset;
+
+  private Stopwatch stopwatch = new Stopwatch();
+
 
   /** Creates a new AutoAlignPose. */
   public AlignReef(SwerveSubsystem swerve, boolean alignRight) {
     this.swerve = swerve;
     this.alignRight = alignRight;
-
     anglePid.enableContinuousInput(-Math.PI, Math.PI);
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -60,11 +63,17 @@ public class AlignReef extends Command {
   @Override
   public void initialize() {
     System.out.println("Align Reef Pose");
+
+    xPid.setPID(ElasticAlign.kP_X.get(), ElasticAlign.kI_X.get(), ElasticAlign.kD_X.get());
+    yPid.setPID(ElasticAlign.kP_Y.get(), ElasticAlign.kI_Y.get(), ElasticAlign.kD_Y.get());
+    anglePid.setPID(ElasticAlign.kP_ANGLE.get(), ElasticAlign.kI_ANGLE.get(), ElasticAlign.kD_ANGLE.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    /*
+    
     if (alignRight) {
       if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
         tagPose = Cameras.LEFT_CAM.getEstimateTagPose();
@@ -78,16 +87,21 @@ public class AlignReef extends Command {
         System.out.println("null");
       }
     }
-    xPid.setPID(ElasticAlign.kP_X.get(), ElasticAlign.kI_X.get(), ElasticAlign.kD_X.get());
-    yPid.setPID(ElasticAlign.kP_Y.get(), ElasticAlign.kI_Y.get(), ElasticAlign.kD_Y.get());
-    anglePid.setPID(ElasticAlign.kP_ANGLE.get(), ElasticAlign.kI_ANGLE.get(), ElasticAlign.kD_ANGLE.get());
+    x = tagPose.getX();
+    y = tagPose.getY();
+    angle = -tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
+    */
 
-    //x = tagPose.getX();
-    //y = tagPose.getY();
-    //angle = -tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
-    tagPosition = swerve.aprilTagFieldLayout.getTagPose(19).get().toPose2d().relativeTo(swerve.getPose());
+    if (alignRight) {
+      yOffset = ElasticAlign.kDIST_OFFSET_RIGHT.get();
+    } else {
+      yOffset = ElasticAlign.kDIST_OFFSET_LEFT.get();
+    }
+
+    tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
+
     x = tagPosition.getX();
-    y = tagPosition.getY() + ElasticAlign.kDIST_OFFSET.get();
+    y = tagPosition.getY() + yOffset;
     angle = tagPosition.getRotation().getRadians();
 
     xPower = xPid.calculate(x, ElasticAlign.kDIST_FROM_REEF.get());
@@ -95,8 +109,8 @@ public class AlignReef extends Command {
     anglePower = anglePid.calculate(angle, Math.PI);
 
     
-    //System.out.println("X: " + x + " Y: " + y + " Angle: " + angle +
-    //" PowerX: " + xPower + " PowerY: " + yPower + " PowerAngle: " + anglePower);
+    System.out.println("X: " + x + " Y: " + y + " Angle: " + angle +
+    " PowerX: " + xPower + " PowerY: " + yPower + " PowerAngle: " + anglePower);
     swerve.drive(
       new Translation2d(
         MathUtil.clamp(
@@ -123,33 +137,22 @@ public class AlignReef extends Command {
   @Override
   public void end(boolean interrupted) {
     swerve.drive(new Translation2d(), 0, false);
+    stopwatch.reset();
   }
 
   // Returns true when the command should end.P
   @Override
   public boolean isFinished() {
-    /*
-    if (alignRight) {
-      if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
-        return (
-          Cameras.LEFT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.LEFT_CAM.getEstimateTagPose().getY() <= 0.05
-        );
-      }
-    } else {
-      if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
-        return (
-          Cameras.RIGHT_CAM.getEstimateTagPose().getX() <= 0.15 &&
-          Cameras.RIGHT_CAM.getEstimateTagPose().getY() <= 0.05
-        );
-      }
+    if (stopwatch.hasStarted()) {
+      System.out.println("started");
+      return stopwatch.hasTriggered();
+    } else if (
+      (Math.abs(x - ElasticAlign.kDIST_FROM_REEF.get()) < ElasticAlign.kX_TOLERANCE.get()) && 
+      (Math.abs(y - 0) < ElasticAlign.kY_TOLERANCE.get()) && 
+      (Math.abs(angle - Math.PI) < ElasticAlign.kANGLE_TOLERANCE.get())
+    ) {
+      stopwatch.start(ElasticAlign.kEXTRA_ALIGNMENT_TIME.get());
     }
-    try {
-      return toTravel.getX() <= 0.15 && toTravel.getY() <= 0.05;
-    } catch (Exception e) {
-      return true;
-    }
-      */
     return false;
   }
 }
