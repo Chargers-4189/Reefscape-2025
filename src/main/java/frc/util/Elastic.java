@@ -169,18 +169,22 @@ public class Elastic {
         public static DoubleEntry kDIST_FROM_REEF = alignTable.getDoubleTopic("DIST_FROM_REEF").getEntry(Constants.AlignmentConstants.kDIST_FROM_REEF);
         public static DoubleEntry kDIST_OFFSET = alignTable.getDoubleTopic("DIST_OFFSET").getEntry(Constants.AlignmentConstants.kDIST_OFFSET);
 
-        public static DoubleEntry kPROPORTIONAL_X = alignTable.getDoubleTopic("PROPORTIONAL_X").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_X);
-        public static DoubleEntry kPROPORTIONAL_Y = alignTable.getDoubleTopic("POPORTIONAL_Y").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_Y);
-        public static DoubleEntry kPROPORTIONAL_ANGLE = alignTable.getDoubleTopic("POPORTIONAL_ANGLE").getEntry(Constants.AlignmentConstants.kPROPORTIONAL_ANGLE);
+        public static DoubleEntry kP_X = alignTable.getDoubleTopic("P_X").getEntry(Constants.AlignmentConstants.kP_X);
+        public static DoubleEntry kP_Y = alignTable.getDoubleTopic("P_Y").getEntry(Constants.AlignmentConstants.kP_Y);
+        public static DoubleEntry kP_ANGLE = alignTable.getDoubleTopic("P_ANGLE").getEntry(Constants.AlignmentConstants.kP_ANGLE);
+
+        public static DoubleEntry kI_X = alignTable.getDoubleTopic("I_X").getEntry(Constants.AlignmentConstants.kI_X);
+        public static DoubleEntry kI_Y = alignTable.getDoubleTopic("I_Y").getEntry(Constants.AlignmentConstants.kI_Y);
+        public static DoubleEntry kI_ANGLE = alignTable.getDoubleTopic("I_ANGLE").getEntry(Constants.AlignmentConstants.kI_ANGLE);
+
+        public static DoubleEntry kD_X = alignTable.getDoubleTopic("D_X").getEntry(Constants.AlignmentConstants.kD_X);
+        public static DoubleEntry kD_Y = alignTable.getDoubleTopic("D_Y").getEntry(Constants.AlignmentConstants.kD_Y);
+        public static DoubleEntry kD_ANGLE = alignTable.getDoubleTopic("D_ANGLE").getEntry(Constants.AlignmentConstants.kD_ANGLE);
 
         public static DoubleEntry kMAX_SPEED_X = alignTable.getDoubleTopic("MAX_SPEED_X").getEntry(Constants.AlignmentConstants.kMAX_SPEED_X);
         public static DoubleEntry kMAX_SPEED_Y = alignTable.getDoubleTopic("MAX_SPEED_Y").getEntry(Constants.AlignmentConstants.kMAX_SPEED_Y);
         public static DoubleEntry kMAX_SPEED_ANGLE = alignTable.getDoubleTopic("MAX_SPEED_ANGLE").getEntry(Constants.AlignmentConstants.kMAX_SPEED_ANGLE);
         
-        public static DoubleEntry kCONST_X = alignTable.getDoubleTopic("CONST_X").getEntry(Constants.AlignmentConstants.kCONST_X);
-        public static DoubleEntry kCONST_Y = alignTable.getDoubleTopic("CONST_Y").getEntry(Constants.AlignmentConstants.kCONST_Y);
-        public static DoubleEntry kCONST_ANGLE = alignTable.getDoubleTopic("CONST_ANGLE").getEntry(Constants.AlignmentConstants.kCONST_ANGLE);
-
         public static DoubleEntry kROTATION_TIMEOUT = alignTable.getDoubleTopic("ROTATION_TIMEOUT").getEntry(Constants.AlignmentConstants.kROTATION_TIMEOUT);
         public static DoubleEntry kPOSITION_TIMEOUT = alignTable.getDoubleTopic("POSITION_TIMEOUT").getEntry(Constants.AlignmentConstants.kPOSITION_TIMEOUT);
 
@@ -188,17 +192,21 @@ public class Elastic {
             kDIST_FROM_REEF.set(kDIST_FROM_REEF.get());
             kDIST_OFFSET.set(kDIST_OFFSET.get());
 
-            kPROPORTIONAL_X.set(kPROPORTIONAL_X.get());
-            kPROPORTIONAL_Y.set(kPROPORTIONAL_Y.get());
-            kPROPORTIONAL_ANGLE.set(kPROPORTIONAL_ANGLE.get());
+            kP_X.set(kP_X.get());
+            kP_Y.set(kP_Y.get());
+            kP_ANGLE.set(kP_ANGLE.get());
+
+            kI_X.set(kI_X.get());
+            kI_Y.set(kI_Y.get());
+            kI_ANGLE.set(kI_ANGLE.get());
+
+            kD_X.set(kD_X.get());
+            kD_Y.set(kD_Y.get());
+            kD_ANGLE.set(kD_ANGLE.get());
 
             kMAX_SPEED_X.set(kMAX_SPEED_X.get());
             kMAX_SPEED_Y.set(kMAX_SPEED_Y.get());
             kMAX_SPEED_ANGLE.set(kMAX_SPEED_ANGLE.get());
-
-            kCONST_X.set(kCONST_X.get());
-            kCONST_Y.set(kCONST_Y.get());
-            kCONST_ANGLE.set(kCONST_ANGLE.get());
 
             kROTATION_TIMEOUT.set(kROTATION_TIMEOUT.get());
             kPOSITION_TIMEOUT.set(kPOSITION_TIMEOUT.get());

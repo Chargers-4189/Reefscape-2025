@@ -347,12 +347,12 @@ public class Vision {
       "flCam2025",
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
       new Translation3d(
-        Units.inchesToMeters(15.508),
-        Units.inchesToMeters(-6.25),
-        Units.inchesToMeters(9.75)
+        Units.inchesToMeters(12.25),
+        Units.inchesToMeters(6.25),
+        Units.inchesToMeters(11.375)
       ),
       VecBuilder.fill(.5, .5, 1),
-      VecBuilder.fill(.25, .25, .5)
+      VecBuilder.fill(.5, .5, 1)
     ),
     /**
      * Right Camera
@@ -361,12 +361,12 @@ public class Vision {
       "frCam2025",
       new Rotation3d(0, Math.toRadians(0), Math.toRadians(0)),
       new Translation3d(
-        Units.inchesToMeters(15.508),
-        Units.inchesToMeters(6.25),
-        Units.inchesToMeters(9.75)
+        Units.inchesToMeters(12.375),
+        Units.inchesToMeters(-6.375),
+        Units.inchesToMeters(11)
       ),
       VecBuilder.fill(.5, .5, 1),
-      VecBuilder.fill(.25, .25, .5)
+      VecBuilder.fill(.5, .5, 1)
     );
 
     //BACK_CAM("bkCam2025",

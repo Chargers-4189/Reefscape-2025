@@ -187,20 +187,25 @@ public final class Constants {
 
     public static final double kROTATION_TIMEOUT = .5; //Seconds
     public static final double kPOSITION_TIMEOUT = 2.5; //Seconds
+    
     public static final double kROTATION_TOLERANCE = 4; //Degrees
-
-    public static final double kPROPORTIONAL_X = 1.5;
-    public static final double kPROPORTIONAL_Y = 1.5;
-    public static final double kPROPORTIONAL_ANGLE = 2;
 
     public static final double kMAX_SPEED_X = .6;
     public static final double kMAX_SPEED_Y = .6;
     public static final double kMAX_SPEED_ANGLE = 1;
     public static final double kOVERARCHING_TIMEOUT = 3; //seconds
 
-    public static final double kCONST_X = 0; //Not used
-    public static final double kCONST_Y = 0; //Not used
-    public static final double kCONST_ANGLE = 0; //Not used
+    public static final double kP_X = 0;
+    public static final double kP_Y = 0;
+    public static final double kP_ANGLE = 0;
+
+    public static final double kI_X = 0;
+    public static final double kI_Y = 0;
+    public static final double kI_ANGLE = 0;
+
+    public static final double kD_X = 0;
+    public static final double kD_Y = 0;
+    public static final double kD_ANGLE = 0;
 
     /* 
     public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;

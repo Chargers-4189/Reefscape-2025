@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -28,17 +29,28 @@ public class AlignReef extends Command {
   private SwerveSubsystem swerve;
   private boolean alignRight;
   private Transform3d tagPose;
+  private Pose2d tagPosition;
   //private Pose2d tagGoal;
   //private Pose2d lastPos;
+  private double xPower;
+  private double yPower;
+  private double anglePower;
+
   private double x;
   private double y;
   private double angle;
-  private Pose2d toTravel;
+
+  private PIDController xPid = new PIDController(0, 0, 0);
+  private PIDController yPid = new PIDController(0, 0, 0);
+  private PIDController anglePid = new PIDController(0, 0, 0);
+
 
   /** Creates a new AutoAlignPose. */
   public AlignReef(SwerveSubsystem swerve, boolean alignRight) {
     this.swerve = swerve;
     this.alignRight = alignRight;
+
+    anglePid.enableContinuousInput(-Math.PI, Math.PI);
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
@@ -66,26 +78,40 @@ public class AlignReef extends Command {
         System.out.println("null");
       }
     }
+    xPid.setPID(ElasticAlign.kP_X.get(), ElasticAlign.kI_X.get(), ElasticAlign.kD_X.get());
+    yPid.setPID(ElasticAlign.kP_Y.get(), ElasticAlign.kI_Y.get(), ElasticAlign.kD_Y.get());
+    anglePid.setPID(ElasticAlign.kP_ANGLE.get(), ElasticAlign.kI_ANGLE.get(), ElasticAlign.kD_ANGLE.get());
 
-    x = tagPose.getX() - .18;
-    y = tagPose.getY();
-    angle = tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
-    System.out.println("X: " + x + " Y: " + y + "Angle: " + angle);
+    //x = tagPose.getX();
+    //y = tagPose.getY();
+    //angle = -tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
+    tagPosition = swerve.aprilTagFieldLayout.getTagPose(19).get().toPose2d().relativeTo(swerve.getPose());
+    x = tagPosition.getX();
+    y = tagPosition.getY() + ElasticAlign.kDIST_OFFSET.get();
+    angle = tagPosition.getRotation().getRadians();
+
+    xPower = xPid.calculate(x, ElasticAlign.kDIST_FROM_REEF.get());
+    yPower = yPid.calculate(y, 0);
+    anglePower = anglePid.calculate(angle, Math.PI);
+
+    
+    //System.out.println("X: " + x + " Y: " + y + " Angle: " + angle +
+    //" PowerX: " + xPower + " PowerY: " + yPower + " PowerAngle: " + anglePower);
     swerve.drive(
       new Translation2d(
         MathUtil.clamp(
-          x * ElasticAlign.kPROPORTIONAL_X.get() + ElasticAlign.kCONST_X.get(),
+          xPower,
           -ElasticAlign.kMAX_SPEED_X.get(),
           ElasticAlign.kMAX_SPEED_X.get()
         ),
         MathUtil.clamp(
-          y * ElasticAlign.kPROPORTIONAL_Y.get() + ElasticAlign.kCONST_Y.get(),
+          yPower,
           -ElasticAlign.kMAX_SPEED_Y.get(),
           ElasticAlign.kMAX_SPEED_Y.get()
         )
       ),
       MathUtil.clamp(
-        angle * ElasticAlign.kPROPORTIONAL_ANGLE.get() + ElasticAlign.kCONST_ANGLE.get(),
+        anglePower,
         -ElasticAlign.kMAX_SPEED_ANGLE.get(),
         ElasticAlign.kMAX_SPEED_ANGLE.get()
       ),

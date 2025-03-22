@@ -83,7 +83,7 @@ public class SwerveSubsystem extends SubsystemBase {
    * @param directory Directory of swerve drive config files.
    */
 
-  private final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
+  public final AprilTagFieldLayout aprilTagFieldLayout = AprilTagFieldLayout.loadField(
     AprilTagFields.k2025ReefscapeWelded
   );
   private final NetworkTableInstance networkTable = NetworkTableInstance
@@ -160,6 +160,12 @@ public class SwerveSubsystem extends SubsystemBase {
       vision.updatePoseEstimation(swerveDrive);
     }
     publisher.set(getPose());
+    if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
+      System.out.println(Cameras.LEFT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
+    }
+    if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+      System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
+    }
   }
 
   @Override
