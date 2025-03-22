@@ -25,12 +25,12 @@ import edu.wpi.first.math.geometry.Rotation2d;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ThreeCoralAuto extends SequentialCommandGroup {
+public class TwoCoralAuto extends SequentialCommandGroup {
   private int reefId1 = 20;
   private int reefId2 = 19;
   private int stationId = 13;
   /** Creates a new ThreeCoralAuto. */
-  public ThreeCoralAuto(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector, boolean rightStart, boolean red) {
+  public TwoCoralAuto(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector, boolean rightStart, boolean red) {
 
 
     if (red) {
