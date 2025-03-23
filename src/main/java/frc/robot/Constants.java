@@ -195,7 +195,7 @@ public final class Constants {
     public static final double kMAX_SPEED_X = 1.5;
     public static final double kMAX_SPEED_Y = 1.5;
     public static final double kMAX_SPEED_ANGLE = 1;
-    public static final double kMAX_SPEED_ANGLE_INITIAL = 1;
+    public static final double kMAX_SPEED_ANGLE_INITIAL = 6;
 
     public static final double kP_X = -6;
     public static final double kP_Y = -6;
@@ -238,10 +238,17 @@ public final class Constants {
 
   public static class HumanDriveConstants {
 
-    public static final double kDRIVE_POWER = .4; //Decreased for safety: prevent tipping
+    public static final double kDRIVE_POWER = .8;
     public static final double kROTATIONAL_POWER = .8;
-    public static final double kDRIVE_EXPONENT = 3;
-    public static final double kROTATIONAL_EXPONENT = 1;
+    
+    public static final double kDRIVE_EXPONENT = -1;
+    public static final double kROTATIONAL_EXPONENT = -1;
+
+    public static final double kP_ANGLE_STATION = 0;
+    public static final double kI_ANGLE_STATION = 0;
+    public static final double kD_ANGLE_STATION = 0;
+    public static final double kMAX_SPEED_ANGLE_STATION = 0;
+
   }
 
   public static class ClimberConstants {

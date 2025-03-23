@@ -5,9 +5,9 @@
 package frc.robot.commands.multiaction;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.MoveElevator;
-import frc.robot.commands.MoveElevatorSlightlyDown;
-import frc.robot.commands.OuttakeCoral;
+import frc.robot.commands.effector.OuttakeCoral;
+import frc.robot.commands.elevator.MoveElevator;
+import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 

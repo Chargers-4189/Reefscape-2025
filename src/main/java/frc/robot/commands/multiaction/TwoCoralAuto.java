@@ -12,14 +12,14 @@ import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import frc.robot.commands.IntakeCoral;
-import frc.robot.commands.MoveElevator;
-import frc.robot.commands.MoveElevatorSlightlyDown;
-import frc.robot.commands.OuttakeCoral;
+import frc.robot.commands.effector.IntakeCoral;
+import frc.robot.commands.effector.OuttakeCoral;
+import frc.robot.commands.elevator.MoveElevator;
+import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
-import frc.robot.subsystems.swervedrive.SwerveSubsystem;
+import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more

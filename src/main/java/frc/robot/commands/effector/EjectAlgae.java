@@ -2,52 +2,46 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.commands;
+package frc.robot.commands.effector;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Intake;
-import frc.util.Elastic.ElasticIntake;
+import frc.robot.subsystems.CoralEffector;
 import frc.util.Stopwatch;
+import frc.util.Elastic.ElasticEffector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class ActuateIntakeUp extends Command {
-
-  private final Intake intake;
-  private final Stopwatch stopwatch = new Stopwatch();
-
-
-  /** Creates a new ActuateIntakeUp. */
-  public ActuateIntakeUp(Intake intake) {
-    this.intake = intake;
+public class EjectAlgae extends Command {
+  private CoralEffector coraleffector;
+  private Stopwatch stopwatch = new Stopwatch();
+  /** Creates a new ReleaseAlgae. */
+  public EjectAlgae(CoralEffector coraleffector) {
+    this.coraleffector = coraleffector;
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(intake);
+    addRequirements(coraleffector);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("Init");
-    stopwatch.start(2500);
+    stopwatch.start((int) ElasticEffector.kEJECT_ALGAE_MILISECONDS.get());
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    System.out.println("Executing");
-    intake.setPower(ElasticIntake.kPOWER.get());
+    coraleffector.setPower(ElasticEffector.kALGAE_POWER.get());
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    System.out.println("Finished");
-    intake.stop();
+    coraleffector.stop();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    System.out.println("switch: " + intake.getTopLimitSwitch() + "  stopwatch: " + stopwatch.hasTriggered());
-    return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
+    //return stopwatch.hasTriggered();
+    return false;
   }
 }

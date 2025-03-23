@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems.swervedrive;
+package frc.robot.subsystems;
 
 import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
@@ -151,7 +151,7 @@ public class SwerveSubsystem extends SubsystemBase {
     if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
       System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }*/
-    //System.out.println(getStationRotation() * 180 / Math.PI);
+    System.out.println("Station: " + (getStationRotation() * 180 / Math.PI) + " Robot: " + getPose().getRotation().getDegrees());
   }
 
   @Override

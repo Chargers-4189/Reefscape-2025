@@ -142,30 +142,37 @@ public class Elastic {
     }
   }
 
-  public static final class ElasticHumanDrive {
+  public static final class ElasticTeleopDrive {
 
-    static NetworkTable humanDriveTable = networkInstance.getTable(
-      "humanDriveConstants"
+    static NetworkTable teleopTable = networkInstance.getTable(
+      "teleopTable"
     );
 
-    public static DoubleEntry kDRIVE_POWER = humanDriveTable
-      .getDoubleTopic("DRIVE_POWER")
-      .getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
-    public static DoubleEntry kROTATIONAL_POWER = humanDriveTable
-      .getDoubleTopic("ROTATIONAL_POWER")
-      .getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
-    public static DoubleEntry kDRIVE_EXPONENT = humanDriveTable
-      .getDoubleTopic("DRIVE_EXPONENT")
-      .getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
-    public static DoubleEntry kROTATIONAL_EXPONENT = humanDriveTable
-      .getDoubleTopic("ROTATIONAL_EXPONENT")
-      .getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+    public static DoubleEntry kDRIVE_POWER = teleopTable.getDoubleTopic("DRIVE_POWER").getEntry(Constants.HumanDriveConstants.kDRIVE_POWER);
+    public static DoubleEntry kROTATIONAL_POWER = teleopTable.getDoubleTopic("ROTATIONAL_POWER").getEntry(Constants.HumanDriveConstants.kROTATIONAL_POWER);
+    
+    public static DoubleEntry kDRIVE_EXPONENT = teleopTable.getDoubleTopic("DRIVE_EXPONENT").getEntry(Constants.HumanDriveConstants.kDRIVE_EXPONENT);
+    public static DoubleEntry kROTATIONAL_EXPONENT = teleopTable.getDoubleTopic("ROTATIONAL_EXPONENT").getEntry(Constants.HumanDriveConstants.kROTATIONAL_EXPONENT);
+
+    public static DoubleEntry kP_ANGLE_STATION = teleopTable.getDoubleTopic("P_ANGLE_STATION").getEntry(Constants.HumanDriveConstants.kP_ANGLE_STATION);
+    public static DoubleEntry kI_ANGLE_STATION = teleopTable.getDoubleTopic("I_ANGLE_STATION").getEntry(Constants.HumanDriveConstants.kI_ANGLE_STATION);
+    public static DoubleEntry kD_ANGLE_STATION = teleopTable.getDoubleTopic("D_ANGLE_STATION").getEntry(Constants.HumanDriveConstants.kD_ANGLE_STATION);
+    
+    public static DoubleEntry kMAX_SPEED_ANGLE_STATION = teleopTable.getDoubleTopic("MAX_SPEED_ANGLE_STATION").getEntry(Constants.HumanDriveConstants.kMAX_SPEED_ANGLE_STATION);
 
     public static void initialize() {
       kDRIVE_POWER.set(kDRIVE_POWER.get());
       kROTATIONAL_POWER.set(kROTATIONAL_POWER.get());
+
       kDRIVE_EXPONENT.set(kDRIVE_EXPONENT.get());
       kROTATIONAL_EXPONENT.set(kDRIVE_EXPONENT.get());
+
+      kP_ANGLE_STATION.set(kP_ANGLE_STATION.get());
+      kI_ANGLE_STATION.set(kI_ANGLE_STATION.get());
+      kD_ANGLE_STATION.set(kD_ANGLE_STATION.get());
+
+      kMAX_SPEED_ANGLE_STATION.set(kMAX_SPEED_ANGLE_STATION.get());
+
     }
   }
 
@@ -260,7 +267,7 @@ public class Elastic {
     ElasticIntake.initialize();
     ElasticSwerve.initialize();
     ElasticEffector.initialize();
-    ElasticHumanDrive.initialize();
+    ElasticTeleopDrive.initialize();
     ElasticClimber.initialize();
     ElasticAlign.initialize();
   }
