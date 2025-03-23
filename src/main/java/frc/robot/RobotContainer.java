@@ -25,6 +25,7 @@ import frc.robot.commands.intake.ActuateIntakeUp;
 import frc.robot.commands.multiaction.AutoPlaceCoral;
 import frc.robot.commands.multiaction.TwoCoralAuto;
 import frc.robot.commands.swervedrive.AlignReef;
+import frc.robot.commands.swervedrive.Drive;
 //import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
@@ -33,6 +34,8 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
 import java.io.File;
+import java.util.function.BooleanSupplier;
+
 import swervelib.SwerveInputStream;
 
 /**
@@ -259,11 +262,22 @@ public class RobotContainer {
     //Primary
 
     //Driving
+    /*
     drivebase.setDefaultCommand(angularVelocityDrive);
     nitroTrigger.and(stationAlign.negate()).and(xFormation.negate()).whileTrue(nitroDrive);
     stationAlign.and(nitroTrigger.negate()).and(xFormation.negate()).whileTrue(stationAngleDrive);
     stationAlign.and(nitroTrigger).and(xFormation.negate()).whileTrue(nitroStationAngleDrive);
     xFormation.whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
+    */
+    drivebase.setDefaultCommand(new Drive(
+      drivebase,
+      primaryController::getLeftX,
+      primaryController::getLeftY,
+      primaryController::getRightX,
+      () -> primaryController.leftStick().getAsBoolean() || primaryController.rightStick().getAsBoolean(),
+      primaryController.leftTrigger(.5)::getAsBoolean)
+    );
+    primaryController.rightTrigger(.5).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
     
     primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 

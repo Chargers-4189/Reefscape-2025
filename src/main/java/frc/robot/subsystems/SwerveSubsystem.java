@@ -151,7 +151,7 @@ public class SwerveSubsystem extends SubsystemBase {
     if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
       System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }*/
-    //System.out.println(getStationRotation() * 180 / Math.PI);
+    System.out.println("Station: " + (getStationRotation() * 180 / Math.PI) + " Robot: " + getPose().getRotation().getDegrees());
   }
 
   @Override

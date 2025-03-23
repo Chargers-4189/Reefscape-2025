@@ -7,22 +7,30 @@ package frc.robot.commands.swervedrive;
 import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.HumanDriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.util.Elastic.ElasticAlign;
+import frc.util.Elastic.ElasticSwerve;
 import frc.util.Elastic.ElasticTeleopDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Drive extends Command {
-  SwerveSubsystem swerve;
-  DoubleSupplier x;
-  DoubleSupplier y;
-  DoubleSupplier angle;
-  boolean nitro;
-  boolean alignStation;
+  private SwerveSubsystem swerve;
+  private DoubleSupplier x;
+  private DoubleSupplier y;
+  private DoubleSupplier angle;
+  private BooleanSupplier nitro;
+  private BooleanSupplier alignStation;
 
-  double scaleFactor;
+  private double drivePowerFactor;
+  private double rotationalPowerFactor;
+
+  private PIDController anglePid = new PIDController(0, 0, 0);
+
 
   /** Creates a new Drive. */
   public Drive(
@@ -30,8 +38,8 @@ public class Drive extends Command {
     DoubleSupplier x,
     DoubleSupplier y,
     DoubleSupplier angle,
-    boolean nitro,
-    boolean alignStation
+    BooleanSupplier nitro,
+    BooleanSupplier alignStation
   ) {
     this.swerve = swerve;
     this.x = x;
@@ -39,11 +47,10 @@ public class Drive extends Command {
     this.angle = angle;
     this.nitro = nitro;
     this.alignStation = alignStation;
-    if (nitro) {
-      scaleFactor = 1;
-    } else {
-      scaleFactor = ElasticTeleopDrive.kDRIVE_POWER.get();
-    }
+
+    rotationalPowerFactor = ElasticTeleopDrive.kROTATIONAL_POWER.get();
+
+    anglePid.enableContinuousInput(-Math.PI, Math.PI);
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
   }
@@ -56,12 +63,31 @@ public class Drive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    if (nitro.getAsBoolean()) {
+      drivePowerFactor = 1;
+    } else {
+      drivePowerFactor = ElasticTeleopDrive.kDRIVE_POWER.get();
+    }
+
+    anglePid.setPID(ElasticTeleopDrive.kP_ANGLE_STATION.get(), ElasticTeleopDrive.kI_ANGLE_STATION.get(), ElasticTeleopDrive.kD_ANGLE_STATION.get());
     
-    swerve.drive(
-      new Translation2d(x.getAsDouble(), y.getAsDouble()),
-      angle.getAsDouble(),
-      true
-    );
+    if (alignStation.getAsBoolean()) {
+      swerve.drive(
+        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        MathUtil.clamp(
+          anglePid.calculate(swerve.getPose().getRotation().getRadians(), swerve.getStationRotation()),
+            -ElasticTeleopDrive.kMAX_SPEED_ANGLE_STATION.get(),
+            ElasticTeleopDrive.kMAX_SPEED_ANGLE_STATION.get()
+          ),
+        true
+      );
+    } else {
+      swerve.drive(
+        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        -angle.getAsDouble() * rotationalPowerFactor * swerve.getSwerveDrive().getMaximumChassisAngularVelocity(),
+        true
+      );
+    }
   }
 
   // Called once the command ends or is interrupted.
