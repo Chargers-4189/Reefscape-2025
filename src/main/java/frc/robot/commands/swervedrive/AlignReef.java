@@ -110,7 +110,7 @@ public class AlignReef extends Command {
     if (tagId == -1) {
       tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
     } else {
-      VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d().relativeTo(swerve.getPose());
+      tagPosition = VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d().relativeTo(swerve.getPose());
     }
 
     x = tagPosition.getX();

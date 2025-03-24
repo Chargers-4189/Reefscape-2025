@@ -59,12 +59,13 @@ public class TwoCoralAuto extends SequentialCommandGroup {
         stationId = 13;
       }
     }
-    
-    
-
-    
     // Add your commands in the addCommands() call.
     addCommands(
+
+    new PlaceThenGetCoral(swerve, elevator, effector, reefId1, stationId, !rightStart),
+    new PlaceThenGetCoral(swerve, elevator, effector, reefId2, stationId, rightStart)
+
+    /*
       //Go to Reef
       //swerveSubsystem.driveToAprilTag(20, new Translation2d(1,0)),
       //Place Coral

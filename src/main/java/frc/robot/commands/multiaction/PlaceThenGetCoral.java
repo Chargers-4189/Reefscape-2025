@@ -4,11 +4,8 @@
 
 package frc.robot.commands.multiaction;
 
-import static edu.wpi.first.units.Units.Seconds;
-
-import edu.wpi.first.units.measure.Time;
 import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.commands.effector.IntakeCoral;
 import frc.robot.commands.effector.OuttakeCoral;
 import frc.robot.commands.elevator.MoveElevator;
@@ -21,9 +18,9 @@ import frc.robot.subsystems.SwerveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class PlaceThenGetCoral extends ParallelCommandGroup {
+public class PlaceThenGetCoral extends SequentialCommandGroup {
   /** Creates a new PlaceThenGetCoral. */
-  public PlaceThenGetCoral(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, int reefId, int stationId, int level) {
+  public PlaceThenGetCoral(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, int reefId, int stationId, boolean alignRight, int level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
@@ -44,5 +41,8 @@ public class PlaceThenGetCoral extends ParallelCommandGroup {
       //Wait for human player to give coral
       new IntakeCoral(effector).withTimeout(1)
     );
+  }
+  public PlaceThenGetCoral(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, int reefId, int stationId, boolean alignRight) {
+    this(swerve, elevator, effector, reefId, stationId, alignRight, 4);
   }
 }

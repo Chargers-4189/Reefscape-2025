@@ -18,21 +18,18 @@ import frc.robot.subsystems.SwerveSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class ReefAccuracyTest extends SequentialCommandGroup {
+public class AlignAccuracyTest extends SequentialCommandGroup {
   /** Creates a new ThreeCoralAuto. */
-  public ReefAccuracyTest(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector) {
+  public AlignAccuracyTest(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector, int reefId, int stationId) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-      swerveSubsystem.driveToAprilTag(19, new Translation2d(1.8,0)),
-      swerveSubsystem.driveToReef(19, true),
-      new AutoPlaceCoral(elevator, effector, 4),
-
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, false, 4),
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, true, 3),
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, false, 3),
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, true, 2),
-      new GetThenPlaceCoral(swerveSubsystem, elevator, effector, 13, 19, false, 2)
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, true, 4),
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, false, 4),
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, true, 3),
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, false, 3),
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, true, 2),
+      new PlaceThenGetCoral(swerveSubsystem, elevator, effector, reefId, stationId, false, 2)
     );
   }
 }

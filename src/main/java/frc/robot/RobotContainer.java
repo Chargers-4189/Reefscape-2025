@@ -22,7 +22,7 @@ import frc.robot.commands.elevator.MoveElevator;
 import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.commands.intake.ActuateIntakeDown;
 import frc.robot.commands.intake.ActuateIntakeUp;
-import frc.robot.commands.multiaction.AutoPlaceCoral;
+import frc.robot.commands.multiaction.PlaceCoral;
 import frc.robot.commands.multiaction.PlaceThenGetCoral;
 import frc.robot.commands.multiaction.TwoCoralAuto;
 import frc.robot.commands.swervedrive.AlignReef;
@@ -229,19 +229,19 @@ public class RobotContainer {
     primaryController
       .x()
       .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new AutoPlaceCoral(elevator, coralEffector, 1));
+      .onTrue(new PlaceCoral(elevator, coralEffector, 1));
     primaryController
       .y()
       .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new AutoPlaceCoral(elevator, coralEffector, 2));
+      .onTrue(new PlaceCoral(elevator, coralEffector, 2));
     primaryController
       .b()
       .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new AutoPlaceCoral(elevator, coralEffector, 3));
+      .onTrue(new PlaceCoral(elevator, coralEffector, 3));
     primaryController
       .a()
       .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new AutoPlaceCoral(elevator, coralEffector, 4));
+      .onTrue(new PlaceCoral(elevator, coralEffector, 4));
 
     primaryController
       .leftBumper()
@@ -381,7 +381,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
-    /*
+    
     return Commands.parallel(
       new TwoCoralAuto(
         drivebase,
@@ -391,7 +391,8 @@ public class RobotContainer {
         drivebase.isRedAlliance()
       ),
       new ActuateIntakeUp(intake)
-    );*/
+    );
+    /*
     return Commands.parallel(
       new PlaceThenGetCoral(
         drivebase,
@@ -399,10 +400,10 @@ public class RobotContainer {
         coralEffector,
         20,
         13,
-        4
+        true
       ),
       new ActuateIntakeUp(intake)
-    );
+    );*/
     //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);
   }
 
