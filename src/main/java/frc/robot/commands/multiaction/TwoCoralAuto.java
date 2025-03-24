@@ -21,16 +21,17 @@ import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import edu.wpi.first.math.geometry.Rotation2d;
+import frc.robot.commands.swervedrive.AlignReef;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
 public class TwoCoralAuto extends SequentialCommandGroup {
-  private int reefId1 = 20;
-  private int reefId2 = 19;
-  private int stationId = 13;
+  private int reefId1;
+  private int reefId2;
+  private int stationId;
   /** Creates a new ThreeCoralAuto. */
-  public TwoCoralAuto(SwerveSubsystem swerveSubsystem, Elevator elevator, CoralEffector effector, boolean rightStart, boolean red) {
+  public TwoCoralAuto(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, boolean rightStart, boolean red) {
 
 
     if (red) {
@@ -67,7 +68,7 @@ public class TwoCoralAuto extends SequentialCommandGroup {
       //Go to Reef
       //swerveSubsystem.driveToAprilTag(20, new Translation2d(1,0)),
       //Place Coral
-      swerveSubsystem.driveToReef(reefId1, true),
+      new AlignReef(swerve, true, reefId1),
 
       new MoveElevator(elevator, 4),
       new OuttakeCoral(effector),
@@ -75,14 +76,14 @@ public class TwoCoralAuto extends SequentialCommandGroup {
       //Go to Station
       Commands.parallel(
         new MoveElevatorSlightlyDown(elevator),
-        swerveSubsystem.driveToAprilTag(stationId, 0)
+        swerve.driveToAprilTag(stationId, 0)
       ),
       //Wait, then go to Reef
       Commands.race(
         new IntakeCoral(effector),
         Commands.sequence(
           Commands.waitTime(Time.ofBaseUnits(1, Seconds)),
-          swerveSubsystem.driveToReef(reefId2, false)
+          new AlignReef(swerve, false, reefId2)
         )
       ),
       //Place Coral
@@ -92,7 +93,7 @@ public class TwoCoralAuto extends SequentialCommandGroup {
       //Go to Station
       Commands.parallel(
         new MoveElevatorSlightlyDown(elevator),
-        swerveSubsystem.driveToAprilTag(stationId, 0)
+        swerve.driveToAprilTag(stationId, 0)
       )
 
       /*

@@ -29,6 +29,8 @@ public class AlignReef extends Command {
   private SwerveSubsystem swerve;
   private boolean alignRight;
   private Pose2d tagPosition;
+
+  private int tagId = -1;
   //private Pose2d tagGoal;
   //private Pose2d lastPos;
   private double xPower;
@@ -59,6 +61,11 @@ public class AlignReef extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
+  }
+
+  public AlignReef(SwerveSubsystem swerve, boolean alignRight, int tagId) {
+    this(swerve, alignRight);
+    this.tagId = tagId;
   }
 
   // Called when the command is initially scheduled.
@@ -94,14 +101,17 @@ public class AlignReef extends Command {
     y = tagPose.getY();
     angle = -tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
     */
-
     if (alignRight) {
       yOffset = ElasticAlign.kDIST_OFFSET_RIGHT.get();
     } else {
       yOffset = ElasticAlign.kDIST_OFFSET_LEFT.get();
     }
-
-    tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
+    
+    if (tagId == -1) {
+      tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
+    } else {
+      VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d().relativeTo(swerve.getPose());
+    }
 
     x = tagPosition.getX();
     y = tagPosition.getY() + yOffset;

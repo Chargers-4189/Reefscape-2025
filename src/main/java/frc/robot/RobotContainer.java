@@ -23,6 +23,7 @@ import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.commands.intake.ActuateIntakeDown;
 import frc.robot.commands.intake.ActuateIntakeUp;
 import frc.robot.commands.multiaction.AutoPlaceCoral;
+import frc.robot.commands.multiaction.PlaceThenGetCoral;
 import frc.robot.commands.multiaction.TwoCoralAuto;
 import frc.robot.commands.swervedrive.AlignReef;
 import frc.robot.commands.swervedrive.Drive;
@@ -446,6 +447,7 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
+    /*
     return Commands.parallel(
       new TwoCoralAuto(
         drivebase,
@@ -453,6 +455,17 @@ public class RobotContainer {
         coralEffector,
         false,
         drivebase.isRedAlliance()
+      ),
+      new ActuateIntakeUp(intake)
+    );*/
+    return Commands.parallel(
+      new PlaceThenGetCoral(
+        drivebase,
+        elevator,
+        coralEffector,
+        20,
+        13,
+        4
       ),
       new ActuateIntakeUp(intake)
     );
