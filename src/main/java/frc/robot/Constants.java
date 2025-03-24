@@ -244,10 +244,10 @@ public final class Constants {
     public static final double kDRIVE_EXPONENT = -1;
     public static final double kROTATIONAL_EXPONENT = -1;
 
-    public static final double kP_ANGLE_STATION = 0;
+    public static final double kP_ANGLE_STATION = 6;
     public static final double kI_ANGLE_STATION = 0;
     public static final double kD_ANGLE_STATION = 0;
-    public static final double kMAX_SPEED_ANGLE_STATION = 0;
+    public static final double kMAX_SPEED_ANGLE_STATION = 3;
 
   }
 

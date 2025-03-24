@@ -68,49 +68,6 @@ public class RobotContainer {
   );
 
   /**
-   * Converts driver input into a field-relative ChassisSpeeds that is controlled by angular velocity.
-   */
-  SwerveInputStream driveAngularVelocity = SwerveInputStream
-    .of(
-      drivebase.getSwerveDrive(),
-      () -> primaryController.getLeftY() * -1,
-      () -> primaryController.getLeftX() * -1
-    )
-    .withControllerRotationAxis(() -> -primaryController.getRightX())
-    .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(0.8)
-    .allianceRelativeControl(true);
-  /**
-   * Clone's the angular velocity input stream and converts it to a fieldRelative input stream.
-   */
-  SwerveInputStream driveWithStationAngle = driveAngularVelocity
-    .copy()
-    .withControllerHeadingAxis(
-      () -> Math.sin(drivebase.getStationRotation()),
-      () -> Math.cos(drivebase.getStationRotation())
-    )
-    .headingWhile(true);
-
-  SwerveInputStream driveWithNitro = SwerveInputStream
-    .of(
-      drivebase.getSwerveDrive(),
-      () -> -primaryController.getLeftY(),
-      () -> -primaryController.getLeftX()
-    )
-    .withControllerRotationAxis(() -> -primaryController.getRightX())
-    .deadband(OperatorConstants.DEADBAND)
-    .scaleTranslation(1)
-    .allianceRelativeControl(true);
-
-    SwerveInputStream driveWithNitroAndStationAngle = driveWithNitro
-    .copy()
-    .withControllerHeadingAxis(
-      () -> Math.sin(drivebase.getStationRotation()),
-      () -> Math.cos(drivebase.getStationRotation())
-    )
-    .headingWhile(true);
-
-  /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
@@ -205,29 +162,6 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    Command angularVelocityDrive = drivebase.driveFieldOriented(
-      driveAngularVelocity
-    );
-    Command nitroDrive = drivebase.driveFieldOriented(
-      driveWithNitro
-    );
-    Command stationAngleDrive = drivebase.driveFieldOriented(
-      driveWithStationAngle
-    );
-    Command nitroStationAngleDrive = drivebase.driveFieldOriented(
-      driveWithNitroAndStationAngle
-    );
-
-    //Driving Triggers
-    final Trigger nitroTrigger = new Trigger(() -> (
-      primaryController.leftStick().getAsBoolean() || primaryController.rightStick().getAsBoolean()
-    ));
-    final Trigger stationAlign = new Trigger(() -> (
-      primaryController.leftTrigger(.5).getAsBoolean()
-    ));
-    final Trigger xFormation = new Trigger(() -> (
-      primaryController.rightTrigger(.5).getAsBoolean()
-    ));
 
     //Secondary Triggers
     final Trigger elevatorTrigger = new Trigger(() ->
