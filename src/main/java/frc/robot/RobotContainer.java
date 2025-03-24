@@ -22,6 +22,7 @@ import frc.robot.commands.elevator.MoveElevator;
 import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.commands.intake.ActuateIntakeDown;
 import frc.robot.commands.intake.ActuateIntakeUp;
+import frc.robot.commands.multiaction.CenterAuto;
 import frc.robot.commands.multiaction.PlaceCoral;
 import frc.robot.commands.multiaction.PlaceThenGetCoral;
 import frc.robot.commands.multiaction.TwoCoralAuto;
@@ -78,25 +79,40 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
     NamedCommands.registerCommand("test", Commands.print("I EXIST"));
     // Choose the autos
-    autoChooser.setDefaultOption("2 Coral Left Start", Commands.parallel(
-      new TwoCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        false,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-    autoChooser.addOption("2 Coral Right Start",  Commands.parallel(
-      new TwoCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        true,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-      /*autoChooser.addOption("3 Coral Left Start", Commands.parallel(
+    autoChooser.setDefaultOption("2 Coral Left Start", new TwoCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      false,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("2 Coral Right Start",  new TwoCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      true,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("1 Coral Center Start - Left Place",  new CenterAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      drivebase.isRedAlliance(),
+      false
+    ));
+    autoChooser.addOption("1 Coral Center Start - Right Place",  new CenterAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      drivebase.isRedAlliance(),
+      true
+    ));
+      /*
+      autoChooser.addOption("3 Coral Left Start", Commands.parallel(
       new ThreeCoralAuto(
         drivebase,
         elevator,
@@ -122,8 +138,6 @@ public class RobotContainer {
         false,
         drivebase.isRedAlliance()
       ),
-      //yeah we wouldnt need to move the intake for a one coral auto, but it would take one more thing for Amelia to remember, same for a taxi auto, your choice though
-      new ActuateIntakeUp(intake)));
       autoChooser.addOption("1 Coral Right Start",  Commands.parallel(
       new OneCoralAuto(
         drivebase,
@@ -141,17 +155,9 @@ public class RobotContainer {
         true,
         drivebase.isRedAlliance()
       ),
-      new ActuateIntakeUp(intake)));**/
-    
-
-    SmartDashboard.putData(autoChooser);
-    
-    //autoChooser.setDefaultOption("17", drivebase.driveToAprilTag(17));
-    //autoChooser.addOption("18", drivebase.driveToAprilTag(18));
-    //autoChooser.addOption("19", drivebase.driveToAprilTag(19));
-    //autoChooser.addOption("20", drivebase.driveToAprilTag(20));
-    //autoChooser.addOption("21", drivebase.driveToAprilTag(21));
-    //autoChooser.addOption("22", drivebase.driveToAprilTag(22));
+      new ActuateIntakeUp(intake)));
+      */
+      SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -381,7 +387,8 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
-    
+    return autoChooser.getSelected();
+    /*
     return Commands.parallel(
       new TwoCoralAuto(
         drivebase,
@@ -391,7 +398,7 @@ public class RobotContainer {
         drivebase.isRedAlliance()
       ),
       new ActuateIntakeUp(intake)
-    );
+    );*/
     /*
     return Commands.parallel(
       new PlaceThenGetCoral(

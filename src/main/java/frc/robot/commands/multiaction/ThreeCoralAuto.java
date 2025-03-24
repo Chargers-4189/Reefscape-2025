@@ -28,12 +28,12 @@ import frc.robot.commands.swervedrive.AlignReef;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoCoralAuto extends ParallelCommandGroup {
+public class ThreeCoralAuto extends ParallelCommandGroup {
   private int reefId1;
   private int reefId2;
   private int stationId;
   /** Creates a new ThreeCoralAuto. */
-  public TwoCoralAuto(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, Intake intake, boolean rightStart, boolean red) {
+  public ThreeCoralAuto(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, Intake intake, boolean rightStart, boolean red) {
 
 
     if (red) {
@@ -66,7 +66,8 @@ public class TwoCoralAuto extends ParallelCommandGroup {
       new ActuateIntakeUp(intake),
       Commands.sequence(
         new PlaceThenGetCoral(swerve, elevator, effector, reefId1, stationId, !rightStart),
-        new PlaceThenGetCoral(swerve, elevator, effector, reefId2, stationId, rightStart)
+        new PlaceThenGetCoral(swerve, elevator, effector, reefId2, stationId, rightStart),
+        new PlaceThenGetCoral(swerve, elevator, effector, reefId2, stationId, !rightStart)
       )
     );
   }
