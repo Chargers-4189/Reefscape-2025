@@ -105,7 +105,7 @@ public final class Constants {
     public static final double kALGAE_POWER = .6;
     public static final int kEJECT_ALGAE_MILISECONDS = 1500;
     //Outtake
-    public static final double kCORAL_POWER = .1;
+    public static final double kCORAL_POWER = .6;
     public static final int kMILISECONDS_OUTTAKE = 2;
 
     public static final double kSECONDARY_OUT_POWER = .05;
@@ -182,7 +182,7 @@ public final class Constants {
 
   public static class AlignmentConstants {
 
-    public static final double kDIST_FROM_REEF = .5;
+    public static final double kDIST_FROM_REEF = .48;
     public static final double kDIST_OFFSET_LEFT = .18;
     public static final double kDIST_OFFSET_RIGHT = -.15;
 
@@ -258,8 +258,15 @@ public final class Constants {
 
     public static final int kMOTOR_ID = 51;
 
-    public static final double kMAX_POWER = 0.5;
+    public static final double kMAX_POWER = 0.6;
     public static final double kMAX_UP_POWER = .05;
     public static final double kMAX_DOWN_POWER = .05;
+  }
+
+  public static class TaxiConstants {
+
+    public static final double kX = 1;
+    public static final double kY = 0;
+    public static final double kSECONDS = .4;
   }
 }

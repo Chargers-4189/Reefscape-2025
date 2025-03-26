@@ -262,6 +262,20 @@ public class Elastic {
         }
     }
 
+  public static final class ElasticTaxi {
+    static NetworkTable taxiTable = networkInstance.getTable("taxiConstants");
+    
+    public static DoubleEntry kX = taxiTable.getDoubleTopic("X").getEntry(Constants.TaxiConstants.kX);
+    public static DoubleEntry kY = taxiTable.getDoubleTopic("Y").getEntry(Constants.TaxiConstants.kY);
+    public static DoubleEntry kSECONDS = taxiTable.getDoubleTopic("SECONDS").getEntry(Constants.TaxiConstants.kSECONDS);
+
+    public static void initialize() {
+      kX.set(kX.get());
+      kY.set(kY.get());
+      kSECONDS.set(kSECONDS.get());
+    }
+  }
+
   public static void initialize() {
     ElasticElevator.initialize();
     ElasticIntake.initialize();
@@ -270,5 +284,6 @@ public class Elastic {
     ElasticTeleopDrive.initialize();
     ElasticClimber.initialize();
     ElasticAlign.initialize();
+    ElasticTaxi.initialize();
   }
 }

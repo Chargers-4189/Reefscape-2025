@@ -27,7 +27,7 @@ public class PlaceThenGetCoral extends SequentialCommandGroup {
       //Place Coral
       Commands.race(
         new IntakeCoral(effector),
-        new AlignReef(swerve, true, reefId)
+        new AlignReef(swerve, alignRight, reefId)
       ),
 
       new MoveElevator(elevator, level),

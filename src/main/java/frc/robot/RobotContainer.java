@@ -22,10 +22,13 @@ import frc.robot.commands.elevator.MoveElevator;
 import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
 import frc.robot.commands.intake.ActuateIntakeDown;
 import frc.robot.commands.intake.ActuateIntakeUp;
+import frc.robot.commands.multiaction.AlignAccuracyTest;
 import frc.robot.commands.multiaction.CenterAuto;
 import frc.robot.commands.multiaction.PlaceCoral;
 import frc.robot.commands.multiaction.PlaceThenGetCoral;
-import frc.robot.commands.multiaction.TwoCoralAuto;
+import frc.robot.commands.multiaction.Taxi;
+import frc.robot.commands.multiaction.ThreeCoralAuto;
+import frc.robot.commands.multiaction.OneCoralAuto;
 import frc.robot.commands.swervedrive.AlignReef;
 import frc.robot.commands.swervedrive.Drive;
 //import frc.robot.subsystems.Climber;
@@ -76,88 +79,8 @@ public class RobotContainer {
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+    configureAutoChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
-    NamedCommands.registerCommand("test", Commands.print("I EXIST"));
-    // Choose the autos
-    autoChooser.setDefaultOption("2 Coral Left Start", new TwoCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      false,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("2 Coral Right Start",  new TwoCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      true,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("1 Coral Center Start - Left Place",  new CenterAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      drivebase.isRedAlliance(),
-      false
-    ));
-    autoChooser.addOption("1 Coral Center Start - Right Place",  new CenterAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      drivebase.isRedAlliance(),
-      true
-    ));
-      /*
-      autoChooser.addOption("3 Coral Left Start", Commands.parallel(
-      new ThreeCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        false,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-    autoChooser.addOption("3 Coral Right Start",  Commands.parallel(
-      new ThreeCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        true,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-      autoChooser.addOption("1 Coral Left Start", Commands.parallel(
-      new OneCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        false,
-        drivebase.isRedAlliance()
-      ),
-      autoChooser.addOption("1 Coral Right Start",  Commands.parallel(
-      new OneCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        true,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-      autoChooser.addOption("Taxi",  Commands.parallel(
-      new Taxi(
-        drivebase,
-        elevator,
-        coralEffector,
-        true,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)));
-      */
-      SmartDashboard.putData(autoChooser);
   }
 
   /**
@@ -377,6 +300,77 @@ public class RobotContainer {
     // }));
 
     //climber.setDefaultCommand(Commands.run(() -> climber.setPower(secondaryController.getRightY()), climber));
+  }
+
+  private void configureAutoChooser() {
+    autoChooser.setDefaultOption("3 Coral Right", new ThreeCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      true,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("3 Coral Left", new ThreeCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      false,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("2 Coral Right", new OneCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      true,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("2 Coral Left",  new OneCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      false,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.setDefaultOption("1 Coral Right", new ThreeCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      true,
+      drivebase.isRedAlliance()
+    ));
+    autoChooser.addOption("1 Coral Center - Place Right",  new CenterAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      drivebase.isRedAlliance(),
+      true
+    ));
+    autoChooser.addOption("1 Coral Center - Place Left",  new CenterAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      drivebase.isRedAlliance(),
+      false
+    ));
+    autoChooser.addOption("Taxi",  new Taxi(
+      drivebase,
+      coralEffector,
+      intake
+    ));
+    autoChooser.addOption("Accuracy Test",  new AlignAccuracyTest(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake
+    ));
+    SmartDashboard.putData(autoChooser);
   }
 
   /**
