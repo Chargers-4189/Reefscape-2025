@@ -31,6 +31,8 @@ public class Drive extends Command {
 
   private PIDController anglePid = new PIDController(0, 0, 0);
 
+  private int allianceFactor;
+
 
   /** Creates a new Drive. */
   public Drive(
@@ -58,6 +60,11 @@ public class Drive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (swerve.isRedAlliance()) {
+      allianceFactor = 1;
+    } else {
+      allianceFactor = -1;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -73,7 +80,7 @@ public class Drive extends Command {
     
     if (alignStation.getAsBoolean()) {
       swerve.drive(
-        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        new Translation2d(y.getAsDouble(), x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor * allianceFactor),
         MathUtil.clamp(
           anglePid.calculate(swerve.getPose().getRotation().getRadians(), swerve.getStationRotation()),
             -ElasticTeleopDrive.kMAX_SPEED_ANGLE_STATION.get(),
@@ -83,7 +90,7 @@ public class Drive extends Command {
       );
     } else {
       swerve.drive(
-        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        new Translation2d(y.getAsDouble(), x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor * allianceFactor),
         -angle.getAsDouble() * rotationalPowerFactor * swerve.getSwerveDrive().getMaximumChassisAngularVelocity(),
         true
       );
