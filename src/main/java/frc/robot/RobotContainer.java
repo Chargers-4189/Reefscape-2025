@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelAll;
+import frc.robot.commands.Mood;
 import frc.robot.commands.effector.IntakeCoral;
 import frc.robot.commands.elevator.MoveElevator;
 import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
@@ -29,6 +30,7 @@ import frc.robot.commands.swervedrive.Drive;
 //import frc.robot.subsystems.Climber;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
+import frc.robot.subsystems.Faces;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
@@ -57,6 +59,7 @@ public class RobotContainer {
   private final Elevator elevator = new Elevator();
   private final CoralEffector coralEffector = new CoralEffector();
   private final Intake intake = new Intake();
+  private final Faces faces = new Faces();
   //private final Climber climber = new Climber();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "swerve")
@@ -144,7 +147,6 @@ public class RobotContainer {
     
 
     SmartDashboard.putData(autoChooser);
-    
     //autoChooser.setDefaultOption("17", drivebase.driveToAprilTag(17));
     //autoChooser.addOption("18", drivebase.driveToAprilTag(18));
     //autoChooser.addOption("19", drivebase.driveToAprilTag(19));
@@ -192,6 +194,7 @@ public class RobotContainer {
 
     //Defaults
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
+    faces.setDefaultCommand(new Mood(faces, primaryController));
 
     //Primary
 
