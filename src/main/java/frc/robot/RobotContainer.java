@@ -5,7 +5,6 @@
 package frc.robot;
 
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -15,7 +14,6 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.CancelAll;
 import frc.robot.commands.effector.IntakeCoral;
 import frc.robot.commands.elevator.MoveElevator;
@@ -25,7 +23,6 @@ import frc.robot.commands.intake.ActuateIntakeUp;
 import frc.robot.commands.multiaction.AlignAccuracyTest;
 import frc.robot.commands.multiaction.CenterAuto;
 import frc.robot.commands.multiaction.PlaceCoral;
-import frc.robot.commands.multiaction.PlaceThenGetCoral;
 import frc.robot.commands.multiaction.Taxi;
 import frc.robot.commands.multiaction.ThreeCoralAuto;
 import frc.robot.commands.multiaction.OneCoralAuto;
@@ -39,9 +36,6 @@ import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
 import java.io.File;
-import java.util.function.BooleanSupplier;
-
-import swervelib.SwerveInputStream;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very

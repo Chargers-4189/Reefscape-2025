@@ -11,10 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.HumanDriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.util.Elastic.ElasticAlign;
-import frc.util.Elastic.ElasticSwerve;
 import frc.util.Elastic.ElasticTeleopDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
