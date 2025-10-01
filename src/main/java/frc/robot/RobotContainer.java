@@ -120,6 +120,7 @@ public class RobotContainer {
 
     //Defaults
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
+    
     faces.setDefaultCommand(new Mood(faces, primaryController));
 
     //Primary

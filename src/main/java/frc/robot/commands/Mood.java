@@ -52,41 +52,43 @@ public class Mood extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    System.out.println("FACE EXECUTING");
     //smile (Default)
-    if(controller.a().getAsBoolean()){
+    if(controller.povLeft().getAsBoolean()){
       mood = 0;
     }
     //dizzy (Lost Comms)
-    else if (controller.b().getAsBoolean()){
+    else if (controller.povUp().getAsBoolean()){
       mood = 1;
     }
     //submerge (With Elevator)
-    else if (controller.y().getAsBoolean()){
+    else if (controller.povRight().getAsBoolean()){
       mood = 2;
     }
     else{
       //default
       faces.smile();
     }
-    switch (mood){
+
+    switch (mood) {
       case 0:
-      faceTime = (faces.getTime() - (0.5625 * frameNumber));
-      if(faceTime >= 0.5625){
-        mode++;
-        mode = (mode % 2); //change frame number here
-        frameNumber++;       
-      }           
-      faces.party(mode); //change face frames here
-      break;
+        faceTime = (faces.getTime() - (0.5625 * frameNumber));
+        if(faceTime >= 0.5625) {
+          mode++;
+          mode = (mode % 2); //change frame number here
+          frameNumber++;       
+        }           
+        faces.party(mode); //change face frames here
+        break;
       case 1:
-      faceTime = (faces.getTime() - (0.5625 * frameNumber));
-      if(faceTime >= 0.5625){
-        mode++;
-        mode = (mode % 16); //change frame number here
-        frameNumber++;       
-      }           
-      faces.submerge(mode); //change face frames here
-      break;
+        faceTime = (faces.getTime() - (0.5625 * frameNumber));
+        if(faceTime >= 0.5625) {
+          mode++;
+          mode = (mode % 16); //change frame number here
+          frameNumber++;       
+        }           
+        faces.submerge(mode); //change face frames here
+        break;
       case 2:
         faces.clown();
         break;
