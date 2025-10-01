@@ -14,10 +14,10 @@ import frc.robot.subsystems.Elevator;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class AutoPlaceCoral extends SequentialCommandGroup {
+public class PlaceCoral extends SequentialCommandGroup {
 
   /** Creates a new AutoPlaceCoral. */
-  public AutoPlaceCoral(Elevator elevator, CoralEffector effector, int level) {
+  public PlaceCoral(Elevator elevator, CoralEffector effector, int level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(

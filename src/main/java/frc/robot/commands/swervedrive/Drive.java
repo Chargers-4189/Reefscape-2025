@@ -11,10 +11,7 @@ import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.HumanDriveConstants;
 import frc.robot.subsystems.SwerveSubsystem;
-import frc.util.Elastic.ElasticAlign;
-import frc.util.Elastic.ElasticSwerve;
 import frc.util.Elastic.ElasticTeleopDrive;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -30,6 +27,8 @@ public class Drive extends Command {
   private double rotationalPowerFactor;
 
   private PIDController anglePid = new PIDController(0, 0, 0);
+
+  private int allianceFactor;
 
 
   /** Creates a new Drive. */
@@ -58,6 +57,11 @@ public class Drive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    if (swerve.isRedAlliance()) {
+      allianceFactor = 1;
+    } else {
+      allianceFactor = -1;
+    }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -73,7 +77,7 @@ public class Drive extends Command {
     
     if (alignStation.getAsBoolean()) {
       swerve.drive(
-        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        new Translation2d(y.getAsDouble(), x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor * allianceFactor),
         MathUtil.clamp(
           anglePid.calculate(swerve.getPose().getRotation().getRadians(), swerve.getStationRotation()),
             -ElasticTeleopDrive.kMAX_SPEED_ANGLE_STATION.get(),
@@ -83,7 +87,7 @@ public class Drive extends Command {
       );
     } else {
       swerve.drive(
-        new Translation2d(-y.getAsDouble(), -x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor),
+        new Translation2d(y.getAsDouble(), x.getAsDouble()).times(swerve.getSwerveDrive().getMaximumChassisVelocity() * drivePowerFactor * allianceFactor),
         -angle.getAsDouble() * rotationalPowerFactor * swerve.getSwerveDrive().getMaximumChassisAngularVelocity(),
         true
       );

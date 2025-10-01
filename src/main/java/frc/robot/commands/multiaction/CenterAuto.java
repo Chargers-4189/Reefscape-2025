@@ -6,54 +6,37 @@ package frc.robot.commands.multiaction;
 
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import frc.robot.commands.effector.IntakeCoral;
 import frc.robot.commands.intake.ActuateIntakeUp;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
+import frc.robot.commands.swervedrive.AlignReef;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class TwoCoralAuto extends ParallelCommandGroup {
-  private int reefId1;
-  private int reefId2;
-  private int stationId;
+public class CenterAuto extends ParallelCommandGroup {
+  private int reefId;
   /** Creates a new ThreeCoralAuto. */
-  public TwoCoralAuto(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, Intake intake, boolean rightStart, boolean red) {
+  public CenterAuto(SwerveSubsystem swerve, Elevator elevator, CoralEffector effector, Intake intake, boolean red, boolean alignRight) {
 
 
     if (red) {
-      if (rightStart) {
-        //red-right
-        reefId1 = 9;
-        reefId2 = 8;
-        stationId = 2;
-      } else {
-        //red-left
-        reefId1 = 11;
-        reefId2 = 6;
-        stationId = 1;
-      }
+      reefId = -1;
     } else {
-      if (rightStart) {
-        //blue-right
-        reefId1 = 22;
-        reefId2 = 17;
-        stationId = 12;
-      } else {
-        //blue-left
-        reefId1 = 20;
-        reefId2 = 19;
-        stationId = 13;
-      }
+      reefId = 18;
     }
     // Add your commands in the addCommands() call.
     addCommands(
       new ActuateIntakeUp(intake),
       Commands.sequence(
-        new PlaceThenGetCoral(swerve, elevator, effector, reefId1, stationId, !rightStart),
-        new PlaceThenGetCoral(swerve, elevator, effector, reefId2, stationId, rightStart)
+        Commands.race(
+          new IntakeCoral(effector),
+          new AlignReef(swerve, alignRight, reefId)
+        ),
+        new PlaceCoral(elevator, effector, 4)
       )
     );
   }

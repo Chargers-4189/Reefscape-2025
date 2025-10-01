@@ -7,17 +7,8 @@ package frc.robot.commands.swervedrive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.networktables.NetworkTableInstance;
-import edu.wpi.first.networktables.StructPublisher;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.AlignmentConstants;
 import frc.robot.Constants.VisionConstants;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.util.Stopwatch;
@@ -29,6 +20,8 @@ public class AlignReef extends Command {
   private SwerveSubsystem swerve;
   private boolean alignRight;
   private Pose2d tagPosition;
+
+  private int tagId = -1;
   //private Pose2d tagGoal;
   //private Pose2d lastPos;
   private double xPower;
@@ -59,6 +52,11 @@ public class AlignReef extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
+  }
+
+  public AlignReef(SwerveSubsystem swerve, boolean alignRight, int tagId) {
+    this(swerve, alignRight);
+    this.tagId = tagId;
   }
 
   // Called when the command is initially scheduled.
@@ -94,14 +92,17 @@ public class AlignReef extends Command {
     y = tagPose.getY();
     angle = -tagPose.getRotation().plus(new Rotation3d(0, 0, Math.PI)).getZ();
     */
-
     if (alignRight) {
       yOffset = ElasticAlign.kDIST_OFFSET_RIGHT.get();
     } else {
       yOffset = ElasticAlign.kDIST_OFFSET_LEFT.get();
     }
-
-    tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
+    
+    if (tagId == -1) {
+      tagPosition = swerve.getClosestReefTagPose().relativeTo(swerve.getPose());
+    } else {
+      tagPosition = VisionConstants.aprilTagFieldLayout.getTagPose(tagId).get().toPose2d().relativeTo(swerve.getPose());
+    }
 
     x = tagPosition.getX();
     y = tagPosition.getY() + yOffset;

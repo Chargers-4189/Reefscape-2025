@@ -4,7 +4,6 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Degrees;
 import static edu.wpi.first.units.Units.Meter;
 
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -33,10 +32,8 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructPublisher;
-import edu.wpi.first.units.measure.Angle;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -151,7 +148,7 @@ public class SwerveSubsystem extends SubsystemBase {
     if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
       System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }*/
-    System.out.println("Station: " + (getStationRotation() * 180 / Math.PI) + " Robot: " + getPose().getRotation().getDegrees());
+    //System.out.println("Station: " + (getStationRotation() * 180 / Math.PI) + " Robot: " + getPose().getRotation().getDegrees());
   }
 
   @Override
