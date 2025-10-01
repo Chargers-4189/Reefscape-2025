@@ -38,9 +38,9 @@ public class TwoCoralAuto extends ParallelCommandGroup {
     } else {
       if (rightStart) {
         //blue-right
-        reefId1 = 20;
+        reefId1 = 22;
         reefId2 = 17;
-        stationId = 22;
+        stationId = 12;
       } else {
         //blue-left
         reefId1 = 20;

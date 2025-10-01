@@ -71,6 +71,7 @@ public class RobotContainer {
   private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
 
   public RobotContainer() {
+    //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
     configureBindings();
     configureAutoChooser();
