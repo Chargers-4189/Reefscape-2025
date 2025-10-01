@@ -65,6 +65,19 @@ public class Elastic {
     }
   }
 
+  public static final class ElasticFace {
+    static NetworkTable faceTable = networkInstance.getTable("faceTable");
+
+    public static DoubleEntry kPOWER_FACTOR = faceTable
+      .getDoubleTopic("POWER_FACTOR")
+      .getEntry(Constants.FaceConstants.kPOWER_FACTOR);
+
+    
+    public static void initialize() {
+      kPOWER_FACTOR.set(kPOWER_FACTOR.get());
+    }
+  }
+
   public static final class ElasticSwerve {
 
     static NetworkTable swerveTable = networkInstance.getTable("swerveTable");
@@ -285,5 +298,6 @@ public class Elastic {
     ElasticClimber.initialize();
     ElasticAlign.initialize();
     ElasticTaxi.initialize();
+    ElasticFace.initialize();
   }
 }

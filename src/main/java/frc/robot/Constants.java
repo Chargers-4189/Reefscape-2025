@@ -269,4 +269,8 @@ public final class Constants {
     public static final double kY = 0;
     public static final double kSECONDS = .4;
   }
+
+  public static class FaceConstants {
+    public static final double kPOWER_FACTOR = 1;
+  }
 }

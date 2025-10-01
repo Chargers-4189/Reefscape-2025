@@ -54,23 +54,25 @@ public class Mood extends Command {
   public void execute() {
     System.out.println("FACE EXECUTING");
     //smile (Default)
-    if(controller.povLeft().getAsBoolean()){
+    if (controller.povLeft().getAsBoolean()) {
       mood = 0;
     }
     //dizzy (Lost Comms)
-    else if (controller.povUp().getAsBoolean()){
+    else if (controller.povUp().getAsBoolean()) {
       mood = 1;
     }
     //submerge (With Elevator)
-    else if (controller.povRight().getAsBoolean()){
+    else if (controller.povRight().getAsBoolean()) {
       mood = 2;
     }
-    else{
-      //default
-      faces.smile();
+    else if (controller.povDown().getAsBoolean()) {
+      mood = -1;
     }
 
     switch (mood) {
+      case -1:
+        faces.smile();
+        break;
       case 0:
         faceTime = (faces.getTime() - (0.5625 * frameNumber));
         if(faceTime >= 0.5625) {

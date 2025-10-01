@@ -120,7 +120,7 @@ public class RobotContainer {
 
     //Defaults
     coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
-    
+
     faces.setDefaultCommand(new Mood(faces, primaryController));
 
     //Primary
@@ -146,6 +146,7 @@ public class RobotContainer {
     primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
 
     //Elevator + Effector
+    /*
     primaryController
       .povDown()
       .and(() -> !elevatorTrigger.getAsBoolean())
@@ -153,8 +154,8 @@ public class RobotContainer {
         Commands.sequence(
           new MoveElevator(elevator, 0),
           new MoveElevatorSlightlyDown(elevator)
-        )
-      );
+      
+      ); */
     primaryController
       .x()
       .and(() -> !elevatorTrigger.getAsBoolean())

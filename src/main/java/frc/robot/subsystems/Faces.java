@@ -15,6 +15,8 @@ import com.ctre.phoenix6.controls.SolidColor;
 import com.ctre.phoenix6.hardware.CANdle;
 import com.ctre.phoenix6.signals.RGBWColor;
 
+import frc.util.Elastic.ElasticFace;
+
 public class Faces extends SubsystemBase {
     //private static final int LED_PIN = 1;//port number
     private static final int NUM_LEDS = 264;//number of lights (16 by 16 plus 8)
@@ -24,6 +26,8 @@ public class Faces extends SubsystemBase {
     //private AddressableLED led = new AddressableLED(LED_PIN);
     //private AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(NUM_LEDS);
     private CANdle candle = new CANdle(1);
+
+    private final double dampenFactor = 3;
 
     //private static final Map<String, short[]> Face = new HashMap<String, short[]>();
 
@@ -54,7 +58,7 @@ public class Faces extends SubsystemBase {
     }
     public void makeFace(short[] pixelsArray){
         for (int i = 0, j = 8; j < NUM_LEDS && i + 2 < pixelsArray.length; i += 3, j++) {  
-            candle.setControl(new SolidColor(j, j).withColor( new RGBWColor(pixelsArray[i], pixelsArray[i + 1], pixelsArray[i + 2], 0)));
+            candle.setControl(new SolidColor(j, j).withColor( new RGBWColor((int) (pixelsArray[i] * ElasticFace.kPOWER_FACTOR.get()), (int) (pixelsArray[i + 1] * ElasticFace.kPOWER_FACTOR.get()), (int) (pixelsArray[i + 2] * ElasticFace.kPOWER_FACTOR.get()), 0)));
         }
         //led.setData(ledBuffer);
     }
@@ -91,6 +95,7 @@ public class Faces extends SubsystemBase {
         setFace(getFace("smile"));
         makeFace(chosenFace);
     }
+    
     public void nextDizzy(int mode){
         if(mode == 0){
             setFace(getFace("dizzyOne"));
