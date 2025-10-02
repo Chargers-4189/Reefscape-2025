@@ -4,6 +4,7 @@
 
 package frc.robot.commands.intake;
 
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Intake;
 import frc.util.Elastic.ElasticIntake;
@@ -34,7 +35,9 @@ public class ActuateIntakeUp extends Command {
   @Override
   public void execute() {
     System.out.println("Executing");
-    intake.setPower(ElasticIntake.kPOWER.get());
+    double encoderDifference = MathUtil.clamp((ElasticIntake.kRAISED_ROTATIONS.get() - intake.getEncoder()) / 10, 0, 1);
+    double calculatedPower = 0.2 + .8 * encoderDifference;
+    intake.setPower(calculatedPower * ElasticIntake.kPOWER.get());
   }
 
   // Called once the command ends or is interrupted.
@@ -48,6 +51,7 @@ public class ActuateIntakeUp extends Command {
   @Override
   public boolean isFinished() {
     System.out.println("switch: " + intake.getTopLimitSwitch() + "  stopwatch: " + stopwatch.hasTriggered());
-    return (intake.getTopLimitSwitch()) || stopwatch.hasTriggered();
+    return (intake.atTopByEncoder() || stopwatch.hasTriggered());
+    //return (intake.getTopLimitSwitch() || stopwatch.hasTriggered());
   }
 }

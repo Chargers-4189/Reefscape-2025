@@ -110,8 +110,13 @@ public class Elastic {
       .getDoubleTopic("INTAKE_POWER")
       .getEntry(Constants.IntakeConstants.kPOWER);
 
+    public static DoubleEntry kRAISED_ROTATIONS = intakeTable
+    .getDoubleTopic("RAISED_ROTATIONS")
+    .getEntry(Constants.IntakeConstants.kRAISED_ROTATIONS);
+
     public static void initialize() {
       kPOWER.set(kPOWER.get());
+      kRAISED_ROTATIONS.set(kRAISED_ROTATIONS.get());
     }
   }
 

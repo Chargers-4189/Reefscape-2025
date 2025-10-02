@@ -5,12 +5,15 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.RelativeEncoder;
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.IntakeConstants;
+
+import frc.util.Elastic.ElasticIntake;
 
 //ADD CONSTANTS
 public class Intake extends SubsystemBase {
@@ -30,6 +33,10 @@ public class Intake extends SubsystemBase {
   );
 
   private RelativeEncoder encoder = actuatorMotor.getEncoder();
+
+  private SparkAbsoluteEncoder absoluteEncoder = actuatorMotor.getAbsoluteEncoder();
+
+  private boolean encoderReset = false;
 
   public Intake() {}
     public void setPower(double power) {
@@ -60,10 +67,22 @@ public class Intake extends SubsystemBase {
     public double getEncoder() {
       return encoder.getPosition();
     }
-  
+
+    public boolean atTopByEncoder() {
+      if (encoderReset) {
+        return (encoder.getPosition() > ElasticIntake.kRAISED_ROTATIONS.get());
+      } else {
+        return getTopLimitSwitch();
+      }
+    }
 
   @Override
   public void periodic() {
+    if (getBottomLimitSwitch()) {
+      encoder.setPosition(absoluteEncoder.getPosition());
+      encoderReset = true;
+    }
+    System.out.println(encoder.getPosition() + " " + encoderReset);
     // This method will be called once per scheduler run
     /*
     System.out.print("Bottom: " + getBottomLimitSwitch());
