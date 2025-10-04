@@ -74,25 +74,19 @@ public class Mood extends Command {
         faces.smile();
         break;
       case 0:
+        faces.angry(3);
+        break;
+      case 1:
+        faces.pirate();
+        break;
+      case 2:
         faceTime = (faces.getTime() - (0.5625 * frameNumber));
-        if(faceTime >= 0.5625) {
+        if(faceTime >= 0.5625){
           mode++;
           mode = (mode % 2); //change frame number here
           frameNumber++;       
         }           
         faces.party(mode); //change face frames here
-        break;
-      case 1:
-        faceTime = (faces.getTime() - (0.5625 * frameNumber));
-        if(faceTime >= 0.5625) {
-          mode++;
-          mode = (mode % 16); //change frame number here
-          frameNumber++;       
-        }           
-        faces.submerge(mode); //change face frames here
-        break;
-      case 2:
-        faces.clown();
         break;
       }
     }

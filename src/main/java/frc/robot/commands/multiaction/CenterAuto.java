@@ -24,9 +24,9 @@ public class CenterAuto extends ParallelCommandGroup {
 
 
     if (red) {
-      reefId = -1;
+      reefId = 10;
     } else {
-      reefId = 18;
+      reefId = 21;
     }
     // Add your commands in the addCommands() call.
     addCommands(

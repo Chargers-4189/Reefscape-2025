@@ -71,7 +71,7 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser();
+  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("3 Coral Right");
 
   public RobotContainer() {
     //System.out.println(AutoBuilder.getAllAutoNames());
@@ -350,7 +350,7 @@ public class RobotContainer {
       coralEffector,
       intake,
       drivebase.isRedAlliance(),
-      true
+      false
     ));
     autoChooser.addOption("1 Coral Center - Place Left",  new CenterAuto(
       drivebase,
@@ -358,7 +358,7 @@ public class RobotContainer {
       coralEffector,
       intake,
       drivebase.isRedAlliance(),
-      false
+      true
     ));
     autoChooser.addOption("Taxi",  new Taxi(
       drivebase,
@@ -382,7 +382,14 @@ public class RobotContainer {
   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
     //return drivebase.getAutonomousCommand("New Auto");
-    return autoChooser.getSelected();
+    return new ThreeCoralAuto(
+      drivebase,
+      elevator,
+      coralEffector,
+      intake,
+      false,
+      drivebase.isRedAlliance()
+    );
     /*
     return Commands.parallel(
       new TwoCoralAuto(
@@ -411,5 +418,9 @@ public class RobotContainer {
 
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
+  }
+
+  public void face() {
+    faces.smile();
   }
 }

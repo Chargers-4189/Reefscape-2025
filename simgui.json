@@ -51,6 +51,11 @@
           "open": true
         }
       }
+    },
+    "RoboRIO": {
+      "window": {
+        "visible": true
+      }
     }
   },
   "NTProvider": {
@@ -68,6 +73,7 @@
       "/SmartDashboard/JSON": "Alerts",
       "/SmartDashboard/Motors": "Alerts",
       "/SmartDashboard/PathPlanner": "Alerts",
+      "/SmartDashboard/PhotonAlerts": "Alerts",
       "/SmartDashboard/Pigeon 2 (v6) [13]": "Gyro",
       "/SmartDashboard/Pigeon 2 (v6) [35]": "Gyro",
       "/SmartDashboard/Pigeon 2 [13]": "Gyro",
@@ -135,18 +141,21 @@
     }
   },
   "NetworkTables": {
+    "Retained Values": {
+      "open": false
+    },
     "transitory": {
       "FMSInfo": {
+        "open": true
+      },
+      "Shuffleboard": {
         "open": true
       },
       "SmartDashboard": {
         "Field": {
           "open": true
         },
-        "open": true,
-        "swerve": {
-          "open": true
-        }
+        "open": true
       }
     }
   },

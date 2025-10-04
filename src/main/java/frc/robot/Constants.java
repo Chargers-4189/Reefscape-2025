@@ -133,7 +133,7 @@ public final class Constants {
       .01,
       7.9,
       26.1,
-      53.3,
+      52,
       3,
       19.5,
     }; // Intake, L1, L2, L3, L4, Algae Low, Algae High
