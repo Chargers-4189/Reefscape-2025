@@ -4,11 +4,58 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants.ElevatorConstants;
 
 public class Elevator extends SubsystemBase {
+
+   SparkMax leftActuatorSparkMax = new SparkMax(
+    ElevatorConstants.kLEFT_MOTOR_ID, // ID CHANGE HERE
+    MotorType.kBrushed
+    ); 
+
+     SparkMax rightActuatorSparkMax = new SparkMax(
+    ElevatorConstants.kRIGHT_MOTOR_ID, // ID CHANGE HERE
+    MotorType.kBrushed
+    ); 
+
+    Encoder leftActuatorEncoder = new Encoder(ElevatorConstants.kMIN_LIMIT_DIO, ElevatorConstants.kMAX_LIMIT_DIO, false, Encoder.EncodingType.k2X);
+    Encoder rightActuatorEncoder = new Encoder(ElevatorConstants.kMIN_LIMIT_DIO, ElevatorConstants.kMAX_LIMIT_DIO, false, Encoder.EncodingType.k2X);
+
+    DigitalInput topLimitSwitch = new DigitalInput(0);
+    DigitalInput bottomLimitSwitch = new DigitalInput(0);
+    
   /** Creates a new Elevator. */
   public Elevator() {}
+
+  public void moveElevator(double speed){
+      leftActuatorSparkMax.set(speed);
+      rightActuatorSparkMax.set(speed);
+  }
+  
+  public void stayStill(){
+      leftActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
+      rightActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
+  }
+
+  public double getEncoderValue(){
+      return(rightActuatorEncoder.get());
+  }
+
+  public boolean getTopLimitSwitch(){
+      return(topLimitSwitch.get());
+  }
+
+  public boolean getBottomLimitSwitch(){
+      return(bottomLimitSwitch.get());
+  }
+
+
 
   @Override
   public void periodic() {
