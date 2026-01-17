@@ -15,6 +15,7 @@ public class MoveElevator extends Command {
   private double currentlevel;
   private int levelwanted;
   private double heightneeded;
+  private boolean bottomlimitswitch;
 
 
   public MoveElevator(int levelwanted, Elevator elevator) {
@@ -44,33 +45,40 @@ public class MoveElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(currentlevel < heightneeded){
-        if((currentlevel + 1) < levelwanted){
-          elevator.moveElevator(0.4);
-        }
-        else{
-          elevator.moveElevator(0.05); //emm/caleb/bryan what do you reccommend for these values?
-        }
-      }else if(currentlevel > heightneeded){
-        if((currentlevel - 1) > levelwanted){
-          elevator.moveElevator(-0.4);
-        }
-        else{
-          elevator.moveElevator(-0.05);
-        }
-      }
+    currentlevel = elevator.getEncoderValue();
+    bottomlimitswitch = elevator.getBottomLimitSwitch();
       if(levelwanted == 0){
-        if(elevator.getTopLimitSwitch() /= "true"){
-          elevator.moveElevator(-0.4);
+        if(bottomlimitswitch){
+          elevator.moveElevator(-10);
+        }else{
+          isFinished();
         }
       }
-
-
+      if(currentlevel < (heightneeded - ElevatorConstants.kTOLERANCE)){
+        if((currentlevel + 1) < (heightneeded - ElevatorConstants.kTOLERANCE)){
+          elevator.moveElevator(10);
+        }
+        else{
+          elevator.moveElevator(0.5); //emm/caleb/bryan what do you reccommend for these values?
+        }
+      }else if(currentlevel > (heightneeded + ElevatorConstants.kTOLERANCE)){
+        if((currentlevel - 1) > (heightneeded + ElevatorConstants.kTOLERANCE)){
+          elevator.moveElevator(-10);
+        }
+        else{
+          elevator.moveElevator(-0.5);
+        }
+      }
+      if(Math.abs(currentlevel - heightneeded) < ElevatorConstants.kTOLERANCE || Math.abs(currentlevel + heightneeded) < ElevatorConstants.kTOLERANCE ){
+        isFinished();  //Am I misunderstanding, is the tolerance really 1.4? That's crazy high to me. Am I crazy?
+      }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    elevator.stayStill();
+  }
 
   // Returns true when the command should end.
   @Override
