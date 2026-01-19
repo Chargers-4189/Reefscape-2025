@@ -155,7 +155,6 @@ public final class Constants {
     public static final int kDIO_PORT_BOTTOM = 3;
     public static final double kPOWER_SCALE = .1;
 
-
     //public static final double kGRAVITY_VOLTS = .01;
 
     //public static final double kUP_ENCODER = 22.5;

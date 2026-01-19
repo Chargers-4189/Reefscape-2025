@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeDown;
+import frc.robot.commands.IntakeUp;
+import frc.robot.subsystems.Intake;
 
 import java.io.File;
 
@@ -34,12 +37,13 @@ public class RobotContainer {
 
   // The robot's subsystems and commands are defined here...
 
+  private final Intake Intake = new Intake();
   //private final Climber climber = new Climber();
 
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("3 Coral Right");
+  //private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("3 Coral Right");
 
   public RobotContainer() {
     //System.out.println(AutoBuilder.getAllAutoNames());
@@ -56,6 +60,8 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
+    primaryController.y().onTrue(new IntakeUp(Intake));
+    primaryController.a().onTrue(new IntakeDown(Intake));
   }
 
   /**
@@ -67,5 +73,5 @@ public class RobotContainer {
     return new Command() {
       
     };
-}
+  }
 }
