@@ -14,6 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.MoveElevator;
+import frc.robot.commands.OuttakeCoral;
+import frc.robot.subsystems.CoralEffector;
+import frc.robot.subsystems.Elevator;
 
 import java.io.File;
 
@@ -28,24 +33,38 @@ public class RobotContainer {
   private final CommandXboxController primaryController = new CommandXboxController(
     0
   );
-  private final CommandXboxController secondaryController = new CommandXboxController(
+ /*  private final CommandXboxController secondaryController = new CommandXboxController(
     1
-  );
+  );*/
 
   // The robot's subsystems and commands are defined here...
-
-  //private final Climber climber = new Climber();
-
+  private final CoralEffector coraleffector = new CoralEffector();
+  private final Elevator elevator = new Elevator();
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("3 Coral Right");
 
   public RobotContainer() {
     //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
+
+    primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
+    primaryController.y().onTrue(new MoveElevator(2,elevator,coraleffector));
+    primaryController.b().onTrue(new MoveElevator(3,elevator,coraleffector));
+    primaryController.a().onTrue(new MoveElevator(4,elevator,coraleffector));
+    //primaryController.a().onTrue(new OuttakeCoral(coraleffector));
+    /*primaryController.b().onTrue(new IntakeCoral(coraleffector));
+    primaryController.a().onTrue(Commands.run(()->{
+      elevator.moveElevator(.5);
+      System.out.println("im working");
+    }, this.elevator));
+    primaryController.a().onFalse(Commands.run(()->{
+      elevator.moveElevator(0);
+      System.out.println("im working");
+    }, this.elevator));**/
+
   }
 
   /**

@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkMax;
 
@@ -16,26 +17,26 @@ public class Elevator extends SubsystemBase {
 
    SparkMax leftActuatorSparkMax = new SparkMax(
     ElevatorConstants.kLEFT_MOTOR_ID, // ID CHANGE HERE
-    MotorType.kBrushed
+    MotorType.kBrushless
     ); 
-
+ 
      SparkMax rightActuatorSparkMax = new SparkMax(
     ElevatorConstants.kRIGHT_MOTOR_ID, // ID CHANGE HERE
-    MotorType.kBrushed
+    MotorType.kBrushless
     ); 
 
-    Encoder leftActuatorEncoder = new Encoder(ElevatorConstants.kMIN_LIMIT_DIO, ElevatorConstants.kMAX_LIMIT_DIO, false, Encoder.EncodingType.k2X);
-    Encoder rightActuatorEncoder = new Encoder(ElevatorConstants.kMIN_LIMIT_DIO, ElevatorConstants.kMAX_LIMIT_DIO, false, Encoder.EncodingType.k2X);
+    SparkAbsoluteEncoder leftActuatorEncoder =  leftActuatorSparkMax.getAbsoluteEncoder();
+    SparkAbsoluteEncoder rightActuatorEncoder =  rightActuatorSparkMax.getAbsoluteEncoder();
 
-    DigitalInput topLimitSwitch = new DigitalInput(0);
-    DigitalInput bottomLimitSwitch = new DigitalInput(0);
+    DigitalInput topLimitSwitch = new DigitalInput(ElevatorConstants.kMAX_LIMIT_DIO);
+    DigitalInput bottomLimitSwitch = new DigitalInput(ElevatorConstants.kMIN_LIMIT_DIO);
     
   /** Creates a new Elevator. */
   public Elevator() {}
 
   public void moveElevator(double speed){
-      leftActuatorSparkMax.set(speed);
-      rightActuatorSparkMax.set(speed);
+      //leftActuatorSparkMax.set(speed);
+      rightActuatorSparkMax.set(-speed);
   }
   
   public void stayStill(){
@@ -44,7 +45,7 @@ public class Elevator extends SubsystemBase {
   }
 
   public double getEncoderValue(){
-      return(rightActuatorEncoder.get());
+      return(rightActuatorEncoder.getPosition());
   }
 
   public boolean getTopLimitSwitch(){

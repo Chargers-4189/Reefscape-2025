@@ -144,6 +144,7 @@ public final class Constants {
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;
 
     public static final double kTOLERANCE = 1.4;
+    public static final double kTOLERANCE_IN = 0.01;
     public static final int kSLIGHTLY_DOWN_TIMEOUT = 500;
     public static final int kTIMEOUT = 1000;
   }

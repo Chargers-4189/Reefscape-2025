@@ -11,10 +11,13 @@ import frc.robot.subsystems.CoralEffector;
 
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class IntakeCoral extends Command {
+public class OuttakeCoral extends Command {
   private CoralEffector coraleffector;
-  /** Creates a new IntakeCoral. */
-  public IntakeCoral(CoralEffector coraleffector) {
+  private int stage = 0;
+
+
+  /** Creates a new OuttakeCoral. */
+  public OuttakeCoral(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(coraleffector);
@@ -29,8 +32,20 @@ public class IntakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coraleffector.getDigitalSensor()){
-      coraleffector.moveEffector(); //I am assuming postitive for the motor intakes coral, this is complete assumption
+    if(stage == 0){
+      if(coraleffector.getAnalogSensor()){
+        if(!coraleffector.getDigitalSensor()){
+        coraleffector.moveEffector(); // going until first sensor the coral somes in contact with is false
+        }else{
+        stage = 1;
+      }
+      }
+    }if(stage == 1){
+      if(!coraleffector.getAnalogSensor()){
+        coraleffector.moveEffectorBackwards(); //going backwards until the sensor closest to intake is true
+      }else{
+        stage = 3; // 3 = finished
+      }
     }
   }
 
@@ -38,14 +53,14 @@ public class IntakeCoral extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coraleffector.stopEffector();
+     coraleffector.stopEffector();
   }
 
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(coraleffector.getAnalogSensor()){
+    if(stage == 3){
       return true;
     }else{
     return false;

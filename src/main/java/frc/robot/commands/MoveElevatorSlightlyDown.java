@@ -30,22 +30,22 @@ public class MoveElevatorSlightlyDown extends Command {
   @Override
   public void execute() {
 
-    elevator.moveElevator(0.1); //Help, emm what is this value in your OG code, I couldn't find it in constants.
-
-    if (timer.get() >= ElevatorConstants.kSLIGHTLY_DOWN_TIMEOUT){
-      isFinished();
-    }
+    elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.1); //Help, emm what is this value in your OG code, I couldn't find it in constants.
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    elevator.moveElevator(0);
+    elevator.stayStill();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
+    if (timer.get() >= ElevatorConstants.kSLIGHTLY_DOWN_TIMEOUT){
+      return true;
+    }else{
     return false;
+  }
   }
 }
