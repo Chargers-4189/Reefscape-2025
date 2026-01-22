@@ -14,6 +14,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.autoAlign;
+import frc.robot.subsystems.Vision;
+import frc.robot.commands.autoAlign;
 
 import java.io.File;
 
@@ -24,6 +27,7 @@ import java.io.File;
  */
 public class RobotContainer {
 
+
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController primaryController = new CommandXboxController(
     0
@@ -31,7 +35,8 @@ public class RobotContainer {
   private final CommandXboxController secondaryController = new CommandXboxController(
     1
   );
-
+  private final Vision vis = new Vision();
+  private final autoAlign align = new autoAlign(vis);
   // The robot's subsystems and commands are defined here...
 
   //private final Climber climber = new Climber();
@@ -39,11 +44,13 @@ public class RobotContainer {
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
-  private final SendableChooser<Command> autoChooser = AutoBuilder.buildAutoChooser("3 Coral Right");
 
   public RobotContainer() {
     //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
+
+    primaryController.rightBumper().onTrue(align);
+
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
   }
