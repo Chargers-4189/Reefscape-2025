@@ -5,16 +5,13 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.ElevatorConstants;
 import frc.robot.subsystems.Elevator;
-import edu.wpi.first.wpilibj.Timer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class TestGravityConstant extends Command {
+public class ManualElevator extends Command {
   private Elevator elevator;
-  private Timer timer = new Timer();
-  /** Creates a new TestGravityConstant. */
-  public TestGravityConstant(Elevator elevator) {
+  /** Creates a new ManualElevator. */
+  public ManualElevator(Elevator elevator) {
     this.elevator = elevator;
     
     addRequirements(elevator);
@@ -22,16 +19,14 @@ public class TestGravityConstant extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    timer.start();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-
-    elevator.moveElevator(0.5);
+    elevator.moveElevator(0.2);
   }
+
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
@@ -41,10 +36,6 @@ public class TestGravityConstant extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if (timer.get() >= 3){
-      return true;
-    }else{
     return false;
-  }
   }
 }

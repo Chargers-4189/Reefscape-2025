@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.IntakeCoral;
+import frc.robot.commands.ManualElevator;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.OuttakeCoral;
 import frc.robot.commands.TestGravityConstant;
@@ -52,7 +53,10 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
 
     //primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
-    primaryController.x().onTrue(new TestGravityConstant(elevator));
+    primaryController.x().onTrue(new ManualElevator(elevator));
+    elevator.setDefaultCommand(Commands.run(()->{
+      elevator.stayStill();
+    }, this.elevator));
     primaryController.y().onTrue(new MoveElevator(2,elevator,coraleffector));
     primaryController.b().onTrue(new MoveElevator(3,elevator,coraleffector));
     primaryController.a().onTrue(new MoveElevator(4,elevator,coraleffector));
