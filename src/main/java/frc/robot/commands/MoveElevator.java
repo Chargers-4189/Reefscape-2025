@@ -52,21 +52,21 @@ public class MoveElevator extends Command {
       if(levelwanted == 0){
         //If you want the elevator at the bottom, it goes if the bottom limit switch is false
         if(!elevator.getBottomLimitSwitch()){     
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.5);   //WHY IS TOLERANCE NOT BUILT INTO THIS QQUUIINNNN!!!!
+          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.2);   //WHY IS TOLERANCE NOT BUILT INTO THIS QQUUIINNNN!!!!
       }
-      if(elevator.getEncoderValue() < (heightneeded - ElevatorConstants.kTOLERANCE_IN)){
+      if(elevator.getEncoderValue() < (heightneeded - (5 * ElevatorConstants.kTOLERANCE_IN))){
         // it goes up until it hits the inch it wants, the 1 is tolerance so when it is closer to the target it slows doen to not damage itself or overshoot
-        if((elevator.getEncoderValue() + 1) < (heightneeded - ElevatorConstants.kTOLERANCE_IN)){
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS + 0.5);
+        if((elevator.getEncoderValue() + 1) < (heightneeded - (5 * ElevatorConstants.kTOLERANCE_IN))){
+          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS + 0.2);
         }
         else{
           //slowing down because elevator is close to target
           elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS + 0.01); 
         }
-      }else if(elevator.getEncoderValue() > (heightneeded + ElevatorConstants.kTOLERANCE_IN)){
+      }else if(elevator.getEncoderValue() > (heightneeded + (5 * ElevatorConstants.kTOLERANCE_IN))){
         //same as the one above but this one moves the elevator down
-        if((elevator.getEncoderValue() - 1) > (heightneeded + ElevatorConstants.kTOLERANCE_IN)){
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.5);
+        if((elevator.getEncoderValue() - 1) > (heightneeded + (5 * ElevatorConstants.kTOLERANCE_IN))){
+          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.2);
         }
         else{
           elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.01);
@@ -74,7 +74,7 @@ public class MoveElevator extends Command {
       }
     }
 
-    if(Math.abs(elevator.getEncoderValue() - heightneeded) < ElevatorConstants.kTOLERANCE_IN || Math.abs(elevator.getEncoderValue() + heightneeded) < ElevatorConstants.kTOLERANCE_IN || levelwanted == 0 && !elevator.getBottomLimitSwitch()){
+    if(Math.abs(elevator.getEncoderValue() - heightneeded) < (5 * ElevatorConstants.kTOLERANCE_IN) || Math.abs(elevator.getEncoderValue() + heightneeded) < (5 * ElevatorConstants.kTOLERANCE_IN) || levelwanted == 0 && !elevator.getBottomLimitSwitch()){
       if(coraleffector.getAnalogSensor()){
         //output coral
         coraleffector.moveEffector(); 
@@ -95,9 +95,9 @@ public class MoveElevator extends Command {
 
   // Returns true when the command should end.
   @Override
-  public boolean isFinished() {
-    if(Math.abs(elevator.getEncoderValue() - heightneeded) < ElevatorConstants.kTOLERANCE_IN || Math.abs(elevator.getEncoderValue() + heightneeded) < ElevatorConstants.kTOLERANCE_IN || levelwanted == 0 && !elevator.getBottomLimitSwitch()){
-      if(coralscored == true){ // if elevator is within tolerance of target and coral is scores than return true
+  public boolean isFinished(){
+    if(Math.abs(elevator.getEncoderValue() - levelwanted) <= ElevatorConstants.kTOLERANCE){  // error is within tolerance constant from 0
+      if(coralscored == true){  // if elevator is within tolerance of target and coral is scores than return true
       return true;
       }else{
     return false;

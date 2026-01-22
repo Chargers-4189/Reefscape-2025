@@ -50,10 +50,11 @@ public class RobotContainer {
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
+    //primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
     primaryController.y().onTrue(new MoveElevator(2,elevator,coraleffector));
     primaryController.b().onTrue(new MoveElevator(3,elevator,coraleffector));
     primaryController.a().onTrue(new MoveElevator(4,elevator,coraleffector));
+    primaryController.x().onTrue(new IntakeCoral(coraleffector));
     //primaryController.a().onTrue(new OuttakeCoral(coraleffector));
     /*primaryController.b().onTrue(new IntakeCoral(coraleffector));
     primaryController.a().onTrue(Commands.run(()->{

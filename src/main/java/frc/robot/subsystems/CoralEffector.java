@@ -33,7 +33,11 @@ public class CoralEffector extends SubsystemBase {
   public CoralEffector() {}
    
   public void moveEffector(){
-    ActuatorSparkMax.set(-CoralEffectorConstants.kCORAL_POWER);
+    ActuatorSparkMax.set(-0.2);
+  }
+
+  public void moveEffectorBackwards(){
+    ActuatorSparkMax.set(0.05);
   }
 
   public void stopEffector(){

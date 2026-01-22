@@ -13,6 +13,9 @@ import frc.robot.subsystems.CoralEffector;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class IntakeCoral extends Command {
   private CoralEffector coraleffector;
+  private int stage = 0;
+
+
   /** Creates a new IntakeCoral. */
   public IntakeCoral(CoralEffector coraleffector) {
     this.coraleffector = coraleffector;
@@ -23,14 +26,44 @@ public class IntakeCoral extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    stage = 0;
+  }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coraleffector.getDigitalSensor()){
-      coraleffector.moveEffector(); //I am assuming postitive for the motor intakes coral, this is complete assumption
+ System.out.println(stage);
+  System.out.println("Digital: "  + coraleffector.getDigitalSensor());
+  System.out.println("Analog: "  + coraleffector.getAnalogSensor());
+
+    if(stage == 0){
+      if(coraleffector.getDigitalSensor()){
+        if(!coraleffector.getAnalogSensor()){
+          System.out.println("Stage 0");
+        coraleffector.moveEffector(); // going until first sensor the coral comes in contact with is false
+        }else{
+        stage = 1;
+      }
+      }
+    }
+
+    if(stage == 1){
+      if(coraleffector.getDigitalSensor()){
+        System.out.println("Stage 1");
+        coraleffector.moveEffector();
+      }else{
+        stage = 2; // 3 = finished
+      }
+    }
+    if(stage == 2){
+      if(!coraleffector.getDigitalSensor()){
+        System.out.println("Stage 2");
+        coraleffector.moveEffectorBackwards(); //going backwards until the sensor closest to intake is true
+      }else{
+        stage = 3; // 3 = finished
+      }
     }
   }
 
@@ -38,14 +71,14 @@ public class IntakeCoral extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    coraleffector.stopEffector();
+     coraleffector.stopEffector();
   }
 
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(coraleffector.getAnalogSensor()){
+    if(stage == 3){
       return true;
     }else{
     return false;

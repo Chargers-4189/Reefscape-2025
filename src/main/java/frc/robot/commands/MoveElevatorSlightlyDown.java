@@ -30,7 +30,7 @@ public class MoveElevatorSlightlyDown extends Command {
   @Override
   public void execute() {
 
-    elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.1); //Help, emm what is this value in your OG code, I couldn't find it in constants.
+    elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.1);
   }
 
   // Called once the command ends or is interrupted.
