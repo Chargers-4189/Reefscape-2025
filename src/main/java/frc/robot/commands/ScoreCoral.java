@@ -5,15 +5,17 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import frc.robot.subsystems.CoralEffector;
+import frc.robot.subsystems.Elevator;
 
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class test extends SequentialCommandGroup {
+public class ScoreCoral extends SequentialCommandGroup {
   /** Creates a new test. */
-  public test() {
+  public ScoreCoral(CoralEffector effector, Elevator elevator, int level) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
-    addCommands();
+    addCommands(new MoveElevator(level, elevator,effector), new OuttakeCoral(effector), new MoveElevator(0, elevator,effector));
   }
 }

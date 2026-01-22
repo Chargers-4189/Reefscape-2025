@@ -40,15 +40,14 @@ public class Elevator extends SubsystemBase {
   }
   
   public void stayStill(){
-      leftActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
-      rightActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
+      //leftActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
+      rightActuatorSparkMax.set(-0.039);
   }
 
   public double getEncoderValue(){
       return(rightActuatorEncoder.getPosition());
   }
-
-  public boolean getTopLimitSwitch(){
+ public boolean getTopLimitSwitch(){
       return(topLimitSwitch.get());
   }
 

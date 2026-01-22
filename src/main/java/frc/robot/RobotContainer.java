@@ -18,7 +18,6 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.ManualElevator;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.OuttakeCoral;
-import frc.robot.commands.TestGravityConstant;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 
@@ -53,7 +52,7 @@ public class RobotContainer {
     DriverStation.silenceJoystickConnectionWarning(true);
 
     //primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
-    primaryController.x().onTrue(new ManualElevator(elevator));
+    primaryController.x().whileTrue(new ManualElevator(elevator));
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.stayStill();
     }, this.elevator));
