@@ -74,17 +74,6 @@ public class MoveElevator extends Command {
       }
     }
 
-    if(Math.abs(elevator.getEncoderValue() - heightneeded) < (5 * ElevatorConstants.kTOLERANCE_IN) || Math.abs(elevator.getEncoderValue() + heightneeded) < (5 * ElevatorConstants.kTOLERANCE_IN) || levelwanted == 0 && !elevator.getBottomLimitSwitch()){
-      if(coraleffector.getAnalogSensor()){
-        //output coral
-        coraleffector.moveEffector(); 
-      }else{
-        //puts target back to 0 to reset and move elevator to the bottom
-        coralscored = true;
-        levelwanted = 0;
-      }
-    }
-
   }
 
   // Called once the command ends or is interrupted.
@@ -97,11 +86,8 @@ public class MoveElevator extends Command {
   @Override
   public boolean isFinished(){
     if(Math.abs(elevator.getEncoderValue() - levelwanted) <= ElevatorConstants.kTOLERANCE){  // error is within tolerance constant from 0
-      if(coralscored == true){  // if elevator is within tolerance of target and coral is scores than return true
       return true;
-      }else{
-    return false;
-    }}else{
+     }else{
     return false;
     }
   }
