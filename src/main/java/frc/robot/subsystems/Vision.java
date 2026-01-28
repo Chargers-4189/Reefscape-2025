@@ -50,7 +50,7 @@ public class Vision extends SubsystemBase {
       Transform3d alternateCameraToTarget = target.getAlternateCameraToTarget();
 
 
-
+      System.out.println("way: " + yaw + " pitch: " + pitch + " area: " + area + " ID: " + targetID + " ambig: " +  poseAmbiguity + " bestCameraToTarget: " + bestCameraToTarget + " alternateCameraToTarget: " + alternateCameraToTarget);
 
     }else{
       System.out.println("there is no target");
