@@ -60,7 +60,8 @@ public class Vision extends SubsystemBase {
       System.out.println("there is no target");
     } */
 
-    System.out.println(cam.getAllUnreadResults());
+    System.out.println("Unread pipline results" + cam.getAllUnreadResults());
+    System.out.println("pipeline Index" + cam.getPipelineIndex());
 
   }
 }
