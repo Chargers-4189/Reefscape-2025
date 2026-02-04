@@ -14,9 +14,11 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.autoAlign;
+
+import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
-import frc.robot.commands.autoAlign;
+import frc.util.Camera;
+
 
 import java.io.File;
 
@@ -36,7 +38,9 @@ public class RobotContainer {
     1
   );
   private final Vision vis = new Vision();
-  private final autoAlign align = new autoAlign(vis);
+
+  private final Camera cam = new Camera();
+  private final SwerveSubsystem swerver = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(), "swerve")); 
   // The robot's subsystems and commands are defined here...
 
   //private final Climber climber = new Climber();
@@ -45,11 +49,13 @@ public class RobotContainer {
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
 
+
   public RobotContainer() {
     //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
 
-    primaryController.rightBumper().onTrue(align);
+    primaryController.leftBumper().onTrue(swerver.aimAtTarget(cam, vis));
+
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);

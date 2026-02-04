@@ -1,14 +1,23 @@
 package frc.util;
 
 
+import java.util.List;
+
 import org.photonvision.targeting.PhotonPipelineResult;
-import org.photonvision.targeting.PhotonTrackedTarget;
+
 
 import frc.robot.subsystems.Vision;
 
 public class Camera {
-   /* public PhotonPipelineResult getBestResult(Vision vis){
+   public PhotonPipelineResult getBestResult(Vision vis){
+    List <PhotonPipelineResult> results = vis.Results();
+    PhotonPipelineResult bestResult;
 
-    return ;
-   } */
+        bestResult = results.get(0);
+
+    return bestResult;
+    
+    
+   }
+   
 }

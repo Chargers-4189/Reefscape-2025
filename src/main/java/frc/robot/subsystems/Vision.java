@@ -8,6 +8,7 @@ import java.util.List;
 
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
+import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -18,16 +19,15 @@ public class Vision extends SubsystemBase {
   PhotonCamera cam = new PhotonCamera("frCam2025");
 
   public Vision() {
-
+   
     //boolean hasTragets;
     
   }
 
-  /*public PhotonTrackedTarget bestResult(){
-    var result = cam.getLatestResult();
-    List <PhotonTrackedTarget> targets = result.getTargets();
-    
-  } */
+  public List <PhotonPipelineResult> Results(){
+    var results = cam.getAllUnreadResults();
+    return results;
+  } 
 
   public void poseEstmater(){
 
@@ -60,8 +60,7 @@ public class Vision extends SubsystemBase {
       System.out.println("there is no target");
     } */
 
-    System.out.println("Unread pipline results" + cam.getAllUnreadResults());
-    System.out.println("pipeline Index" + cam.getPipelineIndex());
+    
 
   }
 }
