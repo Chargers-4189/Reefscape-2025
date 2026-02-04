@@ -138,7 +138,7 @@ public final class Constants {
       19.5,
     }; // Intake, L1, L2, L3, L4, Algae Low, Algae High
 
-    public static final double kGRAVITY_VOLTS = .4;
+    public static final double kGRAVITY_VOLTS = -0.035;
     public static final double kPROPORTIONAL_VOLTS = .8;
     public static final double kMAX_VOLTS = 12;
     public static final double kMAX_VOLT_CHANGE_PER_SECOND = 40;

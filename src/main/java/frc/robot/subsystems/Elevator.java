@@ -4,8 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.spark.SparkAbsoluteEncoder;
+import com.revrobotics.spark.SparkRelativeEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkMax;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -25,8 +26,9 @@ public class Elevator extends SubsystemBase {
     MotorType.kBrushless
     ); 
 
-    SparkAbsoluteEncoder leftActuatorEncoder =  leftActuatorSparkMax.getAbsoluteEncoder();
-    SparkAbsoluteEncoder rightActuatorEncoder =  rightActuatorSparkMax.getAbsoluteEncoder();
+    //SparkRelativeEncoder leftActuatorEncoder =  leftActuatorSparkMax.getRelativeEncoder();
+    RelativeEncoder rightActuatorEncoder =  rightActuatorSparkMax.getEncoder();
+
 
     DigitalInput topLimitSwitch = new DigitalInput(ElevatorConstants.kMAX_LIMIT_DIO);
     DigitalInput bottomLimitSwitch = new DigitalInput(ElevatorConstants.kMIN_LIMIT_DIO);
@@ -41,12 +43,16 @@ public class Elevator extends SubsystemBase {
   
   public void stayStill(){
       //leftActuatorSparkMax.set(ElevatorConstants.kGRAVITY_VOLTS);
-      rightActuatorSparkMax.set(-0.039);
+      rightActuatorSparkMax.set(-0.035);
+  }
+  public void ZeroEncoder(){
+    rightActuatorEncoder.setPosition(0);
   }
 
   public double getEncoderValue(){
-      return(rightActuatorEncoder.getPosition());
+      return(-rightActuatorEncoder.getPosition());
   }
+  
  public boolean getTopLimitSwitch(){
       return(topLimitSwitch.get());
   }

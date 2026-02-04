@@ -33,14 +33,19 @@ public class MoveElevator extends Command {
   @Override
   public void initialize() {
     //goes from the level wanted to the amount of inches the bot needs to travel
-    if(levelwanted == 1){
-      heightneeded = ElevatorConstants.kHEIGHTS[2];
+    if(levelwanted == 0){
+      heightneeded = 0;
+    }else if(levelwanted == 1){
+      heightneeded = ElevatorConstants.kHEIGHTS[1];
     }else if(levelwanted == 2){
-      heightneeded = ElevatorConstants.kHEIGHTS[3];
+      heightneeded = ElevatorConstants.kHEIGHTS[2];
     }else if(levelwanted == 3){
-      heightneeded = ElevatorConstants.kHEIGHTS[4];
+      heightneeded = ElevatorConstants.kHEIGHTS[3] - 9;
     }else if(levelwanted == 4){
-      heightneeded = ElevatorConstants.kHEIGHTS[5];
+      heightneeded = ElevatorConstants.kHEIGHTS[4] - 6.8;
+    }
+    if(levelwanted != 0){
+    elevator.ZeroEncoder();
     }
 
     //find level elevator is at (current level)
@@ -49,32 +54,30 @@ public class MoveElevator extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-      if(levelwanted == 0){
-        //If you want the elevator at the bottom, it goes if the bottom limit switch is false
-        if(!elevator.getBottomLimitSwitch()){     
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.2);   //WHY IS TOLERANCE NOT BUILT INTO THIS QQUUIINNNN!!!!
-      }
-      if(elevator.getEncoderValue() < (heightneeded - (5 * ElevatorConstants.kTOLERANCE_IN))){
+    System.out.println("heightneeded: " + heightneeded);
+    System.out.println("elevator.getEncoderValue(): " + elevator.getEncoderValue());
+    
+      if(elevator.getEncoderValue() < (heightneeded)){
         // it goes up until it hits the inch it wants, the 1 is tolerance so when it is closer to the target it slows doen to not damage itself or overshoot
-        if((elevator.getEncoderValue() + 1) < (heightneeded - (5 * ElevatorConstants.kTOLERANCE_IN))){
+        if((elevator.getEncoderValue() + 0.1) < (heightneeded)){
+          System.out.println("one");
           elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS + 0.2);
         }
         else{
           //slowing down because elevator is close to target
+          System.out.println("two");
           elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS + 0.01); 
         }
-      }else if(elevator.getEncoderValue() > (heightneeded + (5 * ElevatorConstants.kTOLERANCE_IN))){
+      }else if(elevator.getEncoderValue() > (heightneeded + (5 * 0.01))){
         //same as the one above but this one moves the elevator down
-        if((elevator.getEncoderValue() - 1) > (heightneeded + (5 * ElevatorConstants.kTOLERANCE_IN))){
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.2);
+        if((elevator.getEncoderValue() - 0.1) > (heightneeded + (5 * 0.01))){
+          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.1);
         }
         else{
-          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.01);
+          elevator.moveElevator(ElevatorConstants.kGRAVITY_VOLTS - 0.005);
         }
       }
     }
-
-  }
 
   // Called once the command ends or is interrupted.
   @Override
@@ -85,7 +88,9 @@ public class MoveElevator extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished(){
-    if(Math.abs(elevator.getEncoderValue() - levelwanted) <= ElevatorConstants.kTOLERANCE){  // error is within tolerance constant from 0
+    
+    if(Math.abs(elevator.getEncoderValue() - heightneeded) <= 0.1){  // error is within tolerance constant from 0
+      System.out.println(Math.abs(elevator.getEncoderValue() - heightneeded));
       return true;
      }else{
     return false;

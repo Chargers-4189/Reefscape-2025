@@ -27,21 +27,23 @@ public class IntakeCoral extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    stage = 0;
+    stage = -1;
   }
 
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
- System.out.println(stage);
-  System.out.println("Digital: "  + coraleffector.getDigitalSensor());
-  System.out.println("Analog: "  + coraleffector.getAnalogSensor());
-
+  //System.out.println(stage);
+  //System.out.println("Digital: "  + coraleffector.getDigitalSensor());
+  //System.out.println("Analog: "  + coraleffector.getAnalogSensor());
+    if(coraleffector.getDigitalSensor() && !coraleffector.getAnalogSensor()){
+      stage = 0;
+    }
     if(stage == 0){
       if(coraleffector.getDigitalSensor()){
         if(!coraleffector.getAnalogSensor()){
-          System.out.println("Stage 0");
+          //System.out.println("Stage 0");
         coraleffector.moveEffector(); // going until first sensor the coral comes in contact with is false
         }else{
         stage = 1;
@@ -51,7 +53,7 @@ public class IntakeCoral extends Command {
 
     if(stage == 1){
       if(coraleffector.getDigitalSensor()){
-        System.out.println("Stage 1");
+        //System.out.println("Stage 1");
         coraleffector.moveEffector();
       }else{
         stage = 2; // 3 = finished
@@ -59,9 +61,10 @@ public class IntakeCoral extends Command {
     }
     if(stage == 2){
       if(!coraleffector.getDigitalSensor()){
-        System.out.println("Stage 2");
+        //System.out.println("Stage 2");
         coraleffector.moveEffectorBackwards(); //going backwards until the sensor closest to intake is true
       }else{
+        //System.out.println("killmenow");
         stage = 3; // 3 = finished
       }
     }
@@ -78,7 +81,8 @@ public class IntakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(stage == 3){
+    if(stage == 3 || (stage == -1 && coraleffector.getDigitalSensor() && coraleffector.getAnalogSensor())){
+      //System.out.println("Kill me again");
       return true;
     }else{
     return false;

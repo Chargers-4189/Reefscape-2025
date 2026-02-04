@@ -18,6 +18,7 @@ import frc.robot.commands.IntakeCoral;
 import frc.robot.commands.ManualElevator;
 import frc.robot.commands.MoveElevator;
 import frc.robot.commands.OuttakeCoral;
+import frc.robot.commands.ScoreCoral;
 import frc.robot.subsystems.CoralEffector;
 import frc.robot.subsystems.Elevator;
 
@@ -51,14 +52,17 @@ public class RobotContainer {
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
 
-    //primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
-    primaryController.x().whileTrue(new ManualElevator(elevator));
     elevator.setDefaultCommand(Commands.run(()->{
       elevator.stayStill();
     }, this.elevator));
-    primaryController.y().onTrue(new MoveElevator(2,elevator,coraleffector));
-    primaryController.b().onTrue(new MoveElevator(3,elevator,coraleffector));
-    primaryController.a().onTrue(new MoveElevator(4,elevator,coraleffector));
+    coraleffector.setDefaultCommand(new IntakeCoral(coraleffector));
+
+
+    //primaryController.x().onTrue(new MoveElevator(1,elevator,coraleffector));
+    primaryController.button(4).onTrue(new ScoreCoral(coraleffector, elevator, 4));
+    primaryController.button(3).onTrue(new ScoreCoral(coraleffector, elevator, 3));
+    primaryController.button(1).onTrue(new ScoreCoral(coraleffector, elevator, 2));
+    primaryController.button(2).onTrue(new ScoreCoral(coraleffector, elevator, 1));
     //primaryController.x().onTrue(new IntakeCoral(coraleffector));
     //primaryController.a().onTrue(new OuttakeCoral(coraleffector));
     /*primaryController.b().onTrue(new IntakeCoral(coraleffector));

@@ -29,7 +29,8 @@ public class OuttakeCoral extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    if(coraleffector.getDigitalSensor()){
+    System.out.println("outtakecoralisrunning");
+    if(coraleffector.getAnalogSensor()){
       coraleffector.moveEffector();
     }
   }
@@ -45,7 +46,7 @@ public class OuttakeCoral extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    if(coraleffector.getAnalogSensor()){
+    if(!coraleffector.getAnalogSensor()){
       return true;
     }else{
     return false;
