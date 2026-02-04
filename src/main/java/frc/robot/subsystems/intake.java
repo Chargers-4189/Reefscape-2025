@@ -5,10 +5,13 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkRelativeEncoder;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkAbsoluteEncoder;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -21,16 +24,14 @@ public class Intake extends SubsystemBase {
   //Sensors
   DigitalInput LIMIT_SWITCH_TOP = new DigitalInput(Constants.IntakeConstants.kDIO_PORT_TOP);//magnet up, DIO port
   DigitalInput LIMIT_SWITCH_BOTTOM = new DigitalInput(Constants.IntakeConstants.kDIO_PORT_BOTTOM);//magnet down, DIO port
-  SparkAbsoluteEncoder ENCODER; //Encoder plugged into SparkMax
+  RelativeEncoder ENCODER = ACTUATOR_MOTOR.getEncoder();//Gets Encoder from SparkMax
+
 
   public Intake() {
-
-    //Gets Encoder from SparkMax
-    ENCODER = ACTUATOR_MOTOR.getAbsoluteEncoder();
-
+    
   }
 
-  //Sets speed / volts of motor
+  //Sets speed of motor
   public void setActuatorSpeed(double speed) {
     ACTUATOR_MOTOR.set(speed);
   }
@@ -38,6 +39,10 @@ public class Intake extends SubsystemBase {
   //encoder
   public double getEncoderPos() {
     return ENCODER.getPosition();
+  }
+
+  public void resetEncoder() {
+    ENCODER.setPosition(0.00);
   }
 
   //switches
@@ -52,8 +57,9 @@ public class Intake extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
+    
+    System.out.println(ENCODER.getPosition());
+    //System.out.println(LIMIT_SWITCH_TOP.get());
+    //System.out.println(LIMIT_SWITCH_BOTTOM.get());
   }
 }
-
-//Reminder to get Brian/Caleb to look over this so they can tell me how many mistakes I've made.

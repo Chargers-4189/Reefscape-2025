@@ -14,8 +14,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.commands.IntakeDown;
-import frc.robot.commands.IntakeUp;
+import frc.robot.commands.IntakeDownAuto;
+import frc.robot.commands.IntakeDownManual;
+import frc.robot.commands.IntakeUpAuto;
+import frc.robot.commands.IntakeUpManual;
 import frc.robot.subsystems.Intake;
 
 import java.io.File;
@@ -60,8 +62,16 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-    primaryController.y().onTrue(new IntakeUp(Intake));
-    primaryController.a().onTrue(new IntakeDown(Intake));
+    
+    //Change to seconday later...
+    
+    //Test to make sure they stop at sensor
+    primaryController.leftBumper().onTrue(new IntakeDownAuto(Intake));
+    primaryController.rightBumper().onTrue(new IntakeUpAuto(Intake));
+    //Test to make sure it doesnt kill itself
+    primaryController.leftTrigger().whileTrue(new IntakeDownManual(Intake));
+    primaryController.rightTrigger().whileTrue(new IntakeUpManual(Intake));
+    
   }
 
   /**
