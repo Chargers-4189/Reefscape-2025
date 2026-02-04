@@ -9,7 +9,9 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import frc.robot.subsystems.Vision;
 
 public class Camera {
+    private Vision vis = new Vision();
    public PhotonPipelineResult getBestResult(Vision vis){
+    this.vis = vis;
     List <PhotonPipelineResult> results = vis.Results();
     PhotonPipelineResult bestResult;
 

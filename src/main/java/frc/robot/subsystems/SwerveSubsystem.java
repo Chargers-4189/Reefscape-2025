@@ -63,6 +63,7 @@ public class SwerveSubsystem extends SubsystemBase {
   /**
    * Swerve drive object.
    */
+  private Vision vis = new Vision();
   private final SwerveDrive swerveDrive;
   /**
    * Enable vision odometry updates while driving.
@@ -239,6 +240,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
  public Command aimAtTarget(Camera camera, Vision vis) {
     return run(() -> {
+      this.vis = vis;
       PhotonPipelineResult resultO = camera.getBestResult(vis);
       if(resultO != null){
       if (resultO.hasTargets()) {
