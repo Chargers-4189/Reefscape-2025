@@ -241,9 +241,8 @@ public class SwerveSubsystem extends SubsystemBase {
  public Command aimAtTarget(Camera camera, Vision vis) {
     return run(() -> {
       this.vis = vis;
-      if(camera.getBestResult(vis) != null){
+      
       PhotonPipelineResult resultO = camera.getBestResult(vis);
-      if(resultO != null){
       if (resultO.hasTargets()) {
           drive(
             getTargetSpeeds(
@@ -253,13 +252,17 @@ public class SwerveSubsystem extends SubsystemBase {
             )
           ); 
           // Not sure if this will work, more math may be required.
+        }else{
+          drive(
+            new ChassisSpeeds()
+          );
         }
-      }
-    }
+      
+    
       
     });
   } 
-
+  
   /**
    * Get the path follower with events.
    *
