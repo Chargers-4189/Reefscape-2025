@@ -14,10 +14,19 @@ public class Camera {
     this.vis = vis;
     List <PhotonPipelineResult> results = vis.Results();
     PhotonPipelineResult bestResult;
+        try{
+            
+    
+            bestResult = results.get(0);
+            System.out.println("Running camera");
+            
+        }catch(Exception e){
+            bestResult = null;
+        
+        }
 
-        bestResult = results.get(0);
-
-    return bestResult;
+        return bestResult;
+        
     
     
    }

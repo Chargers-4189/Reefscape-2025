@@ -25,7 +25,9 @@ public class Vision extends SubsystemBase {
   }
 
   public List <PhotonPipelineResult> Results(){
+     System.out.println("Running vision");
     var results = cam.getAllUnreadResults();
+    //System.out.println("Running vision");
     return results;
   } 
 

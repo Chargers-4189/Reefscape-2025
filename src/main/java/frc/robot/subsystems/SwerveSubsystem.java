@@ -241,18 +241,21 @@ public class SwerveSubsystem extends SubsystemBase {
  public Command aimAtTarget(Camera camera, Vision vis) {
     return run(() -> {
       this.vis = vis;
+      if(camera.getBestResult(vis) != null){
       PhotonPipelineResult resultO = camera.getBestResult(vis);
       if(resultO != null){
       if (resultO.hasTargets()) {
           drive(
             getTargetSpeeds(
-              0,
-              0,
-              Rotation2d.fromDegrees(resultO.getBestTarget().getYaw())
+              0 * 0.1,
+              0 * 0.1,
+              Rotation2d.fromDegrees(resultO.getBestTarget().getYaw() * 0.1)
             )
-          ); // Not sure if this will work, more math may be required.
+          ); 
+          // Not sure if this will work, more math may be required.
         }
       }
+    }
       
     });
   } 
@@ -447,7 +450,7 @@ public class SwerveSubsystem extends SubsystemBase {
       targetAprilTagPose =
         aprilTagFieldLayout.getTagPose(minId).get().toPose2d();
     } catch (Exception e) {
-      System.out.println(e);
+      //System.out.println(e);
       targetAprilTagPose = new Pose2d();
     }
     return this.driveToPose(
@@ -488,7 +491,7 @@ public class SwerveSubsystem extends SubsystemBase {
         .getRotation()
         .getZ();
     } catch (Exception e) {
-      System.out.println(e);
+      //System.out.println(e);
       return 0;
     }
   }
