@@ -6,11 +6,14 @@ package frc.robot.subsystems;
 
 import java.util.List;
 
+import javax.sound.sampled.SourceDataLine;
+
 import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Vision extends SubsystemBase {
@@ -38,7 +41,7 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    /*var result = cam.getLatestResult();
+    var result = cam.getLatestResult();
     boolean hasTragets = result.hasTargets();
     System.out.println("isHasTarget: " + hasTragets);
     if(hasTragets){
@@ -56,11 +59,18 @@ public class Vision extends SubsystemBase {
       Transform3d alternateCameraToTarget = target.getAlternateCameraToTarget();
 
 
-      
+      System.out.println("yaw: " + yaw);
+      System.out.println("pitch: " + pitch);
+      System.out.println("area: " + area);
+      System.out.println("targetID: " + targetID);
+      System.out.println("poseAmbiguity: " + poseAmbiguity);
+
+      System.out.println(cam.getAllUnreadResults());
+      System.out.println(Results());
 
     }else{
       System.out.println("there is no target");
-    } */
+    } 
 
     
 
