@@ -41,6 +41,7 @@ public class aligntoTag extends Command {
   public void execute() {
     //ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
     PhotonPipelineResult resultO = cam.getBestResult(vis);
+    try{
     PhotonTrackedTarget target = resultO.getBestTarget();
 
     if(target.getYaw() != 0){
@@ -51,7 +52,10 @@ public class aligntoTag extends Command {
     }else{
       isFinished();
     }
-      
+    
+  }catch(Exception e){
+    
+  }
   }
 
 
