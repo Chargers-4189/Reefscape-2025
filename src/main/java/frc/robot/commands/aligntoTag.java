@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import java.util.function.DoubleSupplier;
+
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
@@ -44,11 +46,14 @@ public class aligntoTag extends Command {
     try{
     PhotonTrackedTarget target = resultO.getBestTarget();
 
-    if(target.getYaw() != 0){
-      System.out.println("yaw: " + target.getYaw());
-      System.out.println("getTranslation: " + target.getBestCameraToTarget().getTranslation().getNorm());
-      System.out.println("getRotation: " + target.getBestCameraToTarget().getRotation().getAngle());
-      System.out.println("getRotationdgress: " + Math.toDegrees(target.getBestCameraToTarget().getRotation().getAngle()));
+    if(target.getYaw() < -1 && target.getYaw() < 1){
+      
+      DoubleSupplier yaw = () -> target.getYaw();
+      DoubleSupplier transX = () -> target.getBestCameraToTarget().getX() - 1;
+      DoubleSupplier transY = () -> target.getBestCameraToTarget().getY() - 1;
+      
+      swerve.driveCommand(transX, transY , yaw);
+
     }else{
       isFinished();
     }
@@ -66,7 +71,6 @@ public class aligntoTag extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    
     return false;
   }
 }

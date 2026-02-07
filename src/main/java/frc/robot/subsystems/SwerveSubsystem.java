@@ -254,7 +254,7 @@ public class SwerveSubsystem extends SubsystemBase {
           // Not sure if this will work, more math may be required.
         }else{
           drive(
-            new ChassisSpeeds()
+            new ChassisSpeeds(0,0,0)
           );
         }
       
