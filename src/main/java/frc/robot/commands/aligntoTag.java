@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -40,8 +41,13 @@ public class aligntoTag extends Command {
   public void execute() {
     //ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
     PhotonPipelineResult resultO = cam.getBestResult(vis);
-    if(resultO.getBestTarget().getYaw() != 0){
-      swerve.aimAtTarget(cam, vis);
+    PhotonTrackedTarget target = resultO.getBestTarget();
+
+    if(target.getYaw() != 0){
+      System.out.println("yaw: " + target.getYaw());
+      System.out.println("getTranslation: " + target.getBestCameraToTarget().getTranslation().getNorm());
+      System.out.println("getRotation: " + target.getBestCameraToTarget().getRotation().getAngle());
+      System.out.println("getRotationdgress: " + Math.toDegrees(target.getBestCameraToTarget().getRotation().getAngle()));
     }else{
       isFinished();
     }
