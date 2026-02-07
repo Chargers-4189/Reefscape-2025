@@ -18,7 +18,7 @@ public class aligntoTag extends Command {
   Camera cam = new Camera();
 
   //swerver may become a problem
-  SwerveSubsystem swerve = new SwerveSubsystem(null);
+  SwerveSubsystem swerve;
   /** Creates a new aligntoTag. */
   public aligntoTag(Vision vis, Camera cam, SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
