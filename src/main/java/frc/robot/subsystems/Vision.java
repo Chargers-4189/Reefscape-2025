@@ -45,7 +45,7 @@ public class Vision extends SubsystemBase {
     boolean hasTragets = result.hasTargets();
     System.out.println("isHasTarget: " + hasTragets);
     if(hasTragets){
-      List<PhotonTrackedTarget> targets = result.getTargets();
+      /* List<PhotonTrackedTarget> targets = result.getTargets();
       PhotonTrackedTarget target = result.getBestTarget();
 
       // gets the yaw pitch area ID of target to the camera
@@ -55,9 +55,7 @@ public class Vision extends SubsystemBase {
       double area = target.getArea();
       int targetID = target.getFiducialId(); 
       double poseAmbiguity = target.getPoseAmbiguity();
-      Transform3d bestCameraToTarget = target.getBestCameraToTarget();
-      Transform3d alternateCameraToTarget = target.getAlternateCameraToTarget();
-
+      
 
       System.out.println("yaw: " + yaw);
       System.out.println("pitch: " + pitch);
@@ -70,8 +68,9 @@ public class Vision extends SubsystemBase {
 
     }else{
       System.out.println("there is no target");
+      */
     } 
-
+      
     
 
   }

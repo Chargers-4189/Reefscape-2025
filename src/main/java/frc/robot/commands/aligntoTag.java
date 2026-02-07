@@ -39,13 +39,13 @@ public class aligntoTag extends Command {
   @Override
   public void execute() {
     //ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-   /*  PhotonPipelineResult resultO = cam.getBestResult(vis);
+    PhotonPipelineResult resultO = cam.getBestResult(vis);
     if(resultO.getBestTarget().getYaw() != 0){
       swerve.aimAtTarget(cam, vis);
     }else{
       isFinished();
     }
-      */
+      
   }
 
 
