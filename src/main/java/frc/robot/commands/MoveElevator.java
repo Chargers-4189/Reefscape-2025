@@ -40,14 +40,16 @@ public class MoveElevator extends Command {
     }else if(levelwanted == 2){
       heightneeded = ElevatorConstants.kHEIGHTS[2];
     }else if(levelwanted == 3){
-      heightneeded = ElevatorConstants.kHEIGHTS[3] - 9;
+      heightneeded = ElevatorConstants.kHEIGHTS[3];
     }else if(levelwanted == 4){
-      heightneeded = ElevatorConstants.kHEIGHTS[4] - 6.8;
+      heightneeded = ElevatorConstants.kHEIGHTS[4];
     }
     if(levelwanted != 0){
     elevator.ZeroEncoder();
     }
+\
 
+\"?"]
     //find level elevator is at (current level)
   }
 
