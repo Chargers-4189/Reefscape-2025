@@ -47,9 +47,6 @@ public class MoveElevator extends Command {
     if(levelwanted != 0){
     elevator.ZeroEncoder();
     }
-\
-
-\"?"]
     //find level elevator is at (current level)
   }
 
