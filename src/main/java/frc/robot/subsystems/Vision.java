@@ -28,7 +28,7 @@ public class Vision extends SubsystemBase {
   }
 
   public List <PhotonPipelineResult> Results(){
-     System.out.println("Running vision");
+     //System.out.println("Running vision");
     var results = cam.getAllUnreadResults();
     //System.out.println("Running vision");
     return results;
@@ -41,10 +41,10 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    var result = cam.getLatestResult();
-    boolean hasTragets = result.hasTargets();
-    System.out.println("isHasTarget: " + hasTragets);
-    if(hasTragets){
+    //var result = cam.getLatestResult();
+    //boolean hasTragets = result.hasTargets();
+    //System.out.println("isHasTarget: " + hasTragets);
+    //if(hasTragets){
       /* List<PhotonTrackedTarget> targets = result.getTargets();
       PhotonTrackedTarget target = result.getBestTarget();
 
@@ -69,7 +69,7 @@ public class Vision extends SubsystemBase {
     }else{
       System.out.println("there is no target");
       */
-    } 
+    //} 
       
     
 

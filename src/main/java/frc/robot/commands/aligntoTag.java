@@ -9,6 +9,7 @@ import java.util.function.DoubleSupplier;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
@@ -41,32 +42,40 @@ public class aligntoTag extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //ahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh
-    PhotonPipelineResult resultO = cam.getBestResult(vis);
-    try{
-    PhotonTrackedTarget target = resultO.getBestTarget();
-
-    if(target.getYaw() < -1 && target.getYaw() < 1){
-      
-      DoubleSupplier yaw = () -> target.getYaw();
-      DoubleSupplier transX = () -> target.getBestCameraToTarget().getX() - 1;
-      DoubleSupplier transY = () -> target.getBestCameraToTarget().getY() - 1;
-      
-      swerve.driveCommand(transX, transY , yaw);
-
-    }else{
-      isFinished();
+   // swerve.drive(new Translation2d(-0.2 ,0.0),0.0,false);
+   
+   try{
+    System.out.println(cam.getBestResult(vis).getBestTarget());
+    if(cam.getBestResult(vis) != null){
+      if(cam.getBestResult(vis).getBestTarget() != null){
+      PhotonTrackedTarget target = cam.getBestResult(vis).getBestTarget();
+        double x = target.bestCameraToTarget.getTranslation().getX();
+       double y = target.bestCameraToTarget.getTranslation().getY();
+        if(x > .5){
+         if(y < 0){
+          swerve.drive(new Translation2d(0.25, -0.25), 0, false);
+         }else if(y > 0){
+           swerve.drive(new Translation2d(0.25, 0.25), 0, false);
+         }
+        }else{
+          
+          isFinished();
+        }
+       }
     }
-    
   }catch(Exception e){
-    
+    System.out.println(e);
   }
+    
+    
   }
 
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+     swerve.drive(new Translation2d(0,0), 0, false);
+  }
 
   // Returns true when the command should end.
   @Override
@@ -74,3 +83,4 @@ public class aligntoTag extends Command {
     return false;
   }
 }
+

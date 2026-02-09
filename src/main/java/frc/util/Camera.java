@@ -16,16 +16,21 @@ public class Camera {
     PhotonPipelineResult bestResult;
         try{
             
-    
+            
             bestResult = results.get(0);
+            System.out.println("bestResult: " + bestResult);
             System.out.println("Running camera");
+            return bestResult;
+            
+
             
         }catch(Exception e){
-            bestResult = null;
+
+            bestResult = results.get(0);
+            return bestResult;
         
         }
 
-        return bestResult;
         
     
     

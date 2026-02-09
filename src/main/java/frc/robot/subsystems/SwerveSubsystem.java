@@ -422,7 +422,7 @@ public class SwerveSubsystem extends SubsystemBase {
       //System.out.print("Working");
       return driveToReef(minId, right);
     } catch (Exception e) {
-      System.out.println(e);
+      //System.out.println(e);
       return Commands.none();
     }
   }
