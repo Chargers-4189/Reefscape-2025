@@ -45,7 +45,7 @@ public class aligntoTag extends Command {
    // swerve.drive(new Translation2d(-0.2 ,0.0),0.0,false);
    
    try{
-    System.out.println(cam.getBestResult(vis).getBestTarget());
+    System.out.println("this is in aligntoTag excute line 48" + cam.getBestResult(vis).getBestTarget());
     if(cam.getBestResult(vis) != null){
       if(cam.getBestResult(vis).getBestTarget() != null){
       PhotonTrackedTarget target = cam.getBestResult(vis).getBestTarget();
