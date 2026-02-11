@@ -6,41 +6,26 @@ package frc.robot.commands;
 
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.CoralEffector;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class CancelAll extends Command {
 
-  private CoralEffector effector;
-  private Elevator elevator;
-  private Intake intake;
   private SwerveSubsystem swerve;
 
   /** Creates a new CancelAll. */
   public CancelAll(
-    CoralEffector effector,
-    Elevator elevator,
-    Intake intake,
     SwerveSubsystem swerve
   ) {
-    this.effector = effector;
-    this.elevator = elevator;
-    this.intake = intake;
     this.swerve = swerve;
     // Use addRequirements() here to declare subsystem dependencies.
 
-    addRequirements(effector, elevator, intake, swerve);
+    addRequirements(swerve);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    effector.stop();
-    elevator.setVoltage(0);
-    intake.stop();
     swerve.drive(new Translation2d(), 0, false);
   }
 

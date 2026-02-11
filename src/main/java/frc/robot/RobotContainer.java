@@ -15,25 +15,8 @@ import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.commands.CancelAll;
-import frc.robot.commands.Mood;
-import frc.robot.commands.effector.IntakeCoral;
-import frc.robot.commands.elevator.MoveElevator;
-import frc.robot.commands.elevator.MoveElevatorSlightlyDown;
-import frc.robot.commands.intake.ActuateIntakeDown;
-import frc.robot.commands.intake.ActuateIntakeUp;
-import frc.robot.commands.multiaction.AlignAccuracyTest;
-import frc.robot.commands.multiaction.CenterAuto;
-import frc.robot.commands.multiaction.PlaceCoral;
-import frc.robot.commands.multiaction.Taxi;
-import frc.robot.commands.multiaction.ThreeCoralAuto;
-import frc.robot.commands.multiaction.OneCoralAuto;
 import frc.robot.commands.swervedrive.AlignReef;
 import frc.robot.commands.swervedrive.Drive;
-//import frc.robot.subsystems.Climber;
-import frc.robot.subsystems.CoralEffector;
-import frc.robot.subsystems.Elevator;
-import frc.robot.subsystems.Faces;
-import frc.robot.subsystems.Intake;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 
@@ -50,15 +33,8 @@ public class RobotContainer {
   private final CommandXboxController primaryController = new CommandXboxController(
     0
   );
-  private final CommandXboxController secondaryController = new CommandXboxController(
-    1
-  );
 
   // The robot's subsystems and commands are defined here...
-  private final Elevator elevator = new Elevator();
-  private final CoralEffector coralEffector = new CoralEffector();
-  private final Intake intake = new Intake();
-  private final Faces faces = new Faces();
   //private final Climber climber = new Climber();
   private final SwerveSubsystem drivebase = new SwerveSubsystem(
     new File(Filesystem.getDeployDirectory(), "swerve")
@@ -77,7 +53,7 @@ public class RobotContainer {
     //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
     configureBindings();
-    configureAutoChooser();
+    //configureAutoChooser();
     DriverStation.silenceJoystickConnectionWarning(true);
   }
 
@@ -89,43 +65,6 @@ public class RobotContainer {
    * controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight joysticks}.
    */
   private void configureBindings() {
-
-    //Secondary Triggers
-    final Trigger elevatorTrigger = new Trigger(() ->
-      (
-        Math.abs(secondaryController.getLeftY()) >
-        Constants.OperatorConstants.kSecondaryDeadband
-      )
-    );
-
-    final Trigger chuteTrigger = new Trigger(() ->
-      (
-        (
-          Math.abs(secondaryController.getLeftTriggerAxis()) >
-          Constants.OperatorConstants.kSecondaryDeadband
-        ) ||
-        (
-          Math.abs(secondaryController.getRightTriggerAxis()) >
-          Constants.OperatorConstants.kSecondaryDeadband
-        )
-      )
-    );
-
-    final Trigger effectorTrigger = new Trigger(() ->
-      (
-        Math.abs(secondaryController.getRightY()) >
-        Constants.OperatorConstants.kSecondaryDeadband
-      )
-    );
-
-    //Defaults
-    coralEffector.setDefaultCommand(new IntakeCoral(coralEffector));
-
-    faces.setDefaultCommand(new Mood(faces, primaryController));
-
-    //Primary
-
-    //Driving
     /*
     drivebase.setDefaultCommand(angularVelocityDrive);
     nitroTrigger.and(stationAlign.negate()).and(xFormation.negate()).whileTrue(nitroDrive);
@@ -144,34 +83,6 @@ public class RobotContainer {
     primaryController.rightTrigger(.5).whileTrue(Commands.runOnce(drivebase::lock, drivebase).repeatedly());
     
     primaryController.back().onTrue((Commands.runOnce(drivebase::zeroGyro)));
-
-    //Elevator + Effector
-    /*
-    primaryController
-      .povDown()
-      .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(
-        Commands.sequence(
-          new MoveElevator(elevator, 0),
-          new MoveElevatorSlightlyDown(elevator)
-      
-      ); */
-    primaryController
-      .x()
-      .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new PlaceCoral(elevator, coralEffector, 1));
-    primaryController
-      .y()
-      .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new PlaceCoral(elevator, coralEffector, 2));
-    primaryController
-      .b()
-      .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new PlaceCoral(elevator, coralEffector, 3));
-    primaryController
-      .a()
-      .and(() -> !elevatorTrigger.getAsBoolean())
-      .onTrue(new PlaceCoral(elevator, coralEffector, 4));
 
     primaryController
       .leftBumper()
@@ -197,230 +108,14 @@ public class RobotContainer {
     primaryController
       .start()
       .onTrue(
-        new CancelAll(coralEffector, elevator, intake, drivebase)
+        new CancelAll(drivebase)
           .withTimeout(.5)
       );
+    }
 
     //Secondary
 
-    //Cancel All
-    secondaryController
-      .back()
-      .onTrue(
-        new CancelAll(coralEffector, elevator, intake, drivebase)
-          .withTimeout(.5)
-      );
-
-    //Intake
-    secondaryController.leftBumper().onTrue(new ActuateIntakeDown(intake));
-    secondaryController.rightBumper().onTrue(new ActuateIntakeUp(intake));
-
-    chuteTrigger.whileTrue(
-      Commands.run(
-        () -> {
-          intake.setPower(
-            secondaryController.getRightTriggerAxis() -
-            secondaryController.getLeftTriggerAxis()
-          );
-        },
-        intake
-      )
-    );
-
-    chuteTrigger.onFalse(
-      Commands.runOnce(
-        () -> {
-          intake.setPower(0);
-        },
-        intake
-      )
-    );
-
-    //Effector
-    effectorTrigger.whileTrue(
-      Commands.run(
-        () -> {
-          coralEffector.setPower(secondaryController.getRightY() * -.5);
-        },
-        coralEffector
-      )
-    );
-
-    effectorTrigger.onFalse(
-      Commands.runOnce(
-        () -> {
-          coralEffector.setPower(0);
-        },
-        coralEffector
-      )
-    );
-
-    //Elevator
-    secondaryController.x().onTrue(new MoveElevator(elevator, 1));
-    secondaryController.y().onTrue(new MoveElevator(elevator, 2));
-    secondaryController.b().onTrue(new MoveElevator(elevator, 3));
-    secondaryController.a().onTrue(new MoveElevator(elevator, 4));
-    secondaryController
-      .start()
-      .onTrue(
-        Commands.sequence(
-          new MoveElevator(elevator, 0),
-          new MoveElevatorSlightlyDown(elevator)
-        )
-      );
-
-    elevatorTrigger.whileTrue(
-      Commands.run(
-        () -> {
-          elevator.setVoltage(-secondaryController.getLeftY() * 4);
-        },
-        elevator
-      )
-    );
-
-    elevatorTrigger.onFalse(
-      Commands.runOnce(
-        () -> {
-          elevator.setVoltage(0);
-        },
-        elevator
-      )
-    );
-    //secondaryController.povUp().whileTrue(
-    //  Commands.parallel(
-    //  new TwoCoralAuto(drivebase, elevator, coralEffector, false, true),
-    //  new ActuateIntakeUp(intake)
-    //)
-    //);
-
-    // secondaryController.povUp().whileTrue(Commands.run(()->{
-    //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_OUT_POWER);
-    // }));
-    // secondaryController.povDown().whileTrue(Commands.run(()->{
-    //   coralEffector.setPower(Constants.CoralEffectorConstants.kSECONDARY_IN_POWER);
-    // }));
-
-    //climber.setDefaultCommand(Commands.run(() -> climber.setPower(secondaryController.getRightY()), climber));
-  }
-
-  private void configureAutoChooser() {
-    autoChooser.setDefaultOption("3 Coral Right", new ThreeCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      true,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("3 Coral Left", new ThreeCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      false,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("2 Coral Right", new OneCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      true,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("2 Coral Left",  new OneCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      false,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.setDefaultOption("1 Coral Right", new ThreeCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      true,
-      drivebase.isRedAlliance()
-    ));
-    autoChooser.addOption("1 Coral Center - Place Right",  new CenterAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      drivebase.isRedAlliance(),
-      false
-    ));
-    autoChooser.addOption("1 Coral Center - Place Left",  new CenterAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      drivebase.isRedAlliance(),
-      true
-    ));
-    autoChooser.addOption("Taxi",  new Taxi(
-      drivebase,
-      coralEffector,
-      intake
-    ));
-    autoChooser.addOption("Accuracy Test",  new AlignAccuracyTest(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake
-    ));
-    SmartDashboard.putData(autoChooser);
-  }
-
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    //return drivebase.getAutonomousCommand("New Auto");
-    return new ThreeCoralAuto(
-      drivebase,
-      elevator,
-      coralEffector,
-      intake,
-      false,
-      drivebase.isRedAlliance()
-    );
-    /*
-    return Commands.parallel(
-      new TwoCoralAuto(
-        drivebase,
-        elevator,
-        coralEffector,
-        false,
-        drivebase.isRedAlliance()
-      ),
-      new ActuateIntakeUp(intake)
-    );*/
-    /*
-    return Commands.parallel(
-      new PlaceThenGetCoral(
-        drivebase,
-        elevator,
-        coralEffector,
-        20,
-        13,
-        true
-      ),
-      new ActuateIntakeUp(intake)
-    );*/
-    //return new AprilTagPathPlannerAuto(drivebase, elevator, 19, false, 4);
-  }
-
   public void setMotorBrake(boolean brake) {
     drivebase.setMotorBrake(brake);
-  }
-
-  public void face() {
-    faces.smile();
   }
 }
