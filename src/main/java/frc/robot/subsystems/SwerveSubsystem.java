@@ -23,7 +23,9 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -48,6 +50,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
 import swervelib.SwerveDrive;
@@ -142,11 +145,22 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
     publisher.set(getPose());
+    Transform3d transform = new Transform3d(Units.feetToMeters(1.42),Units.feetToMeters(0.58),Units.feetToMeters(0.75),new Rotation3d(0,0,0));
+    PhotonPoseEstimator poseEST = new PhotonPoseEstimator(aprilTagFieldLayout, transform);
+    try{
+      poseEST.estimateLowestAmbiguityPose(vis.Resultsleft().get(0));
+
+      System.out.println(poseEST);
+    }catch(Exception e){
+      
+    }
     /*
     if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {
       System.out.println(Cameras.LEFT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }
     if (Cameras.RIGHT_CAM.getEstimateTagPose() != null) {
+
+
       System.out.println(Cameras.RIGHT_CAM.getEstimateTagPose().getRotation().getZ() * 180 / Math.PI);
     }*/
     //System.out.println("Station: " + (getStationRotation() * 180 / Math.PI) + " Robot: " + getPose().getRotation().getDegrees());
