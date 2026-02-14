@@ -45,6 +45,9 @@ public class RobotContainer {
 
   //private final Climber climber = new Climber();
 
+  
+
+
   /**
    * The container for the robot. Contains subsystems, OI devices, and commands.
    */
@@ -54,7 +57,8 @@ public class RobotContainer {
     //System.out.println(AutoBuilder.getAllAutoNames());
     // Configure the trigger bindings
 
-    primaryController.leftBumper().onTrue(new aligntoTag(vis, cam, swerver));
+    primaryController.leftBumper().onTrue(new aligntoTag(vis, cam, swerver, true));
+    primaryController.rightBumper().onTrue(new aligntoTag(vis, cam, swerver, false));
 
 
     configureBindings();

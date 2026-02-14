@@ -240,7 +240,7 @@ public class SwerveSubsystem extends SubsystemBase {
    */
  public Command aimAtTarget(Camera camera, Vision vis) {
     return run(() -> {
-      this.vis = vis;
+     /*  this.vis = vis;
       
       PhotonPipelineResult resultO = camera.getBestResult(vis);
       if (resultO.hasTargets()) {
@@ -257,6 +257,7 @@ public class SwerveSubsystem extends SubsystemBase {
             new ChassisSpeeds(0,0,0)
           );
         }
+          */
       
     
       

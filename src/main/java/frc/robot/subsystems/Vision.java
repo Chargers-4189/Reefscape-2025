@@ -19,7 +19,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class Vision extends SubsystemBase {
   /** Creates a new Vision. */
 
-  PhotonCamera cam = new PhotonCamera("frCam2025");
+  PhotonCamera rcam = new PhotonCamera("frCam2025");
+  PhotonCamera lcam = new PhotonCamera("flCam2025");
 
   public Vision() {
    
@@ -27,12 +28,18 @@ public class Vision extends SubsystemBase {
     
   }
 
-  public List <PhotonPipelineResult> Results(){
+  public List <PhotonPipelineResult> ResultsRight(){
      //System.out.println("Running vision");
-    var results = cam.getAllUnreadResults();
+    var results = rcam.getAllUnreadResults();
     //System.out.println("Running vision");
     return results;
   } 
+
+  public List <PhotonPipelineResult> Resultsleft(){
+    var results = lcam.getAllUnreadResults();
+
+    return results;
+  }
 
   public void poseEstmater(){
 

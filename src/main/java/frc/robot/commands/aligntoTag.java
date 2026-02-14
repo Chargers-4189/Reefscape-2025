@@ -19,16 +19,19 @@ import frc.util.Camera;
 public class aligntoTag extends Command {
   Vision vis = new Vision();
   Camera cam = new Camera();
+  boolean direction;
+  //direction = false move left true right
 
   //swerver may become a problem
   SwerveSubsystem swerve;
   /** Creates a new aligntoTag. */
-  public aligntoTag(Vision vis, Camera cam, SwerveSubsystem swerve) {
+  public aligntoTag(Vision vis, Camera cam, SwerveSubsystem swerve, boolean direction) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(vis);
     this.swerve = swerve;
     this.vis = vis;
     this.cam = cam;
+    this.direction = direction;
 
 
   }
@@ -45,26 +48,61 @@ public class aligntoTag extends Command {
    // swerve.drive(new Translation2d(-0.2 ,0.0),0.0,false);
    
    try{
-    System.out.println("this is in aligntoTag excute line 48" + cam.getBestResult(vis).getBestTarget());
-    if(cam.getBestResult(vis) != null){
-      if(cam.getBestResult(vis).getBestTarget() != null){
-      PhotonTrackedTarget target = cam.getBestResult(vis).getBestTarget();
-        double x = target.bestCameraToTarget.getTranslation().getX();
-       double y = target.bestCameraToTarget.getTranslation().getY();
-        if(x > .5){
-         if(y < 0){
-          swerve.drive(new Translation2d(0.25, -0.25), 0, false);
-         }else if(y > 0){
-           swerve.drive(new Translation2d(0.25, 0.25), 0, false);
-         }
-        }else{
-          
-          isFinished();
-        }
-       }
+    if(!direction){
+      System.out.println("right side");
+    PhotonTrackedTarget target = cam.getBestResultRightCam(vis).getBestTarget();
+    double x = target.bestCameraToTarget.getX();
+    double y = target.bestCameraToTarget.getY();
+    System.out.println("x: " + x);
+    System.out.println("Y: " + y);
+if(x > .5){
+    if(y > 0.10){
+      swerve.drive(new Translation2d(0.25,0.25), 0, false);
+    }else if(y < -0.10){
+      swerve.drive(new Translation2d(0.25,-0.25), 0, false);
+    }else{
+      swerve.drive(new Translation2d(0.25,0), 0, false);
     }
+  }else{
+    if(y > 0.05){
+      swerve.drive(new Translation2d(0,0.25), 0, false);
+    }else if(y < -0.05){
+      swerve.drive(new Translation2d(0,-0.25), 0, false);
+    }else{
+      end(true);
+      isFinished();
+    }
+  }
+}else{
+  PhotonTrackedTarget target = cam.getBestResultleftCam(vis).getBestTarget();
+    double x = target.bestCameraToTarget.getX();
+    double y = target.bestCameraToTarget.getY();
+    System.out.println("lift Side");
+    System.out.println("x: " + x);
+    System.out.println("Y: " + y);
+if(x > .5){
+    if(y > 0.09){
+      swerve.drive(new Translation2d(0.25,-0.25), 0, false);
+    }else if(y < -0.07){
+      swerve.drive(new Translation2d(0.25,0.25), 0, false);
+    }else{
+      swerve.drive(new Translation2d(0.25,0), 0, false);
+    }
+
+    }else{
+      if(y > 0.09){
+      swerve.drive(new Translation2d(0,0.25), 0, false);
+    }else if(y < -0.07){
+      swerve.drive(new Translation2d(0,-0.25), 0, false);
+    }else{
+      end(true);
+      isFinished();
+    }
+  }
+}
+
   }catch(Exception e){
-    System.out.println(e);
+    //System.out.println(e);
   }
     
     
