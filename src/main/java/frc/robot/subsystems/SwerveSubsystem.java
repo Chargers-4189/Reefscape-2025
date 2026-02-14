@@ -147,6 +147,7 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
     publisher.set(getPose());
+    swerveDrive.updateOdometry();
     //System.out.println("Estimated from Swerve: " + getPose());
     Transform3d transform = new Transform3d(Units.feetToMeters(1.42),Units.feetToMeters(-0.58),Units.feetToMeters(0.75),new Rotation3d(0,0,0));
     PhotonPoseEstimator poseEST = new PhotonPoseEstimator(aprilTagFieldLayout, transform);
