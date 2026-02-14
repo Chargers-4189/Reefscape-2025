@@ -22,6 +22,7 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -50,6 +51,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.DoubleSupplier;
 import java.util.function.Supplier;
 import org.json.simple.parser.ParseException;
+import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 import swervelib.SwerveController;
@@ -145,14 +147,17 @@ public class SwerveSubsystem extends SubsystemBase {
   public void periodic() {
     // When vision is enabled we must manually update odometry in SwerveDrive
     publisher.set(getPose());
-    Transform3d transform = new Transform3d(Units.feetToMeters(1.42),Units.feetToMeters(0.58),Units.feetToMeters(0.75),new Rotation3d(0,0,0));
+    //System.out.println("Estimated from Swerve: " + getPose());
+    Transform3d transform = new Transform3d(Units.feetToMeters(1.42),Units.feetToMeters(-0.58),Units.feetToMeters(0.75),new Rotation3d(0,0,0));
     PhotonPoseEstimator poseEST = new PhotonPoseEstimator(aprilTagFieldLayout, transform);
     try{
-      poseEST.estimateLowestAmbiguityPose(vis.Resultsleft().get(0));
-
-      System.out.println(poseEST);
+     EstimatedRobotPose poser =  poseEST.estimateAverageBestTargetsPose(vis.Resultsleft().get(0)).get();
+      //System.out.println("Estimated From vision" + poser.estimatedPose.toPose2d());
+      swerveDrive.addVisionMeasurement(poser.estimatedPose.toPose2d(), Timer.getFPGATimestamp());
+      swerveDrive.resetOdometry(poser.estimatedPose.toPose2d());
+      //System.out.println("Estimated from Swerve after addedtion: " + getPose());
     }catch(Exception e){
-      
+
     }
     /*
     if (Cameras.LEFT_CAM.getEstimateTagPose() != null) {

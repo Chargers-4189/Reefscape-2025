@@ -4,24 +4,18 @@
 
 package frc.robot;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import edu.wpi.first.math.geometry.Pose2d;
+import java.io.File;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Filesystem;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.commands.Drive;
 import frc.robot.commands.aligntoTag;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
 import frc.util.Camera;
-import frc.robot.commands.aligntoTag;
-
-import java.io.File;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a "declarative" paradigm, very
@@ -60,6 +54,13 @@ public class RobotContainer {
     primaryController.leftBumper().onTrue(new aligntoTag(vis, cam, swerver, true));
     primaryController.rightBumper().onTrue(new aligntoTag(vis, cam, swerver, false));
 
+    swerver.setDefaultCommand(new Drive(
+      swerver,
+      primaryController::getLeftX,
+      primaryController::getLeftY,
+      primaryController::getRightX,
+      () -> primaryController.leftStick().getAsBoolean() || primaryController.rightStick().getAsBoolean(),
+      primaryController.leftTrigger(.5)::getAsBoolean));
 
     configureBindings();
     DriverStation.silenceJoystickConnectionWarning(true);
