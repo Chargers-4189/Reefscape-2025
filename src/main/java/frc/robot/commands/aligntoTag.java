@@ -4,12 +4,11 @@
 
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
-import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.SwerveSubsystem;
 import frc.robot.subsystems.Vision;
@@ -95,8 +94,17 @@ if(x > .5){
     }else if(y < -0.07){
       swerve.drive(new Translation2d(0,-0.25), 0, false);
     }else{
+      Rotation2d swervRotationPOS = swerve.getPose().getRotation();
+      if(swervRotationPOS.getDegrees() != 0){
+        if(swervRotationPOS.getDegrees() > 0){
+          swerve.drive(new Translation2d(0,0),Units.degreesToRadians(2), false);
+        }else{
+          swerve.drive(new Translation2d(0,0),Units.degreesToRadians(-2), false);
+        }
+      }else{
       end(true);
       isFinished();
+      }
     }
   }
 }
