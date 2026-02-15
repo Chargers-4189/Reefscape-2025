@@ -94,9 +94,8 @@ if(x > .5){
     }else if(y < -0.07){
       swerve.drive(new Translation2d(0,-0.25), 0, false);
     }else{
-      Rotation2d swervRotationPOS = swerve.getPose().getRotation();
-      if(swervRotationPOS.getDegrees() != 0){
-        if(swervRotationPOS.getDegrees() > 0){
+      if(target.getYaw() > 0.1 && target.getYaw() < -0.1){
+        if(target.getYaw() > 0.1){
           swerve.drive(new Translation2d(0,0),Units.degreesToRadians(2), false);
         }else{
           swerve.drive(new Translation2d(0,0),Units.degreesToRadians(-2), false);
